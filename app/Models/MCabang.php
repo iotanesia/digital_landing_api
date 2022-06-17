@@ -11,7 +11,7 @@ class MCabang extends Model
     protected $table = 'master_cabang';
     protected $primaryKey = 'id_cabang';
     public $fillable = [
-        'cabang',
+        'nama_cabang',
         'created_at',
         'created_by',
         'updated_at',

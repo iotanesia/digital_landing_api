@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\RSAController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\CabangController;
+use App\Http\Controllers\Master\JenisInstansiController;
+use App\Http\Controllers\Master\JenisKelaminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
@@ -58,6 +60,22 @@ Route::prefix('v1')
                 Route::post('/',[CabangController::class,'store']);
                 Route::put('/{id}',[CabangController::class,'update']);
                 Route::delete('/{id}',[CabangController::class,'destroy']);
+            });
+            // route jenis instansi
+            Route::prefix('jenis-instansi')->group(function () {
+                Route::get('/',[JenisInstansiController::class,'index']);
+                Route::get('/{id}',[JenisInstansiController::class,'show']);
+                Route::post('/',[JenisInstansiController::class,'store']);
+                Route::put('/{id}',[JenisInstansiController::class,'update']);
+                Route::delete('/{id}',[JenisInstansiController::class,'destroy']);
+            });
+            // route jenis kelamin
+            Route::prefix('jenis-kelamin')->group(function () {
+                Route::get('/',[JenisKelaminController::class,'index']);
+                Route::get('/{id}',[JenisKelaminController::class,'show']);
+                Route::post('/',[JenisKelaminController::class,'store']);
+                Route::put('/{id}',[JenisKelaminController::class,'update']);
+                Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
             });
         });
 
