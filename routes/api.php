@@ -12,6 +12,8 @@ use App\Http\Controllers\Master\SubProdukController;
 use App\Http\Controllers\Master\CabangController;
 use App\Http\Controllers\Master\JenisInstansiController;
 use App\Http\Controllers\Master\JenisKelaminController;
+use App\Http\Controllers\Master\TingkatPendidikanController;
+use App\Http\Controllers\Master\StatusPernikahanController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -126,6 +128,22 @@ Route::prefix('v1')
                 Route::post('/',[JenisKelaminController::class,'store']);
                 Route::put('/{id}',[JenisKelaminController::class,'update']);
                 Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
+            });
+            // route tingkat pendidikan
+            Route::prefix('tingkat-pendidikan')->group(function () {
+                Route::get('/',[TingkatPendidikanController::class,'index']);
+                Route::get('/{id}',[TingkatPendidikanController::class,'show']);
+                Route::post('/',[TingkatPendidikanController::class,'store']);
+                Route::put('/{id}',[TingkatPendidikanController::class,'update']);
+                Route::delete('/{id}',[TingkatPendidikanController::class,'destroy']);
+            });
+            // route tingkat pendidikan
+            Route::prefix('status-pernikahan')->group(function () {
+                Route::get('/',[StatusPErnikahanController::class,'index']);
+                Route::get('/{id}',[StatusPErnikahanController::class,'show']);
+                Route::post('/',[StatusPErnikahanController::class,'store']);
+                Route::put('/{id}',[StatusPErnikahanController::class,'update']);
+                Route::delete('/{id}',[StatusPErnikahanController::class,'destroy']);
             });
         });
     });
