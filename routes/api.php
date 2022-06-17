@@ -33,6 +33,7 @@ Route::prefix('v1')
 ->group(function () {
 
     Route::post('/login',[AuthControler::class,'login']);
+    Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
 
     Route::group(['middleware' => 'access'],function () {
         Route::prefix('user')->group(function () {

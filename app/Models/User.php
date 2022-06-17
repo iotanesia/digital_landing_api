@@ -41,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function refRole()
+    {
+        return $this->belongsTo(Role::class,'kode_role','kode_role');
+    }
 }

@@ -76,16 +76,13 @@ class Handler extends ExceptionHandler
         if ($request->wantsJson()) {   //add Accept: application/json in request
             return $this->handleApiException($request, $exception);
         } else {
-            $retval = parent::render($request, $exception);
+            return ResponseInterface::setErrorResponse($exception);
         }
-
-        return $retval;
     }
 
     private function handleApiException($request, \Exception $exception)
     {
 
-        // dd($exception);
         $headers = [
             'Access-Control-Allow-Origin'      => '*',
             'Access-Control-Allow-Methods'     => 'HEAD, POST, GET, OPTIONS, PUT, DELETE',
