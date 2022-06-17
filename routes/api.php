@@ -43,6 +43,7 @@ Route::prefix('v1')
             Route::post('/',[UserControler::class,'save']);
             Route::put('/{id}',[UserControler::class,'update']);
             Route::delete('/{id}',[UserControler::class,'delete']);
+            Route::get('/detail',[UserControler::class,'detail']);
         });
 
         Route::prefix('master')->group(function () {
