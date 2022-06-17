@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Canvasing;
+use App\Query\Canvassing;
 
-class CanvasingController extends Controller
+class CanvassingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class CanvasingController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Canvasing::getDataPusat($request)
+                Canvassing::getDataPusat($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class CanvasingController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Canvasing::store($request)
+                Canvassing::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class CanvasingController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Canvasing::byId($id)
+                Canvassing::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

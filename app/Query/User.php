@@ -20,9 +20,16 @@ class User {
         $user = Model::where('username',$params->username)->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
+        $user->role_produk = $user->manyRoleProduk->map(function ($item){
+            return [
+                'id_produk' => $item->id_produk,
+                'nama_produk' => $item->refProduk->nama_produk ?? null,
+            ];
+        });
         $user->nama_role = $user->refRole->nama_role ?? null;
         unset(
-            $user->refRole
+            $user->refRole,
+            $user->manyRoleProduk,
         );
         $user->access_token = Helper::createJwt($user);
         $user->refresh_token = Helper::createJwt($user, TRUE);
@@ -100,12 +107,13 @@ class User {
 
             $insert = new Model;
             $insert->username = $params->username;
-            $insert->app_name = $params->app_name;
             $insert->email = $params->email;
+            $insert->kode_cabang = $params->kode_cabang;
+            $insert->kode_role = $params->kode_role;
             $insert->description = $params->description;
             $insert->password = Hash::make($params->password);
             $insert->save();
-
+            $insert->manyRoleProduk()->createMany(self::setParamRoleProduk($params,$insert->id));
             DB::commit();
             return [
                 'items' => $insert,
@@ -114,6 +122,20 @@ class User {
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
+        }
+    }
+
+    public static function setParamRoleProduk($request,$id)
+    {
+        if($request->role_produk){
+            $params = [];
+            foreach ($request->role_produk as $key => $val) {
+                $params[] = [
+                    'id_user' => $id,
+                    'id_produk' => $val['id_produk']
+                ];
+            }
+            return $params;
         }
     }
 

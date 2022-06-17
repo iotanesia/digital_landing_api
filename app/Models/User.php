@@ -46,10 +46,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class,'kode_role','kode_role');
     }
-    
+
     public function refCabang()
     {
         return $this->belongsTo(MCabang::class,'kode_cabang','kode_cabang');
     }
 
+    public function refRoleProduk()
+    {
+        return $this->belongsTo(RoleProduk::class,'id_user','id');
+    }
+
+    public function manyRoleProduk()
+    {
+        return $this->hasMany(RoleProduk::class,'id_user','id');
+    }
 }

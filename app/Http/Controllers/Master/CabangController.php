@@ -16,6 +16,7 @@ class CabangController extends Controller
     public function index(Request $request)
     {
         try {
+            dd('ss');
             return Helper::resultResponse(
                 MCabang::getAll($request)
             );

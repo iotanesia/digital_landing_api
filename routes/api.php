@@ -113,25 +113,25 @@ Route::prefix('v1')
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
             // route cabang
             Route::prefix('cabang')->group(function () {
-                Route::get('/',[CabangController::class,'index']);
-                Route::get('/{id}',[CabangController::class,'show']);
-                Route::post('/',[CabangController::class,'store']);
-                Route::put('/{id}',[CabangController::class,'update']);
-                Route::delete('/{id}',[CabangController::class,'destroy']);
+                Route::get('/',[Cabang::class,'index']);
+                Route::post('/',[Cabang::class,'store']);
+                Route::get('/{id}',[Cabang::class,'show']);
+                Route::put('/{id}',[Cabang::class,'update']);
+                Route::delete('/{id}',[Cabang::class,'destroy']);
             });
             // route jenis instansi
             Route::prefix('jenis-instansi')->group(function () {
                 Route::get('/',[JenisInstansiController::class,'index']);
-                Route::get('/{id}',[JenisInstansiController::class,'show']);
                 Route::post('/',[JenisInstansiController::class,'store']);
+                Route::get('/{id}',[JenisInstansiController::class,'show']);
                 Route::put('/{id}',[JenisInstansiController::class,'update']);
                 Route::delete('/{id}',[JenisInstansiController::class,'destroy']);
             });
             // route jenis kelamin
             Route::prefix('jenis-kelamin')->group(function () {
                 Route::get('/',[JenisKelaminController::class,'index']);
-                Route::get('/{id}',[JenisKelaminController::class,'show']);
                 Route::post('/',[JenisKelaminController::class,'store']);
+                Route::get('/{id}',[JenisKelaminController::class,'show']);
                 Route::put('/{id}',[JenisKelaminController::class,'update']);
                 Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
             });
