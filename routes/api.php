@@ -44,7 +44,8 @@ Route::prefix('v1')
         // reoute canvasing
         Route::prefix('canvasing')->group(function () {
             Route::get('/',[CanvasingController::class,'index']);
-
+            Route::post('/',[CanvasingController::class,'store']);
+            Route::get('/{id}',[CanvasingController::class,'show']);
         });
         // users
         Route::prefix('user')->group(function () {
