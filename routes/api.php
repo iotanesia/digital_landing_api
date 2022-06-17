@@ -113,13 +113,14 @@ Route::prefix('v1')
                 Route::get('/{id}',[SubProdukController::class,'show']);
                 Route::put('/{id}',[SubProdukController::class,'update']);
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
+            });
             // route cabang
             Route::prefix('cabang')->group(function () {
-                Route::get('/',[Cabang::class,'index']);
-                Route::post('/',[Cabang::class,'store']);
-                Route::get('/{id}',[Cabang::class,'show']);
-                Route::put('/{id}',[Cabang::class,'update']);
-                Route::delete('/{id}',[Cabang::class,'destroy']);
+                Route::get('/',[CabangController::class,'index']);
+                Route::post('/',[CabangController::class,'store']);
+                Route::get('/{id}',[CabangController::class,'show']);
+                Route::put('/{id}',[CabangController::class,'update']);
+                Route::delete('/{id}',[CabangController::class,'destroy']);
             });
             // route jenis instansi
             Route::prefix('jenis-instansi')->group(function () {
@@ -140,25 +141,27 @@ Route::prefix('v1')
             // route tingkat pendidikan
             Route::prefix('tingkat-pendidikan')->group(function () {
                 Route::get('/',[TingkatPendidikanController::class,'index']);
-                Route::get('/{id}',[TingkatPendidikanController::class,'show']);
                 Route::post('/',[TingkatPendidikanController::class,'store']);
+                Route::get('/{id}',[TingkatPendidikanController::class,'show']);
                 Route::put('/{id}',[TingkatPendidikanController::class,'update']);
                 Route::delete('/{id}',[TingkatPendidikanController::class,'destroy']);
             });
             // route tingkat pendidikan
             Route::prefix('status-pernikahan')->group(function () {
-                Route::get('/',[StatusPErnikahanController::class,'index']);
-                Route::get('/{id}',[StatusPErnikahanController::class,'show']);
-                Route::post('/',[StatusPErnikahanController::class,'store']);
-                Route::put('/{id}',[StatusPErnikahanController::class,'update']);
-                Route::delete('/{id}',[StatusPErnikahanController::class,'destroy']);
+                Route::get('/',[StatusPernikahanController::class,'index']);
+                Route::post('/',[StatusPernikahanController::class,'store']);
+                Route::get('/{id}',[StatusPernikahanController::class,'show']);
+                Route::put('/{id}',[StatusPernikahanController::class,'update']);
+                Route::delete('/{id}',[StatusPernikahanController::class,'destroy']);
+            });
+            // route tujuan pemasaran
+            Route::prefix('tujuan-pemasaran')->group(function () {
+                Route::get('/',[TujuanPemasaranController::class,'index']);
+                Route::post('/',[TujuanPemasaranController::class,'store']);
+                Route::get('/{id}',[TujuanPemasaranController::class,'show']);
+                Route::put('/{id}',[TujuanPemasaranController::class,'update']);
+                Route::delete('/{id}',[TujuanPemasaranController::class,'destroy']);
             });
         });
     });
-
-
-    });
-
-
 });
-
