@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthControler;
-use App\Http\Controllers\Api\Bri\BriController;
-use App\Http\Controllers\Api\Mandiri\MandiriController;
-use App\Http\Controllers\Api\RSAController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\KabuatenController;
@@ -12,7 +9,9 @@ use App\Http\Controllers\Master\KelurahanController;
 use App\Http\Controllers\Master\ProdukController;
 use App\Http\Controllers\Master\PropinsiController;
 use App\Http\Controllers\Master\SubProdukController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Master\CabangController;
+use App\Http\Controllers\Master\JenisInstansiController;
+use App\Http\Controllers\Master\JenisKelaminController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -49,8 +48,8 @@ Route::prefix('v1')
         });
 
         Route::prefix('master')->group(function () {
-            // route agama
-            Route::prefix('agama')->group(function () {
+             // route agama
+             Route::prefix('agama')->group(function () {
                 Route::get('/',[AgamaController::class,'index']);
                 Route::post('/',[AgamaController::class,'store']);
                 Route::put('/{id}',[AgamaController::class,'update']);
@@ -103,12 +102,34 @@ Route::prefix('v1')
                 Route::get('/{id}',[SubProdukController::class,'show']);
                 Route::put('/{id}',[SubProdukController::class,'update']);
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
+            // route cabang
+            Route::prefix('cabang')->group(function () {
+                Route::get('/',[CabangController::class,'index']);
+                Route::get('/{id}',[CabangController::class,'show']);
+                Route::post('/',[CabangController::class,'store']);
+                Route::put('/{id}',[CabangController::class,'update']);
+                Route::delete('/{id}',[CabangController::class,'destroy']);
+            });
+            // route jenis instansi
+            Route::prefix('jenis-instansi')->group(function () {
+                Route::get('/',[JenisInstansiController::class,'index']);
+                Route::get('/{id}',[JenisInstansiController::class,'show']);
+                Route::post('/',[JenisInstansiController::class,'store']);
+                Route::put('/{id}',[JenisInstansiController::class,'update']);
+                Route::delete('/{id}',[JenisInstansiController::class,'destroy']);
+            });
+            // route jenis kelamin
+            Route::prefix('jenis-kelamin')->group(function () {
+                Route::get('/',[JenisKelaminController::class,'index']);
+                Route::get('/{id}',[JenisKelaminController::class,'show']);
+                Route::post('/',[JenisKelaminController::class,'store']);
+                Route::put('/{id}',[JenisKelaminController::class,'update']);
+                Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
             });
         });
+    });
 
-        Route::get('/test',function (Request $request){
-            return "service up";
-        });
+
     });
 
 
