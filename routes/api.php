@@ -30,34 +30,19 @@ Route::prefix('v1')
 ->middleware('write.log')
 ->group(function () {
 
-    Route::post('rsa-file',[RSAController::class,'upload']);
-    Route::post('rsa-file-mandiri',[RSAController::class,'uploadMandiri']);
+    Route::post('/login',[AuthControler::class,'login']);
 
-    Route::get('/test',function (Request $request){
-       return "service up";
-    });
+    Route::group(['middleware' => 'access'],function () {
+        Route::prefix('user')->group(function () {
+            Route::get('/',[UserControler::class,'getAll']);
+            Route::post('/',[UserControler::class,'save']);
+            Route::put('/{id}',[UserControler::class,'update']);
+            Route::delete('/{id}',[UserControler::class,'delete']);
+        });
 
-    //bri
-    Route::prefix('bri')
-    ->namespace('Bri')
-    ->group(function ()
-    {
-        Route::post('/signature-auth',[BriController::class,'signatureAuth']);
-        Route::post('/account-inquiry-internal',[BriController::class,'accountInquiryInternal']);
-        Route::post('/account-inquiry-status',[BriController::class,'accountInquiryStatus']);
-        Route::post('/transfer-intrabank',[BriController::class,'transferIntrabank']);
-
-    });
-
-    //mandiri
-    Route::prefix('mandiri')
-    ->namespace('Mandiri')
-    ->group(function ()
-    {
-        Route::post('/signature-auth',[MandiriController::class,'signatureAuth']);
-        Route::post('/account-inquiry-internal',[MandiriController::class,'accountInquiryInternal']);
-        Route::post('/transfer-status',[MandiriController::class,'accountInquiryStatus']);
-        Route::post('/transfer-intrabank',[MandiriController::class,'transferIntrabank']);
+        Route::get('/test',function (Request $request){
+            return "service up";
+        });
     });
 
 

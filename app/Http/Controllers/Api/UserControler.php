@@ -4,43 +4,61 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\ApiHelper as ResponseInterface;
-use App\Services\User as Service;
+use App\ApiHelper as Helper;
+use App\Query\User;
 
 class UserControler extends Controller
 {
     public function getAll(Request $request)
     {
-        return ResponseInterface::responseData(
-            Service::getAllData($request)
-        );
+        try {
+            return Helper::resultResponse(
+                User::getAllData($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     public function getById(Request $request,$id)
     {
-        return ResponseInterface::responseData(
-            // Service::byId($id)
+        return Helper::responseData(
+            // User::byId($id)
         );
     }
 
     public function save(Request $request)
     {
-        return ResponseInterface::responseData(
-            Service::saveData($request)
-        );
+
+        try {
+            return Helper::resultResponse(
+                User::saveData($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+
     }
 
     public function update(Request $request,$id)
     {
-        return ResponseInterface::responseData(
-            Service::updateData($request,$id)
-        );
+        try {
+            return Helper::responseData(
+                User::updateData($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     public function delete(Request $request,$id)
     {
-        return ResponseInterface::responseData(
-            Service::deleteData($id)
-        );
+        try {
+            return Helper::responseData(
+                User::deleteData($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 }

@@ -36,7 +36,13 @@ class ApiHelper {
             'Access-Control-Allow-Headers'     => 'X-TIMESTAMP,X-CLIENT-KEY,X-CLIENT-SECRET,Content-Type,X-SIGNATURE,Accept,Authorization,Authorization-Customer,ORIGIN,X-PARTNER-ID,X-EXTERNAL-ID,X-IP-ADDRESS,X-DEVICE-ID,CHANNEL-ID,X-LATITUDE,X-LONGITUDE',
             'originalExternalId' => self::setEksternalId()
         ];
-        return response()->json($data, $statusCode,$headers);
+        $response = [
+            "responseCode" => $statusCode,
+            "responseMessage" => 'success',
+            "responseAttr" => $data['attributes'] ?? null,
+            "responseData" => $data['items'] ?? null,
+        ];
+        return response()->json($response, $statusCode,$headers);
     }
 
      static function setEksternalId()
@@ -72,12 +78,21 @@ class ApiHelper {
         ];
 
         $codeSt = $th->getCode() == 0 ? 500 : $th->getCode();
-        $result = json_decode($th->getMessage());
-        if($codeSt == 500) $result = [
-            "responseCode" => $result->responseCode ?? $codeSt,
+        $result = [
+            "responseCode" => $codeSt,
             "responseMessage" => self::getMessageForPatner($th->getMessage()),
-            // "infoError" => $th
+            "infoError" => [
+                'line' => $th->getLine(),
+                'file' => $th->getFile(),
+            ]
         ];
+
+        if(env('APP_DEBUG') == FALSE){
+            $result = [
+                "responseCode" => $codeSt,
+                "responseMessage" => self::getMessageForPatner($th->getMessage()),
+            ];
+        }
         return response()->json($result,$codeSt,$headers);
     }
 
@@ -157,37 +172,9 @@ class ApiHelper {
         ];
 
         JWT::$leeway = 60; // $leeway dalam detik
-        // dd(env('JWT_SECRET'));
-        return JWT::encode($payload, 'LINK_AJA','HS256');
+        return JWT::encode($payload, env('JWT_SECRET'),'HS256');
     }
 
-    static function createJwtSignature($data = NULL, $is_refresh_token = FALSE) {
-        $issued_at = time();
-        $payload = [
-            'jti' => Str::uuid(),
-            'iss' => "jwt-iuser", // Issuer of the token
-            'sub' => "link-aja", // Subject of the token
-            'aud' => [
-                'https://www.linkaja.id',
-                'https://www.linkaja.id/mitra',
-            ],
-            'clientid' => null,
-            'iat' => $issued_at, // Time when JWT was issued.
-            'exp' => $issued_at + 60
-        ];
-
-        JWT::$leeway = 60; // $leeway dalam detik
-        // dd(env('JWT_SECRET'));
-        return JWT::encode($payload, (string) $data['signature'],'HS256');
-    }
-
-    static function decodeJwtSignature($token,$secret) {
-        try {
-            return JWT::decode($token,new Key($secret, 'HS256'));
-        } catch(\Throwable $e) {
-            throw $e;
-        }
-    }
 
     static function base64url_encode($str)
     {

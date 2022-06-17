@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Services;
-use App\Models\User as Model;
+namespace App\Query;
+use App\Models\ApiUsers as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
 
-class User {
+class ApiUsers {
 
     public static function authenticateuser($params)
     {
+
         $required_params = [];
         if (!$params->username) $required_params[] = 'username';
         if (!$params->password) $required_params[] = 'password';
         if (count($required_params)) throw new \Exception("Parameter berikut harus diisi: " . implode(", ", $required_params));
 
         $user = Model::where('username',$params->username)->first();
-        if(!$user) throw new \Exception("Pengguna belum terdaftar.");
-        if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.");
+        if(!$user) throw new \Exception("Pengguna belum terdaftar.",400);
+        // if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.");
         $user->access_token = Helper::createJwt($user);
+
         $user->expires_in = Helper::decodeJwt($user->access_token)->exp;
         unset($user->ip_whitelist);
         return [
@@ -92,7 +94,6 @@ class User {
             $insert->email = $params->email;
             $insert->ip_whitelist = $params->ip_whitelist;
             $insert->description = $params->description;
-            $insert->group_id = Group::PUBLIC_USER;
             $insert->password = Hash::make($params->password);
             $insert->save();
 
