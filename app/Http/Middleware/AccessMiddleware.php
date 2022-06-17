@@ -24,7 +24,6 @@ class AccessMiddleware
                 if(!$token) throw new \Exception("Invalid Access Token", 400);
                 if($token){
                     $credentials = Helper::decodeJwt($token);
-
                 }
             } catch(ExpiredException $e) {
                 throw new \Exception("Expired Access Token.", 401);

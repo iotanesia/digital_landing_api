@@ -20,7 +20,9 @@ class MAgama {
                 if($request->agama) $query->where('agama','ilike',"%$request->agama%");
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return $item;
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

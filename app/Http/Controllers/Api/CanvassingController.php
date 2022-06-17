@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Master;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MCabang;
-class CabangController extends Controller
+use App\Query\Canvassing;
+
+class CanvassingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +17,8 @@ class CabangController extends Controller
     public function index(Request $request)
     {
         try {
-            dd('ss');
             return Helper::resultResponse(
-                MCabang::getAll($request)
+                Canvassing::getDataPusat($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::store($request)
+                Canvassing::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::byId($id)
+                Canvassing::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -89,13 +89,7 @@ class CabangController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            return Helper::resultResponse(
-                MCabang::updated($request,$id)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
+        //
     }
 
     /**
@@ -104,14 +98,8 @@ class CabangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$id)
+    public function destroy($id)
     {
-        try {
-            return Helper::resultResponse(
-                MCabang::destroy($id)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
+        //
     }
 }
