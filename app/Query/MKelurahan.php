@@ -2,14 +2,14 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\MAgama as Model;
+use App\Models\MKelurahan as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
-class MAgama {
+class MKelurahan {
 
     public static function byId($id)
     {
-        return Model::find($id);
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)
@@ -17,7 +17,8 @@ class MAgama {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->agama) $query->where('agama','ilike',"%$request->agama%");
+                if($request->nama_kelurahan) $query->where('nama_kelurahan','ilike',"%$request->nama_kelurahan%");
+                if($request->id_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -39,7 +40,8 @@ class MAgama {
         try {
 
             $require_fileds = [];
-            if(!$request->agama) $require_fileds[] = 'agama';
+            if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
+            if(!$request->nama_kelurahan) $require_fileds[] = 'nama_kelurahan';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
 
             $store = Model::create($request->all());

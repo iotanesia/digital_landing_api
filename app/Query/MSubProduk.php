@@ -2,14 +2,14 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\MAgama as Model;
+use App\Models\MSubProduk as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
-class MAgama {
+class MSubProduk {
 
     public static function byId($id)
     {
-        return Model::find($id);
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)
@@ -17,7 +17,8 @@ class MAgama {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->agama) $query->where('agama','ilike',"%$request->agama%");
+                if($request->nama_sub_produk) $query->where('nama_sub_produk','ilike',"%$request->nama_sub_produk%");
+                if($request->kode_produk) $query->where('kode_produk',$request->kode_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -39,7 +40,10 @@ class MAgama {
         try {
 
             $require_fileds = [];
-            if(!$request->agama) $require_fileds[] = 'agama';
+            if(!$request->nama_sub_produk) $require_fileds[] = 'nama_sub_produk';
+            if(!$request->kode_sub_produk) $require_fileds[] = 'kode_sub_produk';
+            if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
+            if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
 
             $store = Model::create($request->all());
