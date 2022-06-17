@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Bri\BriController;
 use App\Http\Controllers\Api\Mandiri\MandiriController;
 use App\Http\Controllers\Api\RSAController;
 use App\Http\Controllers\Api\UserControler;
+use App\Http\Controllers\Master\AgamaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
@@ -38,6 +39,16 @@ Route::prefix('v1')
             Route::post('/',[UserControler::class,'save']);
             Route::put('/{id}',[UserControler::class,'update']);
             Route::delete('/{id}',[UserControler::class,'delete']);
+        });
+
+        Route::prefix('master')->group(function () {
+            // route agama
+            Route::prefix('agama')->group(function () {
+                Route::get('/',[AgamaController::class,'index']);
+                Route::post('/',[AgamaController::class,'store']);
+                Route::put('/{id}',[AgamaController::class,'update']);
+                Route::delete('/{id}',[AgamaController::class,'destroy']);
+            });
         });
 
         Route::get('/test',function (Request $request){

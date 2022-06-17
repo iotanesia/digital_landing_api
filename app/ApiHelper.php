@@ -78,6 +78,7 @@ class ApiHelper {
         ];
 
         $codeSt = $th->getCode() == 0 ? 500 : $th->getCode();
+        $codeSt = is_string($codeSt) ? 400 : $codeSt;
         $result = [
             "responseCode" => $codeSt,
             "responseMessage" => self::getMessageForPatner($th->getMessage()),
