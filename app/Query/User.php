@@ -96,7 +96,6 @@ class User {
             $insert->app_name = $params->app_name;
             $insert->email = $params->email;
             $insert->description = $params->description;
-            $insert->group_id = Group::PUBLIC_USER;
             $insert->password = Hash::make($params->password);
             $insert->save();
 

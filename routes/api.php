@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthControler;
+use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\KabuatenController;
@@ -40,6 +41,12 @@ Route::prefix('v1')
     Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
 
     Route::group(['middleware' => 'access'],function () {
+        // reoute canvasing
+        Route::prefix('canvasing')->group(function () {
+            Route::get('/',[CanvasingController::class,'index']);
+
+        });
+        // users
         Route::prefix('user')->group(function () {
             Route::get('/',[UserControler::class,'getAll']);
             Route::post('/',[UserControler::class,'save']);
