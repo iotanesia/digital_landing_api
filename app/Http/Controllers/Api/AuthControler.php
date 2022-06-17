@@ -25,8 +25,9 @@ class AuthControler extends Controller
     public function refreshToken(Request $request)
     {
         try {
+            $user = Helper::getUserJwt($request, TRUE);
             return Helper::resultResponse([
-                'items' => Helper::getUserJwt($request, TRUE)
+                'items' =>  ["access_token" => Helper::createJwt($user)]
             ]);
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
