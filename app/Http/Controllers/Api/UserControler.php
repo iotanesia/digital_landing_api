@@ -61,4 +61,15 @@ class UserControler extends Controller
             return Helper::setErrorResponse($th);
         }
     }
+
+    public function detail(Request $request) {
+        try {
+            $user = Helper::getUserJwt($request);
+            return Helper::resultResponse([
+                'items' =>  User::byId($user->id)
+            ]);
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 }

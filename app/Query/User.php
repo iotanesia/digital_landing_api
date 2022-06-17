@@ -62,8 +62,15 @@ class User {
 
     public static function byId($id)
     {
+        $data =  Model::with(['refRole', 'refCabang'])->find($id);
+        $data->role_name = $data->refRole->nama_role ?? null;
+        $data->cabang_name = $data->refCabang->nama_cabang ?? null;
+        unset(
+            $data->refRole,
+            $data->refCabang
+        );
         return [
-            'items' => Model::find($id),
+            'items' => $data,
             'attributes' => null
         ];
     }

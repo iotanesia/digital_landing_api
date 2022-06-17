@@ -34,4 +34,16 @@ class AuthControler extends Controller
         }
     }
 
+    public function detailUser(Request $request)
+    {
+        try {
+            $user = Helper::getUserJwt($request);
+            return Helper::resultResponse([
+                'items' =>  ["access_token" => Helper::createJwt($user)]
+            ]);
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
 }
