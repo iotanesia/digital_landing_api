@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Mandiri\MandiriController;
 use App\Http\Controllers\Api\RSAController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
+use App\Http\Controllers\Master\CabangController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
@@ -48,6 +49,14 @@ Route::prefix('v1')
                 Route::post('/',[AgamaController::class,'store']);
                 Route::put('/{id}',[AgamaController::class,'update']);
                 Route::delete('/{id}',[AgamaController::class,'destroy']);
+            });
+            // route cabang
+            Route::prefix('cabang')->group(function () {
+                Route::get('/',[CabangController::class,'index']);
+                Route::get('/{id}',[CabangController::class,'show']);
+                Route::post('/',[CabangController::class,'store']);
+                Route::put('/{id}',[CabangController::class,'update']);
+                Route::delete('/{id}',[CabangController::class,'destroy']);
             });
         });
 
