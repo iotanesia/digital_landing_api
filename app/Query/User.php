@@ -21,11 +21,13 @@ class User {
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
         $user->nama_role = $user->refRole->nama_role ?? null;
-        $user->access_token = Helper::createJwt($user);
-        $user->expires_in = Helper::decodeJwt($user->access_token)->exp;
         unset(
             $user->refRole
         );
+        $user->access_token = Helper::createJwt($user);
+        $user->refresh_token = Helper::createJwt($user, TRUE);
+        $user->expires_in = Helper::decodeJwt($user->access_token)->exp;
+
         return [
             'items' => $user,
             'attributes' => null

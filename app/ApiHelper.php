@@ -76,7 +76,6 @@ class ApiHelper {
             'Access-Control-Allow-Headers'     => 'X-TIMESTAMP,X-CLIENT-KEY,X-CLIENT-SECRET,Content-Type,X-SIGNATURE,Accept,Authorization,Authorization-Customer,ORIGIN,X-PARTNER-ID,X-EXTERNAL-ID,X-IP-ADDRESS,X-DEVICE-ID,CHANNEL-ID,X-LATITUDE,X-LONGITUDE'
 
         ];
-
         $codeSt = $th->getCode() == 0 ? 500 : $th->getCode();
         $codeSt = is_string($codeSt) ? 400 : $codeSt;
         $result = [
@@ -210,15 +209,11 @@ class ApiHelper {
     }
 
     static function getUserJwt($request, $is_refresh_token = FALSE) {
-        $token = $is_refresh_token? $request->refresh_token: $request->header('accesstoken');
+        $token = $is_refresh_token? $request->refresh_token: $request->bearerToken();
         $decoded_data = JWT::decode($token,new Key(env('JWT_SECRET'), 'HS256'));
         return $decoded_data->sub;
     }
 
-    static function getUserId($request) {
-        $decoded_data = JWT::decode($request->header('accesstoken'), env('JWT_SECRET'), ['HS256']);
-        return $decoded_data->sub;
-    }
 
     static function getJwtData($token) {
         try {

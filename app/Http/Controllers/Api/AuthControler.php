@@ -22,5 +22,15 @@ class AuthControler extends Controller
         }
     }
 
+    public function refreshToken(Request $request)
+    {
+        try {
+            return Helper::resultResponse([
+                'items' => Helper::getUserJwt($request, TRUE)
+            ]);
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 
 }
