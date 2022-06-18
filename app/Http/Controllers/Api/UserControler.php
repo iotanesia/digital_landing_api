@@ -65,9 +65,7 @@ class UserControler extends Controller
     public function detail(Request $request) {
         try {
             $user = Helper::getUserJwt($request);
-            return Helper::resultResponse([
-                'items' =>  User::byId($user->id)
-            ]);
+            return Helper::resultResponse( User::byId($user->id));
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
