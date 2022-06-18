@@ -12,20 +12,23 @@ use Carbon\Carbon;
 
 class Eform {
 
-    public static function getDataCanvassing($request)
+    public static function getData($request)
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('kode_aplikasi');
+                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('kode_aplikasi')->where('kode_cabang',$request->current_user->kode_cabang);
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [
+                            'id' => $item->id,
                             'nama' => $item->nama,
                             'nik' => $item->nik,
+                            'nama_produk' => $item->refProduk->nama_produk ?? null,
                             'created_at' => $item->created_at,
+                            'foto' => $item->foto
                         ];
                     }),
                     'attributes' => [

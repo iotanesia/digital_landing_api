@@ -18,7 +18,7 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::getDataCanvassing($request)
+                Eform::getData($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

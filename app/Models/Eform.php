@@ -48,4 +48,19 @@ class Eform extends Model
     const STEP_PROSES_EFORM = 2;
     const STEP_SUDAH_EFORM = 3;
 
+    public function refCabang()
+    {
+        return $this->belongsTo(MCabang::class,'kode_cabang','kode_cabang');
+    }
+
+    public function refProduk()
+    {
+        return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
+    public function manyProduk()
+    {
+        return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
 }
