@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\EformController;
+use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Master\AgamaController;
@@ -51,6 +52,11 @@ Route::prefix('v1')
     Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
 
     Route::group(['middleware' => 'access'],function () {
+
+        Route::prefix('file')->group(function () {
+            Route::get('/{filename}',[FileController::class,'show']);
+        });
+
         // reoute canvasing
         Route::prefix('canvasing')->group(function () {
             Route::prefix('web')->group(function () {

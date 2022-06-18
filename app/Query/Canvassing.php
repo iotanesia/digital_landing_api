@@ -10,6 +10,8 @@ use App\Constants\Group;
 use App\Models\Canvassing as ModelsCanvassing;
 use Carbon\Carbon;
 use App\Models\Aktifitas;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 class Canvassing {
 
     public static function getDataPusat($request)
@@ -94,9 +96,13 @@ class Canvassing {
             $params['status'] = ModelsCanvassing::STS_COLD;
             $params['step'] = ModelsCanvassing::STEP_PENGAJUAN_BARU;
             $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
+            $image = $request->foto;  // your base64 encoded
+            $request->foto =(string) Str::uuid().'.png';
+
             $store = Model::create($params);
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
+            Storage::put($request->foto, base64_decode($image));
             return [
                 'items' => $store
             ];
@@ -114,7 +120,8 @@ class Canvassing {
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'nama_rm' => $data->refRm->nama ?? null,
             'lokasi' => $request->lokasi,
-            'informasi_aktifitas' =>  $request->informasi_aktifitas
+            'informasi_aktifitas' =>  $request->informasi_aktifitas,
+            'foto' => $request->foto
          ];
     }
 
@@ -163,9 +170,13 @@ class Canvassing {
              $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
+             $image = $request->foto;  // your base64 encoded
+             $request->foto =(string) Str::uuid().'.png';
+
              $store = Model::create($params);
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
              if($is_transaction) DB::commit();
+             Storage::put($request->foto, base64_decode($image));
              return [
                  'items' => $store
              ];
