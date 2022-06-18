@@ -12,6 +12,7 @@ class Aktifitas extends Model
     public $fillable = [
         'id_tujuan_pemasaran',
         'id_cara_pemasaran',
+        'id_canvassing',
         'informasi_aktifitas',
         'foto',
         'lokasi',

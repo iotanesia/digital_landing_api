@@ -44,7 +44,7 @@ class MSubProduk {
             if(!$request->kode_sub_produk) $require_fileds[] = 'kode_sub_produk';
             if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
             if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();

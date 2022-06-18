@@ -13,13 +13,12 @@ class User {
     public static function authenticateuser($params)
     {
         $required_params = [];
-        if (!$params->username) $required_params[] = 'username';
+        if (!$params->nirk) $required_params[] = 'nirk';
         if (!$params->password) $required_params[] = 'password';
         if (count($required_params)) throw new \Exception("Parameter berikut harus diisi: " . implode(", ", $required_params));
 
         $user = Model::where(function ($query) use ($params){
-            $query->where('username',$params->username);
-            $query->orWhere('nirk',$params->nirk);
+            $query->where('nirk',$params->nirk);
         })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
@@ -179,5 +178,10 @@ class User {
             DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function byUsername($username)
+    {
+        return Model::where('username',$username)->first();
     }
 }

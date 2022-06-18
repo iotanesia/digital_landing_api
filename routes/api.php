@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthControler;
-use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
@@ -60,7 +59,8 @@ Route::prefix('v1')
 
             Route::prefix('main')->group(function () {
                 Route::get('/',[CanvassingController::class,'index']);
-                Route::get('/{id}',[CanvasingController::class,'show']);
+                Route::post('/assign',[CanvassingController::class,'assign']);
+                Route::get('/{id}',[CanvassingController::class,'show']);
             });
 
         });

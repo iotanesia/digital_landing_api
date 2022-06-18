@@ -11,6 +11,7 @@ class Canvassing extends Model
     protected $table = 'canvassing';
 
     public $fillable = [
+        'id',
         'nik',
         'nama',
         'no_hp',
@@ -28,6 +29,7 @@ class Canvassing extends Model
         'id_sub_produk',
         'npwp',
         'nirk',
+        'nomor_aplikasi',
         'created_at',
         'created_by',
         'updated_at',
@@ -35,6 +37,9 @@ class Canvassing extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    const STS_COLD = 'COLD';
+    const STS_HOT = 'HOT';
 
     const STEP_PENGAJUAN_BARU = 0;
     const STEP_INPUT_CANVASSING = 1;
@@ -49,5 +54,10 @@ class Canvassing extends Model
     public function refRm()
     {
         return $this->belongsTo(User::class,'nirk','nirk');
+    }
+
+    public function refProduk()
+    {
+        return $this->belongsTo(MProduk::class,'id_produk','id_produk');
     }
 }

@@ -41,7 +41,7 @@ class MStatusTempatTinggal {
 
             $require_fileds = [];
             if(!$request->nama_status_tempat_tinggal) $require_fileds[] = 'nama_status_tempat_tinggal';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();

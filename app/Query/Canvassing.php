@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Models\Canvassing as ModelsCanvassing;
 use Carbon\Carbon;
 
 class Canvassing {
@@ -16,6 +17,7 @@ class Canvassing {
         try {
             $data = Model::where(function ($query) use ($request){
                 $query->where('step',Model::STEP_PENGAJUAN_BARU);
+                $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -39,20 +41,22 @@ class Canvassing {
         }
     }
 
-    public static function byId($request)
+    public static function byId($id)
     {
-        // dummy-data
+
         try {
+            $data = Model::find($id);
+            if(!$data) throw new \Exception("Data not found.", 400);
+
             return [
                 'items' => [
-                    'id' => 1,
-                    'nik' => '123455667789',
-                    'nama_lengkap' => 'Rexy',
-                    'no_hp' => '089201023911',
-                    'alamat' => 'Ds KKN Penari',
-                    'status' => null,
-                    'produk' => 'MIKRO',
-                    'kode_produk' => 'MKR'
+                    'nik' => $data->nik,
+                    'nama' => $data->nama,
+                    'no_hp' => $data->no_hp,
+                    'alamat' => $data->alamat,
+                    'status' => $data->status,
+                    'id_produk' => $data->id_produk,
+                    'nama_produk' => $data->refProduk->nama_produk ?? null,
                 ],
                 'attributes' => null,
             ];
@@ -81,11 +85,20 @@ class Canvassing {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->lokasi) $require_fileds[] = 'lokasi';
             if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
-            $store = Model::create($request->all());
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $request->informasi_aktifitas = 'e-form: Pengajuan Baru Via Web';
+            if($request->nirk)  $request->informasi_aktifitas = 'e-form: Input Via Web';
+            $params = $request->all();
+            // default include params
+            $params['status'] = ModelsCanvassing::STS_COLD;
+            $params['step'] = ModelsCanvassing::STEP_PENGAJUAN_BARU;
+            $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
+            $store = Model::create($params);
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
-            return $store;
+            return [
+                'items' => $store
+            ];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -95,12 +108,35 @@ class Canvassing {
     public static function setParamsRefAktifitas($request,$data)
     {
          return [
-            'id_canvassing' => $data,
+            'id_canvassing' => $data->id,
             'waktu' => Carbon::now()->format('H:i'),
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'nama_rm' => $data->refRm->nama ?? null,
             'lokasi' => $request->lokasi,
-            'informasi_aktifitas' => 'e-form: Pengajuan Baru Via Web'
+            'informasi_aktifitas' =>  $request->informasi_aktifitas
          ];
+    }
+
+    // set rm assignmeent data
+    public static function assign($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_canvassing) $require_fileds[] = 'id_canvassing';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $request->informasi_aktifitas = 'e-form: Input Via Web';
+            $data = Model::find($request->id_canvassing);
+            $data->step = ModelsCanvassing::STEP_INPUT_CANVASSING;
+            $data->nirk = $request->current_user->nirk; // assign rm
+            $data->save();
+            $data->refAktifitas()->create(self::setParamsRefAktifitas($request,$data));
+
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
     }
 }
