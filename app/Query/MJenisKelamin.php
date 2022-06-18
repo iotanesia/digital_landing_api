@@ -38,7 +38,7 @@ class MJenisKelamin {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_jenikelamin) $require_fileds[] = 'nama_jenikelamin';
+            if(!$request->nama_jenis_kelamin) $require_fileds[] = 'nama_jenis_kelamin';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
 
             $store = Model::create($request->all());

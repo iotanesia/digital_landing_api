@@ -14,6 +14,11 @@ use App\Http\Controllers\Master\SubProdukController;
 use App\Http\Controllers\Master\CabangController;
 use App\Http\Controllers\Master\JenisInstansiController;
 use App\Http\Controllers\Master\JenisKelaminController;
+use App\Http\Controllers\Master\TingkatPendidikanController;
+use App\Http\Controllers\Master\StatusPernikahanController;
+use App\Http\Controllers\Master\TujuanPemasaranController;
+use App\Http\Controllers\Master\CaraPemasaranController;
+use App\Http\Controllers\Master\HubunganController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -126,11 +131,11 @@ Route::prefix('v1')
 
             // route cabang
             Route::prefix('cabang')->group(function () {
-                Route::get('/',[Cabang::class,'index']);
-                Route::post('/',[Cabang::class,'store']);
-                Route::get('/{id}',[Cabang::class,'show']);
-                Route::put('/{id}',[Cabang::class,'update']);
-                Route::delete('/{id}',[Cabang::class,'destroy']);
+                Route::get('/',[CabangController::class,'index']);
+                Route::post('/',[CabangController::class,'store']);
+                Route::get('/{id}',[CabangController::class,'show']);
+                Route::put('/{id}',[CabangController::class,'update']);
+                Route::delete('/{id}',[CabangController::class,'destroy']);
             });
             // route jenis instansi
             Route::prefix('jenis-instansi')->group(function () {
@@ -148,11 +153,46 @@ Route::prefix('v1')
                 Route::put('/{id}',[JenisKelaminController::class,'update']);
                 Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
             });
+            // route tingkat pendidikan
+            Route::prefix('tingkat-pendidikan')->group(function () {
+                Route::get('/',[TingkatPendidikanController::class,'index']);
+                Route::post('/',[TingkatPendidikanController::class,'store']);
+                Route::get('/{id}',[TingkatPendidikanController::class,'show']);
+                Route::put('/{id}',[TingkatPendidikanController::class,'update']);
+                Route::delete('/{id}',[TingkatPendidikanController::class,'destroy']);
+            });
+            // route tingkat pendidikan
+            Route::prefix('status-pernikahan')->group(function () {
+                Route::get('/',[StatusPernikahanController::class,'index']);
+                Route::post('/',[StatusPernikahanController::class,'store']);
+                Route::get('/{id}',[StatusPernikahanController::class,'show']);
+                Route::put('/{id}',[StatusPernikahanController::class,'update']);
+                Route::delete('/{id}',[StatusPernikahanController::class,'destroy']);
+            });
+            // route tujuan pemasaran
+            Route::prefix('tujuan-pemasaran')->group(function () {
+                Route::get('/',[TujuanPemasaranController::class,'index']);
+                Route::post('/',[TujuanPemasaranController::class,'store']);
+                Route::get('/{id}',[TujuanPemasaranController::class,'show']);
+                Route::put('/{id}',[TujuanPemasaranController::class,'update']);
+                Route::delete('/{id}',[TujuanPemasaranController::class,'destroy']);
+            });
+            // route Hubungan
+            Route::prefix('hubungan')->group(function () {
+                Route::get('/',[HubunganController::class,'index']);
+                Route::post('/',[HubunganController::class,'store']);
+                Route::get('/{id}',[HubunganController::class,'show']);
+                Route::put('/{id}',[HubunganController::class,'update']);
+                Route::delete('/{id}',[HubunganController::class,'destroy']);
+            });
+            // cara pemasaran
+            Route::prefix('cara-pemasaran')->group(function () {
+                Route::get('/',[CaraPemasaranController::class,'index']);
+                Route::post('/',[CaraPemasaranController::class,'store']);
+                Route::get('/{id}',[CaraPemasaranController::class,'show']);
+                Route::put('/{id}',[CaraPemasaranController::class,'update']);
+                Route::delete('/{id}',[CaraPemasaranController::class,'destroy']);
+            });
         });
-
-
     });
-
-
 });
-

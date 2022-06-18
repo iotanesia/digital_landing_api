@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MCabang;
-class CabangController extends Controller
+use App\Query\MHubungan;
+class HubunganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::getAll($request)
+                MHubungan::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -44,7 +44,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::store($request)
+                MHubungan::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -61,7 +61,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::byId($id)
+                MHubungan::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -90,7 +90,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::updated($request,$id)
+                MHubungan::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -107,7 +107,7 @@ class CabangController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MCabang::destroy($id)
+                MHubungan::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

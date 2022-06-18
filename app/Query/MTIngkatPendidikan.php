@@ -2,21 +2,21 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\MTujuanPemasaran as Model;
+use App\Models\MTIngkatPendidikan as Model;
 use Illuminate\Support\Facades\DB;
 
-class MTujuanPemasaran {
+class MTIngkatPendidikan {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_tujuan_pemasaran', $id)->first()];
+        return ['items' => Model::where('id', $id)->first()];
     }
 
     public static function getAll($request)
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_tujuan_pemasaran) $query->where('nama_tujuan_pemasaran','ilike',"%$request->nama_tujuan_pemasaran%");
+                if($request->nama_tingkat_pendidikan) $query->where('nama_tingkat_pendidikan','ilike',"%$request->nama_tingkat_pendidikan%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -38,7 +38,7 @@ class MTujuanPemasaran {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_tujuan_pemasaran) $require_fileds[] = 'nama_tujuan_pemasaran';
+            if(!$request->nama_tingkat_pendidikan) $require_fileds[] = 'nama_tingkat_pendidikan';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
 
             $store = Model::create($request->all());
