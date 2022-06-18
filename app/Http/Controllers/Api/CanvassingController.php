@@ -45,7 +45,7 @@ class CanvassingController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Canvassing::store($request)
+                Canvassing::storeWeb($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -79,7 +79,7 @@ class CanvassingController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Canvassing::store($request)
+                Canvassing::storeMobile($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -98,6 +98,23 @@ class CanvassingController extends Controller
         try {
             return Helper::resultResponse(
                 Canvassing::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function riwayatAktifitas(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                Canvassing::getHistoryActivities($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

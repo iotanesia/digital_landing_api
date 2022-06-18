@@ -51,6 +51,12 @@ class Canvassing extends Model
         return $this->belongsTo(Aktifitas::class,'id_canvassing','id');
     }
 
+    public function manyAktifitas()
+    {
+        return $this->hasMany(Aktifitas::class,'id_canvassing','id');
+    }
+
+
     public function refRm()
     {
         return $this->belongsTo(User::class,'nirk','nirk');

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
 use App\Models\Canvassing as ModelsCanvassing;
 use Carbon\Carbon;
-
+use App\Models\Aktifitas;
 class Canvassing {
 
     public static function getDataPusat($request)
@@ -66,7 +66,7 @@ class Canvassing {
     }
 
     // eform web
-    public static function store($request,$is_transaction = true)
+    public static function storeWeb($request,$is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
         try {
@@ -139,4 +139,83 @@ class Canvassing {
             throw $th;
         }
     }
+
+     // eform web
+     public static function storeMobile($request,$is_transaction = true)
+     {
+         if($is_transaction) DB::beginTransaction();
+         try {
+             $require_fileds = [];
+             if(!$request->nik) $require_fileds[] = 'nik';
+             if(!$request->nama) $require_fileds[] = 'nama';
+             if(!$request->no_hp) $require_fileds[] = 'no_hp';
+             if(!$request->email) $require_fileds[] = 'email';
+             if(!$request->npwp) $require_fileds[] = 'npwp';
+             if(!$request->id_produk) $require_fileds[] = 'id_produk';
+             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
+             if(!$request->lokasi) $require_fileds[] = 'lokasi';
+             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+             $params = $request->all();
+             // default include params
+             $params['status'] = ModelsCanvassing::STS_COLD;
+             $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
+             $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
+             $params['kode_cabang'] = $request->current_user->kode_cabang;
+             $params['nirk'] = $request->current_user->nirk;
+             $store = Model::create($params);
+             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
+             if($is_transaction) DB::commit();
+             return [
+                 'items' => $store
+             ];
+         } catch (\Throwable $th) {
+             if($is_transaction) DB::rollBack();
+             throw $th;
+         }
+     }
+
+     public static function getHistoryActivities($request,$id)
+     {
+        try {
+                $data = Model::with(['manyAktifitas' => function ($query){
+                     $query->orderBy('created_at','desc');
+                }])->find($id);
+                if(!$data) throw new \Exception("Data not found.", 400);
+                return [
+                    'items' => $data->manyAktifitas ?? [],
+                    'attributes' => null
+                ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+     }
+
+     public static function getData($request)
+     {
+         try {
+             $data = Model::where(function ($query) use ($request){
+                 $query->where('nirk');
+                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+                 if($request->nik) $query->where('nik',$request->nik);
+             })->paginate($request->limit);
+                 return [
+                     'items' => $data->getCollection()->transform(function ($item){
+                         return [
+                             'nama' => $item->nama,
+                             'nik' => $item->nik,
+                             'created_at' => $item->created_at,
+                         ];
+                     }),
+                     'attributes' => [
+                         'total' => $data->total(),
+                         'current_page' => $data->currentPage(),
+                         'from' => $data->currentPage(),
+                         'per_page' => (int) $data->perPage(),
+                     ]
+                 ];
+         } catch (\Throwable $th) {
+             throw $th;
+         }
+     }
+
 }

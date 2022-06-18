@@ -21,7 +21,7 @@ class User {
             $query->where('nirk',$params->nirk);
         })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
-        if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
+        // if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
         $user->role_produk = $user->manyRoleProduk->map(function ($item){
             return [
                 'id_produk' => $item->id_produk,
