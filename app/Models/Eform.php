@@ -33,6 +33,7 @@ class Eform extends Model
         'id_sub_produk',
         'kode_aplikasi',
         'step',
+        'id_canvassing',
         'created_at',
         'created_by',
         'updated_at',

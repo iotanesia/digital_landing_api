@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
 use App\Models\Canvassing as ModelsCanvassing;
+use App\Models\Eform as ModelsEform;
 use Carbon\Carbon;
 use App\Models\Aktifitas;
 use Illuminate\Support\Facades\Storage;
@@ -121,6 +122,8 @@ class Canvassing {
             'nama_rm' => $data->refRm->nama ?? null,
             'lokasi' => $request->lokasi,
             'informasi_aktifitas' =>  $request->informasi_aktifitas,
+            'id_tujuan_pemasaran' => $request->id_tujuan_pemasaran,
+            'id_cara_pemasaran' => $request->id_cara_pemasaran,
             'foto' => $request->foto
          ];
     }
@@ -161,20 +164,33 @@ class Canvassing {
              if(!$request->npwp) $require_fileds[] = 'npwp';
              if(!$request->id_produk) $require_fileds[] = 'id_produk';
              if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
+             if(!$request->status) $require_fileds[] = 'status';
              if(!$request->lokasi) $require_fileds[] = 'lokasi';
              if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
              $params = $request->all();
              // default include params
-             $params['status'] = ModelsCanvassing::STS_COLD;
-             $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
+            //  $params['status'] = ModelsCanvassing::STS_COLD;
+            //  $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
              $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
              $image = $request->foto;  // your base64 encoded
              $request->foto =(string) Str::uuid().'.png';
+             $params['step'] = $request->status == ModelsCanvassing::STS_HOT ? ModelsCanvassing::STEP_SUDAH_CANVASSING : ModelsCanvassing::STEP_PROSES_CANVASSING;
 
-             $store = Model::create($params);
+             if($request->id) {
+                 $store = Model::where('id', $request->id)->first()->fill($params);
+                 $store->save();
+             } else {
+                 $store = Model::create($params);
+             }
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
+             if($request->status == ModelsCanvassing::STS_HOT) {
+                 $params['id_canvassing'] =  $store->id;
+                 $params['step'] =  ModelsCanvassing::STEP_PENGAJUAN_BARU;
+                 ModelsEform::create($params);
+             }
+
              if($is_transaction) DB::commit();
              Storage::put($request->foto, base64_decode($image));
              return [
@@ -205,7 +221,9 @@ class Canvassing {
      public static function getData($request)
      {
          try {
-             $data = Model::where(function ($query) use ($request){
+             $data = Model::whereIn('step', [ModelsCanvassing::STEP_INPUT_CANVASSING,ModelsCanvassing::STEP_PROSES_CANVASSING])
+                     ->where('kode_cabang', $request->current_user->kode_cabang)
+                     ->where(function ($query) use ($request){
                  $query->where('nirk',$request->current_user->nirk);
                  if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                  if($request->nik) $query->where('nik',$request->nik);
