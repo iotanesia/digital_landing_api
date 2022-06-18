@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
-use App\Http\Controllers\Api\CanvassingController;
+use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\UserControler;
+use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\KabuatenController;
 use App\Http\Controllers\Master\KecamatanController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Master\SubProdukController;
 use App\Http\Controllers\Master\CabangController;
 use App\Http\Controllers\Master\JenisInstansiController;
 use App\Http\Controllers\Master\JenisKelaminController;
+use App\Http\Controllers\Master\JenisPekerjaanController;
 use App\Http\Controllers\Master\TingkatPendidikanController;
 use App\Http\Controllers\Master\StatusPernikahanController;
 use App\Http\Controllers\Master\TujuanPemasaranController;
@@ -72,7 +74,7 @@ Route::prefix('v1')
             Route::delete('/{id}',[UserControler::class,'delete']);
             Route::get('/detail',[UserControler::class,'detail']);
         });
-
+        // master
         Route::prefix('master')->group(function () {
              // route agama
              Route::prefix('agama')->group(function () {
@@ -129,7 +131,6 @@ Route::prefix('v1')
                 Route::put('/{id}',[SubProdukController::class,'update']);
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
             });
-
             // route cabang
             Route::prefix('cabang')->group(function () {
                 Route::get('/',[CabangController::class,'index']);
@@ -153,6 +154,14 @@ Route::prefix('v1')
                 Route::get('/{id}',[JenisKelaminController::class,'show']);
                 Route::put('/{id}',[JenisKelaminController::class,'update']);
                 Route::delete('/{id}',[JenisKelaminController::class,'destroy']);
+            });
+            // route jenis pekerjaan
+            Route::prefix('jenis-pekerjaan')->group(function () {
+                Route::get('/',[JenisPekerjaanController::class,'index']);
+                Route::post('/',[JenisPekerjaanController::class,'store']);
+                Route::get('/{id}',[JenisPekerjaanController::class,'show']);
+                Route::put('/{id}',[JenisPekerjaanController::class,'update']);
+                Route::delete('/{id}',[JenisPekerjaanController::class,'destroy']);
             });
             // route tingkat pendidikan
             Route::prefix('tingkat-pendidikan')->group(function () {
@@ -203,5 +212,17 @@ Route::prefix('v1')
                 Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
             });
         });
+        // simulasi
+        Route::prefix('simulasi')->group(function () {
+            Route::get('/',[SimulasiController::class,'process']);
+        });
+        // eform
+        Route::prefix('eform')->group(function () {
+            Route::prefix('main')->group(function () {
+                Route::get('/',[EformController::class,'index']);
+                Route::get('/{id}',[EformController::class,'show']);
+            });
+        });
+
     });
 });
