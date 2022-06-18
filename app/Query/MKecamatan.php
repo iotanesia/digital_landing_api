@@ -42,7 +42,7 @@ class MKecamatan {
             $require_fileds = [];
             if(!$request->id_kabupaten) $require_fileds[] = 'id_kabupaten';
             if(!$request->nama_kecamatan) $require_fileds[] = 'nama_kecamatan';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();

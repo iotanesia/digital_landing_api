@@ -41,7 +41,7 @@ class MJenisKelamin {
 
             $require_fileds = [];
             if(!$request->nama_jenis_kelamin) $require_fileds[] = 'nama_jenis_kelamin';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();

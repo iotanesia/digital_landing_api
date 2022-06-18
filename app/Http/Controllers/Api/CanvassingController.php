@@ -52,6 +52,23 @@ class CanvassingController extends Controller
         }
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function assign(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Canvassing::assign($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
      /**
      * Store a newly created resource in storage.
      *
