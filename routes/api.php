@@ -15,6 +15,9 @@ use App\Http\Controllers\Master\JenisInstansiController;
 use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\TingkatPendidikanController;
 use App\Http\Controllers\Master\StatusPernikahanController;
+use App\Http\Controllers\Master\TujuanPemasaranController;
+use App\Http\Controllers\Master\CaraPemasaranController;
+use App\Http\Controllers\Master\HubunganController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -161,6 +164,22 @@ Route::prefix('v1')
                 Route::get('/{id}',[TujuanPemasaranController::class,'show']);
                 Route::put('/{id}',[TujuanPemasaranController::class,'update']);
                 Route::delete('/{id}',[TujuanPemasaranController::class,'destroy']);
+            });
+            // route Hubungan
+            Route::prefix('hubungan')->group(function () {
+                Route::get('/',[HubunganController::class,'index']);
+                Route::post('/',[HubunganController::class,'store']);
+                Route::get('/{id}',[HubunganController::class,'show']);
+                Route::put('/{id}',[HubunganController::class,'update']);
+                Route::delete('/{id}',[HubunganController::class,'destroy']);
+            });
+            // cara pemasaran
+            Route::prefix('cara-pemasaran')->group(function () {
+                Route::get('/',[CaraPemasaranController::class,'index']);
+                Route::post('/',[CaraPemasaranController::class,'store']);
+                Route::get('/{id}',[CaraPemasaranController::class,'show']);
+                Route::put('/{id}',[CaraPemasaranController::class,'update']);
+                Route::delete('/{id}',[CaraPemasaranController::class,'destroy']);
             });
         });
     });
