@@ -42,6 +42,7 @@ class Canvassing extends Model
         'deleted_at',
         'deleted_by',
         'foto',
+        'platfrom',
     ];
 
     const STS_COLD = 'COLD';
@@ -51,6 +52,10 @@ class Canvassing extends Model
     const STEP_INPUT_CANVASSING = 1;
     const STEP_PROSES_CANVASSING = 2;
     const STEP_SUDAH_CANVASSING = 3;
+
+    const WEB = 'WEB';
+    const PUSAT = 'PUSAT';
+    const MOBILE = 'MOBILE';
 
     public function refAktifitas()
     {
