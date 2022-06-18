@@ -41,7 +41,7 @@ class CanvassingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeWeb(Request $request)
     {
         try {
             return Helper::resultResponse(
@@ -51,6 +51,24 @@ class CanvassingController extends Controller
             return Helper::setErrorResponse($th);
         }
     }
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeMobile(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Canvassing::store($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
 
     /**
      * Display the specified resource.

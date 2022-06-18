@@ -17,6 +17,8 @@ class MPropinsi extends Model
         'created_by',
         'updated_at',
         'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
 
     public static function boot()

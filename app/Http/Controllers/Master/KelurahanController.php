@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MKecamatan;
+use App\Query\MKelurahan;
 
 class KelurahanController extends Controller
 {
@@ -18,7 +18,7 @@ class KelurahanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MKecamatan::getAll($request)
+                MKelurahan::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class KelurahanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MKecamatan::store($request)
+                MKelurahan::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class KelurahanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MKecamatan::byId($id)
+                MKelurahan::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -91,7 +91,7 @@ class KelurahanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MKecamatan::updated($request,$id)
+                MKelurahan::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -108,7 +108,7 @@ class KelurahanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MKecamatan::destroy($id)
+                MKelurahan::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
