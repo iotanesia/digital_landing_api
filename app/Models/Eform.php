@@ -16,7 +16,7 @@ class Eform extends Model
         'no_hp',
         'email',
         'tempat_lahir',
-        'tanggal_lahir',
+        'tgl_lahir',
         'alamat',
         'nama_pasangan',
         'tempat_lahir_pasangan',
@@ -41,6 +41,7 @@ class Eform extends Model
         'deleted_at',
         'deleted_by',
         'alamat_detail',
+        'foto',
     ];
 
     const STEP_PENGAJUAN_BARU = 0;

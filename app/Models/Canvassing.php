@@ -41,6 +41,7 @@ class Canvassing extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
+        'foto',
     ];
 
     const STS_COLD = 'COLD';

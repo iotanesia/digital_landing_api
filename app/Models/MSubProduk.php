@@ -28,7 +28,7 @@ class MSubProduk extends Model
 
     public static function cekPlafon($id, $plafon) {
         try {
-            $sub_produk = Model::find($id);
+            $sub_produk = MSubProduk::find($id);
 
             return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
 
