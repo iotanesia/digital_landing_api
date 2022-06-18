@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Query;
-use App\Models\Eform as Model;
+use App\Models\Canvassing as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -12,30 +12,27 @@ class Canvassing {
 
     public static function getDataPusat($request)
     {
-        // dummy-data
         try {
-            return [
-                'items' => [
-                    [
-                        'id' =>  1,
-                        'nama' =>  'Andi Ruswandi',
-                        'nik' =>  '1234567890123456',
-                        'created_at' => '2021-06-18'
-                    ],
-                    [
-                        'id' =>  2,
-                        'nama' =>  'Rexy Main Gundu',
-                        'nik' =>  '1234567890123457',
-                        'created_at' => '2021-06-18'
+            $data = Model::where(function ($query) use ($request){
+                $query->where('step',Model::STEP_PENGAJUAN_BARU);
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+                if($request->nik) $query->where('nik',$request->nik);
+            })->paginate($request->limit);
+                return [
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'nama' => $item->nama,
+                            'nik' => $item->nik,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
+                    'attributes' => [
+                        'total' => $data->total(),
+                        'current_page' => $data->currentPage(),
+                        'from' => $data->currentPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
-                ],
-                'attributes' => [
-                    'total' => 5,
-                    'current_page' => 1,
-                    'from' => 1,
-                    'per_page' => 2,
-                ]
-            ];
+                ];
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -63,15 +60,31 @@ class Canvassing {
         }
     }
 
-    public static function store($request)
+    public static function store($request,$is_transaction = true)
     {
-        // dummy-data
+        if($is_transaction) DB::beginTransaction();
         try {
-            return [
-                'items' => null,
-                'attributes' => null,
-             ];
+            $require_fileds = [];
+            if(!$request->nik) $require_fileds[] = 'nik';
+            if(!$request->nama) $require_fileds[] = 'nama';
+            if(!$request->no_hp) $require_fileds[] = 'no_hp';
+            if(!$request->email) $require_fileds[] = 'email';
+            if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
+            if(!$request->id_kabupaten) $require_fileds[] = 'id_kabupaten';
+            if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
+            if(!$request->id_kelurahan) $require_fileds[] = 'id_kelurahan';
+            if(!$request->kode_pos) $require_fileds[] = 'kode_pos';
+            if(!$request->alamat) $require_fileds[] = 'alamat';
+            if(!$request->id_produk) $require_fileds[] = 'id_produk';
+            if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
+            if(!$request->lokasi) $require_fileds[] = 'lokasi';
+            if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            $store = Model::create($request->all());
+            if($is_transaction) DB::commit();
+            return $store;
         } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
             throw $th;
         }
     }

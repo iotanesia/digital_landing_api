@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
+use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\KabuatenController;
@@ -49,9 +50,19 @@ Route::prefix('v1')
     Route::group(['middleware' => 'access'],function () {
         // reoute canvasing
         Route::prefix('canvasing')->group(function () {
-            Route::get('/',[CanvasingController::class,'index']);
-            Route::post('/',[CanvasingController::class,'store']);
-            Route::get('/{id}',[CanvasingController::class,'show']);
+            Route::prefix('web')->group(function () {
+                Route::post('/',[CanvassingController::class,'storeWeb']);
+            });
+
+            Route::prefix('mobile')->group(function () {
+                Route::post('/',[CanvassingController::class,'storeMobile']);
+            });
+
+            Route::prefix('main')->group(function () {
+                Route::get('/',[CanvassingController::class,'index']);
+                Route::get('/{id}',[CanvasingController::class,'show']);
+            });
+
         });
         // users
         Route::prefix('user')->group(function () {
@@ -118,6 +129,7 @@ Route::prefix('v1')
                 Route::put('/{id}',[SubProdukController::class,'update']);
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
             });
+
             // route cabang
             Route::prefix('cabang')->group(function () {
                 Route::get('/',[CabangController::class,'index']);
