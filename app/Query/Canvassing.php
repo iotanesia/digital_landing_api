@@ -30,6 +30,7 @@ class Canvassing {
                             'nama' => $item->nama,
                             'nik' => $item->nik,
                             'created_at' => $item->created_at,
+                            'nama_produk' => $item->refProduk->nama_produk ?? null,
                             'foto' => $item->foto
                         ];
                     }),
@@ -234,6 +235,7 @@ class Canvassing {
                              'id' => $item->id,
                              'nama' => $item->nama,
                              'nik' => $item->nik,
+                             'nama_produk' => $item->refProduk->nama_produk ?? null,
                              'created_at' => $item->created_at,
                              'foto' => $item->foto
 
