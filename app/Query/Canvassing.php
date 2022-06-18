@@ -27,6 +27,7 @@ class Canvassing {
                             'nama' => $item->nama,
                             'nik' => $item->nik,
                             'created_at' => $item->created_at,
+                            'foto' => $item->foto
                         ];
                     }),
                     'attributes' => [
@@ -204,6 +205,8 @@ class Canvassing {
                              'nama' => $item->nama,
                              'nik' => $item->nik,
                              'created_at' => $item->created_at,
+                             'foto' => $item->foto
+
                          ];
                      }),
                      'attributes' => [
