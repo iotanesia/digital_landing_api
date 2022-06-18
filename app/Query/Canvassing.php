@@ -213,6 +213,7 @@ class Canvassing {
                  return [
                      'items' => $data->getCollection()->transform(function ($item){
                          return [
+                             'id' => $item->id,
                              'nama' => $item->nama,
                              'nik' => $item->nik,
                              'created_at' => $item->created_at,
