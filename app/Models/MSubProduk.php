@@ -26,6 +26,17 @@ class MSubProduk extends Model
         'deleted_by',
     ];
 
+    public static function cekPlafon($id, $plafon) {
+        try {
+            $sub_produk = Model::find($id);
+
+            return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public static function boot()
     {
         parent::boot();
