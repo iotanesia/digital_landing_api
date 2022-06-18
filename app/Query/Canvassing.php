@@ -194,7 +194,7 @@ class Canvassing {
      {
          try {
              $data = Model::where(function ($query) use ($request){
-                 $query->where('nirk');
+                 $query->where('nirk',$request->current_user->nirk);
                  if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                  if($request->nik) $query->where('nik',$request->nik);
              })->paginate($request->limit);

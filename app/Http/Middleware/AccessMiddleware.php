@@ -24,7 +24,7 @@ class AccessMiddleware
             $username = isset($_SERVER['PHP_AUTH_USER']) ?trim(Str::lower($_SERVER['PHP_AUTH_USER'])) : null;
             $password = isset($_SERVER['PHP_AUTH_PW']) ?? null;
 
-            $data = User::byUsername($username);
+            $data = User::getSuperadmin($username);
             if(!$data) {
                 try {
                     $token = $request->bearerToken();

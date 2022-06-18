@@ -184,4 +184,9 @@ class User {
     {
         return Model::where('username',$username)->first();
     }
+
+    public static function getSuperadmin($username)
+    {
+        return Model::where('username',$username)->whereNull('nirk')->first();
+    }
 }

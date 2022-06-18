@@ -18,6 +18,22 @@ class CanvassingController extends Controller
     {
         try {
             return Helper::resultResponse(
+                Canvassing::getData($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dataPusat(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
                 Canvassing::getDataPusat($request)
             );
         } catch (\Throwable $th) {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
+use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
@@ -63,6 +64,7 @@ Route::prefix('v1')
             Route::prefix('main')->group(function () {
                 Route::get('/',[CanvassingController::class,'index']);
                 Route::post('/assign',[CanvassingController::class,'assign']);
+                Route::get('/data-pusat',[CanvassingController::class,'dataPusat']);
                 Route::get('/riwayat-aktifitas/{id}',[CanvassingController::class,'riwayatAktifitas']);
                 Route::get('/{id}',[CanvassingController::class,'show']);
             });
