@@ -2,6 +2,7 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
 use App\Models\MHubungan as Model;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class MHubungan {
     public static function getAll($request)
     {
         try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_hubungan) $query->where('nama_hubungan','ilike',"%$request->nama_hubungan%");
             })->paginate($request->limit);
