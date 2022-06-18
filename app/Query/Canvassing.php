@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use Carbon\Carbon;
 
 class Canvassing {
 
@@ -60,6 +61,7 @@ class Canvassing {
         }
     }
 
+    // eform web
     public static function store($request,$is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
@@ -81,11 +83,24 @@ class Canvassing {
             if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
             $store = Model::create($request->all());
+            $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamsRefAktifitas($request,$data)
+    {
+         return [
+            'id_canvassing' => $data,
+            'waktu' => Carbon::now()->format('H:i'),
+            'tanggal' => Carbon::now()->format('Y-m-d'),
+            'nama_rm' => $data->refRm->nama ?? null,
+            'lokasi' => $request->lokasi,
+            'informasi_aktifitas' => 'e-form: Pengajuan Baru Via Web'
+         ];
     }
 }

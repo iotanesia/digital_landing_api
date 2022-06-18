@@ -17,7 +17,10 @@ class User {
         if (!$params->password) $required_params[] = 'password';
         if (count($required_params)) throw new \Exception("Parameter berikut harus diisi: " . implode(", ", $required_params));
 
-        $user = Model::where('username',$params->username)->first();
+        $user = Model::where(function ($query) use ($params){
+            $query->where('username',$params->username);
+            $query->orWhere('nirk',$params->nirk);
+        })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
         $user->role_produk = $user->manyRoleProduk->map(function ($item){
@@ -108,6 +111,7 @@ class User {
             $insert = new Model;
             $insert->username = $params->username;
             $insert->email = $params->email;
+            $insert->nama = $params->nama;
             $insert->kode_cabang = $params->kode_cabang;
             $insert->kode_role = $params->kode_role;
             $insert->description = $params->description;

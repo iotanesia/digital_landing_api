@@ -27,6 +27,7 @@ class Canvassing extends Model
         'id_jenis_produk',
         'id_sub_produk',
         'npwp',
+        'nirk',
         'created_at',
         'created_by',
         'updated_at',
@@ -39,4 +40,14 @@ class Canvassing extends Model
     const STEP_INPUT_CANVASSING = 1;
     const STEP_PROSES_CANVASSING = 2;
     const STEP_SUDAH_CANVASSING = 3;
+
+    public function refAktifitas()
+    {
+        return $this->belongsTo(Aktifitas::class,'id_canvassing','id');
+    }
+
+    public function refRm()
+    {
+        return $this->belongsTo(User::class,'nirk','nirk');
+    }
 }
