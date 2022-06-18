@@ -2,6 +2,7 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
 use App\Models\MJenisKelamin as Model;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class MJenisKelamin {
     public static function getAll($request)
     {
         try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_jenikelamin) $query->where('nama_jenikelamin','ilike',"%$request->nama_jenikelamin%");
             })->paginate($request->limit);

@@ -17,6 +17,7 @@ use App\Http\Controllers\Master\TingkatPendidikanController;
 use App\Http\Controllers\Master\StatusPernikahanController;
 use App\Http\Controllers\Master\TujuanPemasaranController;
 use App\Http\Controllers\Master\CaraPemasaranController;
+use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
@@ -180,6 +181,14 @@ Route::prefix('v1')
                 Route::get('/{id}',[CaraPemasaranController::class,'show']);
                 Route::put('/{id}',[CaraPemasaranController::class,'update']);
                 Route::delete('/{id}',[CaraPemasaranController::class,'destroy']);
+            });
+            // status tempat tinggal
+            Route::prefix('status-tempat-tinggal')->group(function () {
+                Route::get('/',[StatusTempatTinggalController::class,'index']);
+                Route::post('/',[StatusTempatTinggalController::class,'store']);
+                Route::get('/{id}',[StatusTempatTinggalController::class,'show']);
+                Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
+                Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
             });
         });
     });
