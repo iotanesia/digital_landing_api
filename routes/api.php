@@ -232,6 +232,9 @@ Route::prefix('v1')
                 Route::get('/',[EformController::class,'index']);
                 Route::get('/{id}',[EformController::class,'show']);
             });
+            Route::prefix('mobile')->group(function () {
+                Route::post('/',[EformController::class,'storeMobile']);
+            });
         });
 
     });

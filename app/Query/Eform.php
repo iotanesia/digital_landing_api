@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Query;
-use App\Models\Canvassing as Model;
+use App\Models\Eform as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Models\MSubProduk;
 use Carbon\Carbon;
 
 class Eform {
@@ -15,7 +16,7 @@ class Eform {
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU);
+                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('kode_aplikasi');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -39,20 +40,38 @@ class Eform {
         }
     }
 
-    public static function byId($request)
+    public static function byId($id)
     {
-        // dummy-data
         try {
+            $data = Model::find($id);
+            if(!$data) throw new \Exception("Data not found.", 400);
+
             return [
                 'items' => [
-                    'id' => 1,
-                    'nik' => '123455667789',
-                    'nama_lengkap' => 'Rexy',
-                    'no_hp' => '089201023911',
-                    'alamat' => 'Ds KKN Penari',
-                    'status' => null,
-                    'produk' => 'MIKRO',
-                    'kode_produk' => 'MKR'
+                    'nik' => $data->nik,
+                    'nama' => $data->nama,
+                    'no_hp' => $data->no_hp,
+                    'email' => $data->email,
+                    'tempat_lahir' => $data->tempat_lahir,
+                    'tanggal_lahir' => $data->tanggal_lahir,
+                    'nama_pasangan' => $data->nama_pasangan,
+                    'tempat_lahir_pasangan' => $data->tempat_lahir_pasangan,
+                    'tanggal_lahir_pasangan' => $data->tanggal_lahir_pasangan,
+                    'id_propinsi' => $data->id_propinsi,
+                    'id_kabupaten' => $data->id_kabupaten,
+                    'id_kecamatan' => $data->id_kecamatan,
+                    'id_kelurahan' => $data->id_kelurahan,
+                    'kode_pos' => $data->kode_pos,
+                    'alamat_detail' => $data->alamat_detail,
+                    'lokasi' => $data->lokasi,
+                    'status' => $data->status,
+                    'id_jenis_produk' => $data->id_jenis_produk,
+                    'id_produk' => $data->id_produk,
+                    'id_sub_produk' => $data->id_sub_produk,
+                    'plafon' => $data->plafon,
+                    'jangka_waktu' => $data->jangka_waktu,
+                    'rate' => $data->rate,
+                    'angsuran' => $data->angsuran,
                 ],
                 'attributes' => null,
             ];
@@ -76,31 +95,27 @@ class Eform {
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
             if(!$request->id_kelurahan) $require_fileds[] = 'id_kelurahan';
             if(!$request->kode_pos) $require_fileds[] = 'kode_pos';
-            if(!$request->alamat) $require_fileds[] = 'alamat';
+            if(!$request->alamat_detail) $require_fileds[] = 'alamat_detail';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->lokasi) $require_fileds[] = 'lokasi';
-            if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
+            if(!$request->plafon) $require_fileds[] = 'plafon';
+            $params = $request->all();
+            $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
-            $store = Model::create($request->all());
-            $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
+            if(MSubProduk::cekPlafon($request->id_sub_produk,$request->plafon)) throw new \Exception('Plafon tidak sesuai',500);
+
+            $store = Model::find($request->id);
+            foreach($params as $key => $val) {
+                $store->{$key} = $val;
+            }
+            $store->save();
+
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
-    }
-
-    public static function setParamsRefAktifitas($request,$data)
-    {
-         return [
-            'id_canvassing' => $data,
-            'waktu' => Carbon::now()->format('H:i'),
-            'tanggal' => Carbon::now()->format('Y-m-d'),
-            'nama_rm' => $data->refRm->nama ?? null,
-            'lokasi' => $request->lokasi,
-            'informasi_aktifitas' => 'e-form: Pengajuan Baru Via Web'
-         ];
     }
 }

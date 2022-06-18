@@ -3,10 +3,10 @@
 namespace App\Query;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
-use App\Models\MTIngkatPendidikan as Model;
+use App\Models\MTingkatPendidikan as Model;
 use Illuminate\Support\Facades\DB;
 
-class MTIngkatPendidikan {
+class MTingkatPendidikan {
 
     public static function byId($id)
     {
