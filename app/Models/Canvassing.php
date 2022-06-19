@@ -32,17 +32,18 @@ class Canvassing extends Model
         'nirk',
         'kode_cabang',
         'id_jenis_instansi',
+        'id_jenis_pekerjaan',
         'nama_pasangan',
         'nomor_aplikasi',
         'id_canvassing',
+        'foto',
+        'platfrom',
         'created_at',
         'created_by',
         'updated_at',
         'updated_by',
         'deleted_at',
         'deleted_by',
-        'foto',
-        'platfrom',
     ];
 
     const STS_COLD = 'COLD';

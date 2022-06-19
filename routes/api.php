@@ -70,6 +70,7 @@ Route::prefix('v1')
             Route::prefix('main')->group(function () {
                 Route::get('/',[CanvassingController::class,'index']);
                 Route::get('/data-pusat',[CanvassingController::class,'dataPusat']);
+                Route::get('/data-web',[CanvassingController::class,'dataWeb']);
                 Route::get('/{id}',[CanvassingController::class,'show']);
                 Route::post('/assign',[CanvassingController::class,'assign']);
                 Route::get('/riwayat-aktifitas/{id}',[CanvassingController::class,'riwayatAktifitas']);
