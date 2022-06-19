@@ -61,7 +61,7 @@ class Eform extends Model
 
     public function refSubProduk()
     {
-        return $this->belongsTo(MSubProduk::class,'id','id_sub_produk');
+        return $this->belongsTo(MSubProduk::class,'id_sub_produk','id');
     }
 
     public function refPropinsi()
