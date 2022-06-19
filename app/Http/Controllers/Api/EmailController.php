@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EFormMail;
 use App\Mail\TestMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -16,11 +17,11 @@ class EmailController extends Controller
      */
     public function index()
     {
-        $email = 'ebects@gmail.com';
+        $email = 'aleekhabib@gmail.com';
         $mail_data = [
             "fullname" => 'test'
         ];
-        $tes = Mail::to($email)->send(new TestMail($mail_data));
+        $tes = Mail::to($email)->send(new EFormMail($mail_data));
     }
 
     /**
