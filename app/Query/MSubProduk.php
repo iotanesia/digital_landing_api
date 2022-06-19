@@ -12,6 +12,11 @@ class MSubProduk {
         return ['items' => Model::find($id)];
     }
 
+    public static function byKode($kode)
+    {
+        return ['items' => Model::where('kode_sub_produk',$kode)->first()];
+    }
+
     public static function getAll($request)
     {
         try {
