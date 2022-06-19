@@ -124,7 +124,7 @@ class Eform {
 
             //tahap prescreening
             $cekDhnDki = MDhnDki::cekDhn($request->nik);
-            
+
             MDhnDki::create();
             if(!$cekDhnDki) {
                 $cekDhnBi = MDhnBi::cekDhn($request->nik);
@@ -135,9 +135,9 @@ class Eform {
                 $params['status'] = Model::TIDAK_LOLOS;
             }
 
-            $cekDukcapil = PreScreening::dukcapil($request);
-            $cekClik = PreScreening::clik($cekDukcapil);
-            dd($cekDukcapil);
+            // $cekDukcapil = PreScreening::dukcapil($request);
+            // $cekClik = PreScreening::clik($cekDukcapil);
+            // dd($cekDukcapil);
 
             $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';
