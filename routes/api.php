@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
+use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\KabuatenController;
 use App\Http\Controllers\Master\KecamatanController;
@@ -69,9 +70,10 @@ Route::prefix('v1')
 
             Route::prefix('main')->group(function () {
                 Route::get('/',[CanvassingController::class,'index']);
+                Route::get('/data-pusat',[CanvassingController::class,'dataPusat']);
+                Route::get('/data-web',[CanvassingController::class,'dataWeb']);
                 Route::get('/{id}',[CanvassingController::class,'show']);
                 Route::post('/assign',[CanvassingController::class,'assign']);
-                Route::get('/data-pusat',[CanvassingController::class,'dataPusat']);
                 Route::get('/riwayat-aktifitas/{id}',[CanvassingController::class,'riwayatAktifitas']);
             });
 
@@ -124,6 +126,14 @@ Route::prefix('v1')
                 Route::get('/{id}',[KelurahanController::class,'show']);
                 Route::put('/{id}',[KelurahanController::class,'update']);
                 Route::delete('/{id}',[KelurahanController::class,'destroy']);
+            });
+             // route produk
+             Route::prefix('jenis-produk')->group(function () {
+                Route::get('/',[JenisProdukController::class,'index']);
+                Route::post('/',[JenisProdukController::class,'store']);
+                Route::get('/{id}',[JenisProdukController::class,'show']);
+                Route::put('/{id}',[JenisProdukController::class,'update']);
+                Route::delete('/{id}',[JenisProdukController::class,'destroy']);
             });
             // route produk
             Route::prefix('produk')->group(function () {

@@ -62,7 +62,7 @@ class ProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MProduk::byId($id)
+                MProduk::byKode($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

@@ -2,10 +2,10 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\MSubProduk as Model;
+use App\Models\MJenisProduk as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
-class MSubProduk {
+class MJenisProduk {
 
     public static function byId($id)
     {
@@ -14,7 +14,7 @@ class MSubProduk {
 
     public static function byKode($kode)
     {
-        return ['items' => Model::where('kode_sub_produk',$kode)->first()];
+        return ['items' => Model::where('kode_produk',$kode)->first()];
     }
 
     public static function getAll($request)
@@ -22,8 +22,7 @@ class MSubProduk {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_sub_produk) $query->where('nama_sub_produk','ilike',"%$request->nama_sub_produk%");
-                if($request->kode_produk) $query->where('kode_produk',$request->kode_produk);
+                if($request->nama_jenis_produk) $query->where('nama_jenis_produk','ilike',"%$request->nama_jenis_produk%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -45,10 +44,7 @@ class MSubProduk {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_sub_produk) $require_fileds[] = 'nama_sub_produk';
-            if(!$request->kode_sub_produk) $require_fileds[] = 'kode_sub_produk';
-            if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
-            if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
+            if(!$request->nama_jenis_produk) $require_fileds[] = 'nama_jenis_produk';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

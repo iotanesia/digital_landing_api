@@ -18,7 +18,7 @@ class Canvassing {
     public static function getDataPusat($request)
     {
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where('platfrom',Model::WEB)->where(function ($query) use ($request){
                 $query->where('step',Model::STEP_PENGAJUAN_BARU);
                 $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
@@ -27,9 +27,48 @@ class Canvassing {
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [
+                            'id' => $item->id,
                             'nama' => $item->nama,
+                            'no_hp' => $item->no_hp,
+                            'alamat' => $item->alamat,
                             'nik' => $item->nik,
                             'created_at' => $item->created_at,
+                            'nama_produk' => $item->refProduk->nama_produk ?? null,
+                            'foto' => $item->foto
+                        ];
+                    }),
+                    'attributes' => [
+                        'total' => $data->total(),
+                        'current_page' => $data->currentPage(),
+                        'from' => $data->currentPage(),
+                        'per_page' => (int) $data->perPage(),
+                    ]
+                ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function getDataWeb($request)
+    {
+        try {
+            $data = Model::where('platfrom', Model::WEB)
+            ->where(function ($query) use ($request){
+                $query->where('step',Model::STEP_PENGAJUAN_BARU);
+                $query->whereNull('nirk');
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+                if($request->nik) $query->where('nik',$request->nik);
+            })->paginate($request->limit);
+                return [
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'nama' => $item->nama,
+                            'no_hp' => $item->no_hp,
+                            'alamat' => $item->alamat,
+                            'nik' => $item->nik,
+                            'created_at' => $item->created_at,
+                            'nama_produk' => $item->refProduk->nama_produk ?? null,
                             'foto' => $item->foto
                         ];
                     }),
@@ -60,6 +99,7 @@ class Canvassing {
                     'alamat' => $data->alamat,
                     'status' => $data->status,
                     'id_produk' => $data->id_produk,
+                    'platfrom' => $data->platfrom,
                     'nama_produk' => $data->refProduk->nama_produk ?? null,
                 ],
                 'attributes' => null,
@@ -78,7 +118,7 @@ class Canvassing {
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
-            if(!$request->email) $require_fileds[] = 'email';
+            // if(!$request->email) $require_fileds[] = 'email';
             if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
             if(!$request->id_kabupaten) $require_fileds[] = 'id_kabupaten';
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
@@ -94,13 +134,17 @@ class Canvassing {
             if($request->nirk)  $request->informasi_aktifitas = 'e-form: Input Via Web';
             $params = $request->all();
             // default include params
-            $params['status'] = ModelsCanvassing::STS_COLD;
-            $params['step'] = ModelsCanvassing::STEP_PENGAJUAN_BARU;
+            $params['status'] = ModelsCanvassing::STS_HOT;
+            $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
+            $params['platfrom'] = ModelsCanvassing::WEB;
             $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
             $image = $request->foto;  // your base64 encoded
             $request->foto =(string) Str::uuid().'.png';
 
             $store = Model::create($params);
+            $params['step'] = ModelsEform::STEP_INPUT_EFORM;
+            $params['id_canvassing'] = $store->id;
+            $storeEform = ModelsEform::create($params);
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
             Storage::put($request->foto, base64_decode($image));
@@ -182,6 +226,7 @@ class Canvassing {
                  $store = Model::where('id', $request->id)->first()->fill($params);
                  $store->save();
              } else {
+                 $params['platfrom'] = ModelsCanvassing::MOBILE;
                  $store = Model::create($params);
              }
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
@@ -234,6 +279,7 @@ class Canvassing {
                              'id' => $item->id,
                              'nama' => $item->nama,
                              'nik' => $item->nik,
+                             'nama_produk' => $item->refProduk->nama_produk ?? null,
                              'created_at' => $item->created_at,
                              'foto' => $item->foto
 

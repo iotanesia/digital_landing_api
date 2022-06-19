@@ -32,9 +32,12 @@ class Canvassing extends Model
         'nirk',
         'kode_cabang',
         'id_jenis_instansi',
+        'id_jenis_pekerjaan',
         'nama_pasangan',
         'nomor_aplikasi',
         'id_canvassing',
+        'foto',
+        'platfrom',
         'created_at',
         'created_by',
         'updated_at',
@@ -50,6 +53,10 @@ class Canvassing extends Model
     const STEP_INPUT_CANVASSING = 1;
     const STEP_PROSES_CANVASSING = 2;
     const STEP_SUDAH_CANVASSING = 3;
+
+    const WEB = 'WEB';
+    const PUSAT = 'PUSAT';
+    const MOBILE = 'MOBILE';
 
     public function refAktifitas()
     {

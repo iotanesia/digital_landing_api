@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Models\Eform as ModelsEform;
 use App\Models\MSubProduk;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Eform {
 
@@ -27,6 +30,10 @@ class Eform {
                             'nama' => $item->nama,
                             'nik' => $item->nik,
                             'nama_produk' => $item->refProduk->nama_produk ?? null,
+                            'nama_propinsi' => $item->refPropinsi->nama_propinsi ?? null,
+                            'nama_kelurahan' => $item->refKelurahan->nama_kelurahan ?? null,
+                            'nama_kabupaten' => $item->refKabupaten->nama_kabupaten ?? null,
+                            'nama_kecamatan' => $item->refKecamatan->nama_kecamatan ?? null,
                             'created_at' => $item->created_at,
                             'foto' => $item->foto
                         ];
@@ -75,6 +82,10 @@ class Eform {
                     'jangka_waktu' => $data->jangka_waktu,
                     'rate' => $data->rate,
                     'angsuran' => $data->angsuran,
+                    'nama_propinsi' => $data->refPropinsi->nama_propinsi ?? null,
+                    'nama_kelurahan' => $data->refKelurahan->nama_kelurahan ?? null,
+                    'nama_kabupaten' => $data->refKabupaten->nama_kabupaten ?? null,
+                    'nama_kecamatan' => $data->refKecamatan->nama_kecamatan ?? null
                 ],
                 'attributes' => null,
             ];
@@ -98,23 +109,30 @@ class Eform {
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
             if(!$request->id_kelurahan) $require_fileds[] = 'id_kelurahan';
             if(!$request->kode_pos) $require_fileds[] = 'kode_pos';
-            if(!$request->alamat_detail) $require_fileds[] = 'alamat_detail';
+            if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
-            if(!$request->lokasi) $require_fileds[] = 'lokasi';
             if(!$request->plafon) $require_fileds[] = 'plafon';
             $params = $request->all();
             $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
+            $params['foto'] = (string) Str::uuid().'.png';
+            $params['step'] = ModelsEform::STEP_INPUT_EFORM;
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
             if(MSubProduk::cekPlafon($request->id_sub_produk,$request->plafon)) throw new \Exception('Plafon tidak sesuai',500);
 
             $store = Model::find($request->id);
+
             foreach($params as $key => $val) {
                 $store->{$key} = $val;
             }
             $store->save();
 
             if($is_transaction) DB::commit();
+            $image = $request->foto;  // your base64 encoded
+            Storage::put($params['foto'], base64_decode($image));
+            return [
+                'items' => $store
+            ];
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();

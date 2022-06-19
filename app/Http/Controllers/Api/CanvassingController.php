@@ -41,6 +41,17 @@ class CanvassingController extends Controller
         }
     }
 
+    public function dataWeb(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Canvassing::getDataWeb($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

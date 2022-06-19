@@ -16,7 +16,7 @@ class Eform extends Model
         'no_hp',
         'email',
         'tempat_lahir',
-        'tanggal_lahir',
+        'tgl_lahir',
         'alamat',
         'nama_pasangan',
         'tempat_lahir_pasangan',
@@ -41,6 +41,7 @@ class Eform extends Model
         'deleted_at',
         'deleted_by',
         'alamat_detail',
+        'foto',
     ];
 
     const STEP_PENGAJUAN_BARU = 0;
@@ -56,6 +57,26 @@ class Eform extends Model
     public function refProduk()
     {
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
+    public function refPropinsi()
+    {
+        return $this->belongsTo(MPropinsi::class,'id_propinsi','id_propinsi');
+    }
+
+    public function refKelurahan()
+    {
+        return $this->belongsTo(MKelurahan::class,'id_kelurahan','id_kelurahan');
+    }
+
+    public function refKecamatan()
+    {
+        return $this->belongsTo(MKecamatan::class,'id_kecamatan','id_kecamatan');
+    }
+
+    public function refKabupaten()
+    {
+        return $this->belongsTo(MKabupaten::class,'id_kabupaten','id_kabupaten');
     }
 
     public function manyProduk()
