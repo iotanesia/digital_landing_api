@@ -30,6 +30,10 @@ class Eform {
                             'nama' => $item->nama,
                             'nik' => $item->nik,
                             'nama_produk' => $item->refProduk->nama_produk ?? null,
+                            'nama_propinsi' => $item->refPropinsi->nama_propinsi ?? null,
+                            'nama_kelurahan' => $item->refKelurahan->nama_kelurahan ?? null,
+                            'nama_kabupaten' => $item->refKabupaten->nama_kabupaten ?? null,
+                            'nama_kecamatan' => $item->refKecamatan->nama_kecamatan ?? null,
                             'created_at' => $item->created_at,
                             'foto' => $item->foto
                         ];
@@ -78,6 +82,10 @@ class Eform {
                     'jangka_waktu' => $data->jangka_waktu,
                     'rate' => $data->rate,
                     'angsuran' => $data->angsuran,
+                    'nama_propinsi' => $data->refPropinsi->nama_propinsi ?? null,
+                    'nama_kelurahan' => $data->refKelurahan->nama_kelurahan ?? null,
+                    'nama_kabupaten' => $data->refKabupaten->nama_kabupaten ?? null,
+                    'nama_kecamatan' => $data->refKecamatan->nama_kecamatan ?? null
                 ],
                 'attributes' => null,
             ];
