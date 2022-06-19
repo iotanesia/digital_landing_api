@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\EformController;
+use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
@@ -51,6 +52,7 @@ Route::prefix('v1')
 
     Route::post('/login',[AuthControler::class,'login']);
     Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
+    Route::get('/mail',[EmailController::class,'index']);
 
     Route::group(['middleware' => 'access'],function () {
 
@@ -76,7 +78,6 @@ Route::prefix('v1')
                 Route::post('/assign',[CanvassingController::class,'assign']);
                 Route::get('/riwayat-aktifitas/{id}',[CanvassingController::class,'riwayatAktifitas']);
             });
-
         });
         // users
         Route::prefix('user')->group(function () {
