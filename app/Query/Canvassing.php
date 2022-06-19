@@ -117,7 +117,7 @@ class Canvassing {
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
-            if(!$request->email) $require_fileds[] = 'email';
+            // if(!$request->email) $require_fileds[] = 'email';
             if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
             if(!$request->id_kabupaten) $require_fileds[] = 'id_kabupaten';
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
