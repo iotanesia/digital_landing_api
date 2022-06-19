@@ -122,15 +122,15 @@ class Eform {
             if(!$request->plafon) $require_fileds[] = 'plafon';
             $params = $request->all();
 
-            $cekDhnDki = MDhnDki::cekDhn($request->nik);
-            if(!$cekDhnDki) {
-                $cekDhnBi = MDhnBi::cekDhn($request->nik);
-                if($cekDhnBi) {
-
-                }
-            } else {
-                
-            }
+            // $cekDhnDki = MDhnDki::cekDhn($request->nik);
+            // if(!$cekDhnDki) {
+            //     $cekDhnBi = MDhnBi::cekDhn($request->nik);
+            //     if($cekDhnBi) {
+            //         $params['status'] = Model::TIDAK_LOLOS;
+            //     }
+            // } else {
+            //     $params['status'] = Model::TIDAK_LOLOS;
+            // }
 
             // $cekDukcapil = PreScreening::dukcapil($request);
             // $cekClik = PreScreening::clik($cekDukcapil);
