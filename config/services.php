@@ -57,5 +57,10 @@ return [
     'dukcapil' => [
         'host' => env('CLIK_HOST','https://api.digidata.ai/bankdkidigi_poc/integrated_id_plus'),
     ],
+    'skip' => [
+        'host' => env('SKIP_HOST','https://dev.bankdki.co.id'),
+        'client_id' => env('SKIP_CLIENT_ID'),
+        'client_secret' => env('SKIP_CLIENT_SECRET'),
+    ],
 
 ];

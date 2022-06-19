@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\EFormMail;
 use App\Mail\TestMail;
+use App\Services\SKIPService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -17,11 +18,15 @@ class EmailController extends Controller
      */
     public function index()
     {
-        $email = 'aleekhabib@gmail.com';
-        $mail_data = [
-            "fullname" => 'test'
+        $params = [
+            'nik' => '3216070000000009'
         ];
-        $tes = Mail::to($email)->send(new EFormMail($mail_data));
+        dd(SKIPService::getCalonSingle($params));
+        // $email = 'aleekhabib@gmail.com';
+        // $mail_data = [
+        //     "fullname" => 'test'
+        // ];
+        // $tes = Mail::to($email)->send(new EFormMail($mail_data));
     }
 
     /**
