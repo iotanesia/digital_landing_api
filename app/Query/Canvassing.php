@@ -116,7 +116,7 @@ class Canvassing {
         try {
             $require_fileds = [];
             if(!$request->nik) $require_fileds[] = 'nik';
-            if(!$request->nama) $require_fileds[] = 'nama';
+            // if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             // if(!$request->email) $require_fileds[] = 'email';
             if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';

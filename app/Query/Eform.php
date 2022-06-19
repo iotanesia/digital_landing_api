@@ -122,17 +122,19 @@ class Eform {
             if(!$request->plafon) $require_fileds[] = 'plafon';
             $params = $request->all();
 
-            // $cekDhnDki = MDhnDki::cekDhn($request->nik);
-            // if(!$cekDhnDki) {
-            //     $cekDhnBi = MDhnBi::cekDhn($request->nik);
-            //     if($cekDhnBi) {
+            $cekDhnDki = MDhnDki::cekDhn($request->nik);
+            if(!$cekDhnDki) {
+                $cekDhnBi = MDhnBi::cekDhn($request->nik);
+                if($cekDhnBi) {
 
-            //     }
-            // } else {
+                }
+            } else {
                 
-            // }
+            }
 
             // $cekDukcapil = PreScreening::dukcapil($request);
+            // $cekClik = PreScreening::clik($cekDukcapil);
+            // dd($cekDukcapil);
 
             $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';

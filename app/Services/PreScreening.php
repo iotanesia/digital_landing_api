@@ -2,13 +2,17 @@
 
 namespace App\Services;
 
+use App\Models\MKabupaten;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 class PreScreening {
     static function convertData($param,$value) {
         try {
-            if($param){
-
+            if($param == 'status_pernikahan') {
+                return $value == 'BELUM KAWIN' ? "1" : "2";
+            }
+            if($param == 'kota') {
+                return MKabupaten::where('nama_kabupaten', 'ilike', '%'.$value.'%')->first()->id_kabupaten;
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -27,32 +31,28 @@ class PreScreening {
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $dataNasabah = $response->json()['data'];
-
-            
-
-
-            dd($response->json()['data']);
             $mappingData = ["SubjectRefDate" =>date('Y-m-d'),
-                            "Gender" => substr($dataNasabah,0,1),
-                            "MarriageStatus" => self::convertData('status_pernikahan', $dataNasabah),
+                            "Gender" => substr($dataNasabah['jenis_kelamin'],0,1),
+                            "MarriageStatus" => self::convertData('status_pernikahan',$dataNasabah['status_perkawinan']),
                             "EducationalStatusCode" => "04",
-                            "NameAsId" => "ANDRA NABILA F",
-                            "FullName" => "ANDRA NABILA F",
+                            "NameAsId" => $dataNasabah['nama_lengkap'],
+                            "FullName" => $dataNasabah['nama_lengkap'],
                             "MothersName" => "",
-                            "BirthDate" => "1991-01-02",
-                            "BirthPlace" => "Bandung",
-                            "Address" => "JL. MERAK NO. 2",
-                            "Subdistrict" => "Kulon",
-                            "District" => "Wetan",
+                            "BirthDate" => date('Y-m-d', strToTime($dataNasabah['tanggal_lahir'])),
+                            "BirthPlace" => $dataNasabah['tempat_lahir'],
+                            "Address" => $dataNasabah['alamat'],
+                            "Subdistrict" => $dataNasabah['kelurahan'],
+                            "District" => $dataNasabah['kecamatan'],
+                            // "City" => (string) self::convertData('kota', $dataNasabah['kabupaten']),
                             "City" => "0198",
-                            "PostalCode" => "11112",
+                            "PostalCode" => $request->kode_pos,
                             "Country" => "ID",
                             "IdentityType" => "1",
-                            "IdentityNumber" => "31207232506962428",
-                            "NPWP" => "",
-                            "PhoneNumber" => "",
-                            "CellphoneNumber" => "088809849772",
-                            "EmailAddress" => "UTRI@YMAIL.COM",
+                            "IdentityNumber" => $request->nik,
+                            "NPWP" => $request->npwp,
+                            "PhoneNumber" => $request->no_hp,
+                            "CellphoneNumber" => $request->no_hp,
+                            "EmailAddress" => $request->email,
                             "JobCode" => "008",
                             "Workplace" => "Olihalus Bandung",
                             "CodeOfBusiness" => "112000",
@@ -62,29 +62,27 @@ class PreScreening {
                             "ContractPhase" => "RQ",
                             "ContractRequestDate" => "2020-10-10",
                             "Currency" => "IDR",
-                            "ApplicationAmount" => "10000000",
-                            "DueDate" => "2023-10-10",
-                            "OriginalAgreementNumber" => "24",
-                            "OriginalAgreementDate" => "2020-10-29",
+                            "ApplicationAmount" => (string)$request->plafon,
+                            "DueDate" => date('Y-m-d', strtotime(' + '.$request->jangka_waktu.' month', strtotime(date('Y-m-d')))),
+                            "OriginalAgreementNumber" => (string)$request->jangka_waktu,
+                            "OriginalAgreementDate" => date('Y-m-d'),
                             "Role" => "B",
                             "ProviderContractNo" => "",
                             "ProviderApplicationNo" => "20101010",
                             "CBContractCode" => ""];
-            return $response->json();
+
+            return $mappingData;
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public static function clik($nik)
+    public static function clik($dataSend)
     {
         try {
             $response = Http::contentType("application/json")
-            ->post(config('services.clik.host'),[
-                "trx_id" => 1,
-                "nik" => $nik
-            ]);
-            dd($response->json());
+            ->post(config('services.clik.host').'/NewApplicationEnquiry',$dataSend);
+            dd($dataSend,$response->json());
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             return $response->json();
