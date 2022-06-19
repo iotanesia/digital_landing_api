@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
+use App\Query\MKreditMinPenghasilan;
 use App\Query\User;
 
 class SimulasiController extends Controller
@@ -14,10 +15,8 @@ class SimulasiController extends Controller
         try {
 
             $amount = self::pmt($request->bunga, $request->jangka_waktu, $request->plafond_kredit);
-            // echo "Your payment will be &pound;" . round($amount,2) . " a month, for " . $months . " months";
             $data['estimasi_angsuran_per_bulan'] =  $amount;
             $data['estimasi_minimal_penghasilan'] = self::estimationSalary($amount);
-
             return Helper::resultResponse(
                ['items' => $data]
             );
@@ -35,7 +34,9 @@ class SimulasiController extends Controller
 
     static function estimationSalary($amount)
     {
-        return round($amount / (60/100));
+        $data = MKreditMinPenghasilan::isActive();
+        $prosentase = $data->prosentase ?? 60;
+        return round($amount / ($prosentase/100),2);
     }
 
 
