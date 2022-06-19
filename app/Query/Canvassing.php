@@ -99,6 +99,7 @@ class Canvassing {
                     'alamat' => $data->alamat,
                     'status' => $data->status,
                     'id_produk' => $data->id_produk,
+                    'platfrom' => $data->platfrom,
                     'nama_produk' => $data->refProduk->nama_produk ?? null,
                 ],
                 'attributes' => null,
