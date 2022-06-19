@@ -36,4 +36,13 @@ class MKabupaten extends Model
             $model->deleted_by = request()->current_user->id;
         });
     }
+
+    public static function getIdClik($id) {
+        try {
+            // return MKabupaten::where('id_kabupaen', $id)->first()->id_clik;
+            return MKabupaten::whereNotNull('id_clik')->first()->id_click;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

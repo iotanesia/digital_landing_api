@@ -12,7 +12,8 @@ class PreScreening {
                 return $value == 'BELUM KAWIN' ? "1" : "2";
             }
             if($param == 'kota') {
-                return MKabupaten::where('nama_kabupaten', 'ilike', '%'.$value.'%')->first()->id_kabupaten;
+                // return MKabupaten::where('id_kabupaen', $value)->first()->id_clik;
+                return MKabupaten::whereNotNull('id_clik', $value)->first()->id_click;
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -43,8 +44,8 @@ class PreScreening {
                             "Address" => $dataNasabah['alamat'],
                             "Subdistrict" => $dataNasabah['kelurahan'],
                             "District" => $dataNasabah['kecamatan'],
-                            // "City" => (string) self::convertData('kota', $dataNasabah['kabupaten']),
-                            "City" => "0198",
+                            "City" => (string) MKabupaten::getIdClik($request->id_kabupaten),
+                            // "City" => "0198",
                             "PostalCode" => $request->kode_pos,
                             "Country" => "ID",
                             "IdentityType" => "1",
