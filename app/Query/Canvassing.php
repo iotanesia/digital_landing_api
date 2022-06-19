@@ -272,6 +272,9 @@ class Canvassing {
      {
          try {
              $data = Model::whereIn('step', [ModelsCanvassing::STEP_INPUT_CANVASSING,ModelsCanvassing::STEP_PROSES_CANVASSING])
+                     ->with(['refAktifitas' => function($query){
+                        $query->orderBy('id','desc');
+                     }])
                      ->where('kode_cabang', $request->current_user->kode_cabang)
                      ->where(function ($query) use ($request){
                  $query->where('nirk',$request->current_user->nirk);
@@ -286,8 +289,8 @@ class Canvassing {
                              'nik' => $item->nik,
                              'nama_produk' => $item->refProduk->nama_produk ?? null,
                              'created_at' => $item->created_at,
-                             'foto' => $item->foto
-
+                             'foto' => $item->foto,
+                             'aktifitas' => $item->refAktifitas->informasi_aktifitas ?? null
                          ];
                      }),
                      'attributes' => [
