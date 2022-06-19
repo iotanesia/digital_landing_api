@@ -48,6 +48,8 @@ class Eform extends Model
     const STEP_INPUT_EFORM = 1;
     const STEP_PROSES_EFORM = 2;
     const STEP_SUDAH_EFORM = 3;
+    const LOLOS = 1;
+    const TIDAK_LOLOS = 0;
 
     public function refCabang()
     {
@@ -57,6 +59,11 @@ class Eform extends Model
     public function refProduk()
     {
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
+    public function refSubProduk()
+    {
+        return $this->belongsTo(MSubProduk::class,'id_sub_produk','id');
     }
 
     public function refPropinsi()

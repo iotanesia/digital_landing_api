@@ -41,4 +41,14 @@ class Aktifitas extends Model
             $model->deleted_by = request()->current_user->id;
         });
     }
+
+    public function refTujuanPemasaran()
+    {
+        return $this->belongsTo(MTujuanPemasaran::class,'id_tujuan_pemasaran','id_tujuan_pemasaran');
+    }
+
+    public function refCaraPemasaran()
+    {
+        return $this->belongsTo(MCaraPemasaran::class,'id_cara_pemasaran','id_cara_pemasaran');
+    }
 }

@@ -60,14 +60,13 @@ class Canvassing extends Model
 
     public function refAktifitas()
     {
-        return $this->belongsTo(Aktifitas::class,'id_canvassing','id');
+        return $this->belongsTo(Aktifitas::class,'id','id_canvassing');
     }
 
     public function manyAktifitas()
     {
         return $this->hasMany(Aktifitas::class,'id_canvassing','id');
     }
-
 
     public function refRm()
     {
@@ -77,5 +76,15 @@ class Canvassing extends Model
     public function refProduk()
     {
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
+    public function refTujuanPemasaran()
+    {
+        return $this->belongsTo(MTujuanPemasaran::class,'id_tujuan_pemasaran','id_tujuan_pemasaran');
+    }
+
+    public function refCaraPemasaran()
+    {
+        return $this->belongsTo(MCaraPemasaran::class,'id_cara_pemasaran','id_cara_pemasaran');
     }
 }

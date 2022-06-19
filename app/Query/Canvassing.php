@@ -18,7 +18,7 @@ class Canvassing {
     public static function getDataPusat($request)
     {
         try {
-            $data = Model::where('platfrom',Model::WEB)->where(function ($query) use ($request){
+            $data = Model::where('platfrom','<>',Model::WEB)->where(function ($query) use ($request){
                 $query->where('step',Model::STEP_PENGAJUAN_BARU);
                 $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
@@ -116,7 +116,7 @@ class Canvassing {
         try {
             $require_fileds = [];
             if(!$request->nik) $require_fileds[] = 'nik';
-            if(!$request->nama) $require_fileds[] = 'nama';
+            // if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             // if(!$request->email) $require_fileds[] = 'email';
             if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
@@ -127,7 +127,7 @@ class Canvassing {
             if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
-            if(!$request->lokasi) $require_fileds[] = 'lokasi';
+            // if(!$request->lokasi) $require_fileds[] = 'lokasi';
             if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $request->informasi_aktifitas = 'e-form: Pengajuan Baru Via Web';
@@ -255,7 +255,12 @@ class Canvassing {
                 }])->find($id);
                 if(!$data) throw new \Exception("Data not found.", 400);
                 return [
-                    'items' => $data->manyAktifitas ?? [],
+                    'items' => isset($data->manyAktifitas) ? $data->manyAktifitas->map(function($item) {
+                        $item->nama_tujuan_pemasaran = $item->refTujuanPemasaran->nama_tujuan_pemasaran ?? null; 
+                        $item->nama_cara_pemasaran = $item->refCaraPemasaran->nama_cara_pemasaran ?? null; 
+                        unset($item->refCaraPemasaran,$item->refTujuanPemasaran);
+                        return $item;
+                     }): [],
                     'attributes' => null
                 ];
         } catch (\Throwable $th) {
@@ -267,6 +272,9 @@ class Canvassing {
      {
          try {
              $data = Model::whereIn('step', [ModelsCanvassing::STEP_INPUT_CANVASSING,ModelsCanvassing::STEP_PROSES_CANVASSING])
+                     ->with(['refAktifitas' => function($query){
+                        $query->orderBy('id','desc');
+                     }])
                      ->where('kode_cabang', $request->current_user->kode_cabang)
                      ->where(function ($query) use ($request){
                  $query->where('nirk',$request->current_user->nirk);
@@ -281,8 +289,8 @@ class Canvassing {
                              'nik' => $item->nik,
                              'nama_produk' => $item->refProduk->nama_produk ?? null,
                              'created_at' => $item->created_at,
-                             'foto' => $item->foto
-
+                             'foto' => $item->foto,
+                             'aktifitas' => $item->refAktifitas->informasi_aktifitas ?? null
                          ];
                      }),
                      'attributes' => [

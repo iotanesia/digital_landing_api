@@ -51,5 +51,11 @@ return [
     'jamkrida' => [
         'host' => env('MONAS_HOST','http://10.32.3.149:9992/monash/api'),
     ],
+    'clik' => [
+        'host' => env('CLIK_HOST','http://10.32.3.168:12010'),
+    ],
+    'dukcapil' => [
+        'host' => env('CLIK_HOST','https://api.digidata.ai/bankdkidigi_poc/integrated_id_plus'),
+    ],
 
 ];

@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
 use App\Models\Eform as ModelsEform;
+use App\Models\MDhnBi;
+use App\Models\MDhnDki;
 use App\Models\MSubProduk;
+use App\Services\Click;
+use App\Services\PreScreening;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -74,6 +78,7 @@ class Eform {
                     'kode_pos' => $data->kode_pos,
                     'alamat_detail' => $data->alamat_detail,
                     'lokasi' => $data->lokasi,
+                    'lokasi_usaha' => $data->lokasi_usaha,
                     'status' => $data->status,
                     'id_jenis_produk' => $data->id_jenis_produk,
                     'id_produk' => $data->id_produk,
@@ -85,7 +90,9 @@ class Eform {
                     'nama_propinsi' => $data->refPropinsi->nama_propinsi ?? null,
                     'nama_kelurahan' => $data->refKelurahan->nama_kelurahan ?? null,
                     'nama_kabupaten' => $data->refKabupaten->nama_kabupaten ?? null,
-                    'nama_kecamatan' => $data->refKecamatan->nama_kecamatan ?? null
+                    'nama_kecamatan' => $data->refKecamatan->nama_kecamatan ?? null,
+                    'nama_produk' => $data->refProduk->nama_produk ?? null,
+                    'nama_sub_produk' => $data->refSubProduk->nama_sub_produk ?? null
                 ],
                 'attributes' => null,
             ];
@@ -114,6 +121,21 @@ class Eform {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafon) $require_fileds[] = 'plafon';
             $params = $request->all();
+
+            // $cekDhnDki = MDhnDki::cekDhn($request->nik);
+            // if(!$cekDhnDki) {
+            //     $cekDhnBi = MDhnBi::cekDhn($request->nik);
+            //     if($cekDhnBi) {
+            //         $params['status'] = Model::TIDAK_LOLOS;
+            //     }
+            // } else {
+            //     $params['status'] = Model::TIDAK_LOLOS;
+            // }
+
+            // $cekDukcapil = PreScreening::dukcapil($request);
+            // $cekClik = PreScreening::clik($cekDukcapil);
+            // dd($cekDukcapil);
+
             $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';
             $params['step'] = ModelsEform::STEP_INPUT_EFORM;
