@@ -255,7 +255,12 @@ class Canvassing {
                 }])->find($id);
                 if(!$data) throw new \Exception("Data not found.", 400);
                 return [
-                    'items' => $data->manyAktifitas ?? [],
+                    'items' => isset($data->manyAktifitas) ? $data->manyAktifitas->map(function($item) {
+                        $item->nama_tujuan_pemasaran = $item->refTujuanPemasaran->nama_tujuan_pemasaran ?? null; 
+                        $item->nama_cara_pemasaran = $item->refCaraPemasaran->nama_cara_pemasaran ?? null; 
+                        unset($item->refCaraPemasaran,$item->refTujuanPemasaran);
+                        return $item;
+                     }): [],
                     'attributes' => null
                 ];
         } catch (\Throwable $th) {

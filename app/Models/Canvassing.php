@@ -78,4 +78,14 @@ class Canvassing extends Model
     {
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
     }
+
+    public function refTujuanPemasaran()
+    {
+        return $this->belongsTo(MTujuanPemasaran::class,'id_tujuan_pemasaran','id_tujuan_pemasaran');
+    }
+
+    public function refCaraPemasaran()
+    {
+        return $this->belongsTo(MCaraPemasaran::class,'id_cara_pemasaran','id_cara_pemasaran');
+    }
 }
