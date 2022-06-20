@@ -93,6 +93,7 @@ class Canvassing {
 
             return [
                 'items' => [
+                    'id' => $data->id,
                     'nik' => $data->nik,
                     'nama' => $data->nama,
                     'no_hp' => $data->no_hp,
