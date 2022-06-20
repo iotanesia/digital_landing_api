@@ -13,6 +13,9 @@ class MProduk extends Model
     public $fillable = [
         'id_produk',
         'nama_produk',
+        'deskripsi_produk',
+        'foto_produk',
+        'banner_produk',
         'created_at',
         'created_by',
         'updated_at',

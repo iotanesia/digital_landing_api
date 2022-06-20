@@ -2,13 +2,13 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\MProduk as Model;
+use App\Models\CPromo as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class MProduk {
+class CPromo {
 
     public static function byId($id)
     {
@@ -50,20 +50,14 @@ class MProduk {
             if(!$request->nama_produk) $require_fileds[] = 'nama_produk';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            if($request->foto_produk){
-                $image = $request->foto_produk;  // your base64 encoded
+            if($request->foto){
+                $image = $request->foto;  // your base64 encoded
                 $namafoto =(string) Str::uuid().'.png';
-            }
-
-            if($request->banner_produk){
-                $banner = $request->banner_produk;  // your base64 encoded
-                $namabanner =(string) Str::uuid().'.png';
             }
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();
-            if($request->foto_produk) Storage::put($namafoto, base64_decode($image));
-            if($request->banner_produk) Storage::put($namabanner, base64_decode($banner));
+            if($request->foto) Storage::put($namafoto, base64_decode($image));
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
@@ -77,21 +71,15 @@ class MProduk {
         try {
             $update = Model::find($id);
 
-            if($request->foto_produk){
-                $image = $request->foto_produk;  // your base64 encoded
+            if($request->foto){
+                $image = $request->foto;  // your base64 encoded
                 $namafoto =(string) Str::uuid().'.png';
-            }
-
-            if($request->banner_produk){
-                $banner = $request->banner_produk;  // your base64 encoded
-                $namabanner =(string) Str::uuid().'.png';
             }
 
             if(!$update) throw new \Exception("Data not found.", 400);
             $update->update($request->all());
             if($is_transaction) DB::commit();
-            if($request->foto_produk) Storage::put($namafoto, base64_decode($image));
-            if($request->banner_produk) Storage::put($namabanner, base64_decode($banner));
+            if($request->foto) Storage::put($namafoto, base64_decode($image));
 
             return $update;
         } catch (\Throwable $th) {

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
+use App\Http\Controllers\Master\BannerController;
 use App\Http\Controllers\Master\KabuatenController;
 use App\Http\Controllers\Master\KecamatanController;
 use App\Http\Controllers\Master\KelurahanController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Master\TujuanPemasaranController;
 use App\Http\Controllers\Master\CaraPemasaranController;
 use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
+use App\Http\Controllers\Master\PromoController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -128,7 +130,7 @@ Route::prefix('v1')
                 Route::put('/{id}',[KelurahanController::class,'update']);
                 Route::delete('/{id}',[KelurahanController::class,'destroy']);
             });
-             // route produk
+             // route jenis roduk
              Route::prefix('jenis-produk')->group(function () {
                 Route::get('/',[JenisProdukController::class,'index']);
                 Route::post('/',[JenisProdukController::class,'store']);
@@ -143,6 +145,22 @@ Route::prefix('v1')
                 Route::get('/{id}',[ProdukController::class,'show']);
                 Route::put('/{id}',[ProdukController::class,'update']);
                 Route::delete('/{id}',[ProdukController::class,'destroy']);
+            });
+            // route banner
+            Route::prefix('banner')->group(function () {
+                Route::get('/',[BannerController::class,'index']);
+                Route::post('/',[BannerController::class,'store']);
+                Route::get('/{id}',[BannerController::class,'show']);
+                Route::put('/{id}',[BannerController::class,'update']);
+                Route::delete('/{id}',[BannerController::class,'destroy']);
+            });
+            // route promo
+            Route::prefix('promo')->group(function () {
+                Route::get('/',[PromoController::class,'index']);
+                Route::post('/',[PromoController::class,'store']);
+                Route::get('/{id}',[PromoController::class,'show']);
+                Route::put('/{id}',[PromoController::class,'update']);
+                Route::delete('/{id}',[PromoController::class,'destroy']);
             });
             // route sub produk
             Route::prefix('sub-produk')->group(function () {
