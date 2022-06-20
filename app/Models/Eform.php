@@ -11,6 +11,7 @@ class Eform extends Model
     protected $table = 'eform';
 
     public $fillable = [
+        'id',
         'nik',
         'nama',
         'no_hp',
