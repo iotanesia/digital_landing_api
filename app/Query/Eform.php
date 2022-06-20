@@ -25,7 +25,7 @@ class Eform {
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('kode_aplikasi')->where('kode_cabang',$request->current_user->kode_cabang);
+                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('nomor_aplikasi')->where('kode_cabang',$request->current_user->kode_cabang);
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -181,7 +181,7 @@ class Eform {
                 }
             }
 
-            $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
+            $params['nomor_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';
             $params['step'] = ModelsEform::STEP_INPUT_EFORM;
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
