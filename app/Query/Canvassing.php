@@ -143,7 +143,6 @@ class Canvassing {
             if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_jenis_produk) $require_fileds[] = 'id_jenis_produk';
-            if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             // if(!$request->lokasi) $require_fileds[] = 'lokasi';
             if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
