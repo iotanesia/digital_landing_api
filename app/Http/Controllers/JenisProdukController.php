@@ -61,7 +61,7 @@ class JenisProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisProduk::byKode($id)
+                MJenisProduk::byIdJenisProduk($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

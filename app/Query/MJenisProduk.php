@@ -12,9 +12,9 @@ class MJenisProduk {
         return ['items' => Model::find($id)];
     }
 
-    public static function byKode($kode)
+    public static function byIdJenisProduk($id_jenis_produk)
     {
-        return ['items' => Model::where('kode_produk',$kode)->first()];
+        return ['items' => Model::where('id_jenis_produk',$id_jenis_produk)->first()];
     }
 
     public static function getAll($request)
