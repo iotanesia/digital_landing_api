@@ -73,11 +73,20 @@ class User {
     public static function byId($id)
     {
         $data =  Model::with(['refRole', 'refCabang'])->find($id);
-        $data->role_name = $data->refRole->nama_role ?? null;
-        $data->cabang_name = $data->refCabang->nama_cabang ?? null;
+        $data->id_jenis_produk = $data->refRoleProduk->id_jenis_produk ?? null;
+        $data->role_produk = $data->manyRoleProduk->map(function ($item){
+            return [
+                'id_jenis_produk' => $item->id_jenis_produk,
+                'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
+            ];
+        });
+        $data->nama_role = $data->refRole->nama_role ?? null;
+        $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
         unset(
             $data->refRole,
-            $data->refCabang
+            $data->refCabang,
+            $data->refRoleProduk,
+            $data->manyRoleProduk
         );
         return [
             'items' => $data,

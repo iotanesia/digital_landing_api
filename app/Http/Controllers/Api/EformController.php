@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\Eform;
+use App\Query\Prescreening;
 
 class EformController extends Controller
 {
@@ -30,9 +31,15 @@ class EformController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function prescreening(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Prescreening::process($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
