@@ -16,9 +16,9 @@ class MDhnBi extends Model
 
     public static function cekDhn($nik) {
         try {
-            $sub_produk = MDhnBi::where('d30ktp', $nik);
+            $dhn = MDhnBi::where('d30ktp', $nik)->first();
 
-            return $sub_produk ?? false;
+            return $dhn ?? false;
 
         } catch (\Throwable $th) {
             throw $th;

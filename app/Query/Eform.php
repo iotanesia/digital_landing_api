@@ -11,8 +11,10 @@ use App\Models\Eform as ModelsEform;
 use App\Models\MDhnBi;
 use App\Models\MDhnDki;
 use App\Models\MSubProduk;
+use App\Models\Prescreening as ModelsPrescreening;
 use App\Services\Click;
 use App\Services\PreScreening;
+use App\Services\SKIPService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -124,10 +126,25 @@ class Eform {
 
             //tahap prescreening
             $cekDhnDki = MDhnDki::cekDhn($request->nik);
+            $params['status'] = Model::LOLOS;
+
+            $dataSend = [
+                'metode' => 'DHN DKI',
+                'keterangan' => 'DHN DKI',
+                'status' => $cekDhnDki ? 0 : 1,
+            ];
+            ModelsPrescreening::create($dataSend);
 
             MDhnDki::create();
             if(!$cekDhnDki) {
                 $cekDhnBi = MDhnBi::cekDhn($request->nik);
+                $dataSend = [
+                    'metode' => 'DHN BI',
+                    'keterangan' => 'DHN BI',
+                    'status' => $cekDhnBi ? 0 : 1,
+                ];
+                ModelsPrescreening::create($dataSend);
+
                 if($cekDhnBi) {
                     $params['status'] = Model::TIDAK_LOLOS;
                 }
@@ -135,9 +152,33 @@ class Eform {
                 $params['status'] = Model::TIDAK_LOLOS;
             }
 
-            // $cekDukcapil = PreScreening::dukcapil($request);
-            // $cekClik = PreScreening::clik($cekDukcapil);
-            // dd($cekDukcapil);
+            if($params['status'] == Model::LOLOS) {
+                $cekDukcapil = PreScreening::dukcapil($request);
+                // $cekClik = PreScreening::clik($cekDukcapil);
+
+                // if($cekClik['Code'] == '10-143') {
+                //     $params['status'] = Model::TIDAK_LOLOS;
+                // }
+
+                // $dataSend = [
+                //     'metode' => 'CLIK',
+                //     'keterangan' => $cekClik['Description'],
+                //     'status' => $cekClik['Code'] == '10-143' ? 0 : 1,
+                // ];
+                ModelsPrescreening::create($dataSend);
+                $cekSikp = SKIPService::getCalonSingle($request);
+
+                $dataSend = [
+                    'metode' => 'SIKP',
+                    'keterangan' => $cekSikp['message'],
+                    'status' => $cekSikp['message'] != 'Data ditemukan' ? 0 : 1,
+                ];
+                ModelsPrescreening::create($dataSend);
+    
+                if($cekSikp['message'] != 'Data ditemukan') {
+                    $params['status'] = Model::TIDAK_LOLOS;
+                }
+            }
 
             $params['kode_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';

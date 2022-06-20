@@ -44,8 +44,8 @@ class PreScreening {
                             "Address" => $dataNasabah['alamat'],
                             "Subdistrict" => $dataNasabah['kelurahan'],
                             "District" => $dataNasabah['kecamatan'],
-                            "City" => (string) MKabupaten::getIdClik($request->id_kabupaten),
-                            // "City" => "0198",
+                            // "City" => (string) MKabupaten::getIdClik($request->id_kabupaten),
+                            "City" => "0198",
                             "PostalCode" => $request->kode_pos,
                             "Country" => "ID",
                             "IdentityType" => "1",
@@ -83,7 +83,6 @@ class PreScreening {
         try {
             $response = Http::contentType("application/json")
             ->post(config('services.clik.host').'/NewApplicationEnquiry',$dataSend);
-            dd($dataSend,$response->json());
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             return $response->json();

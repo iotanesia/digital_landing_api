@@ -62,7 +62,7 @@ class SKIPService {
                 'Authorization' => 'Bearer '.$auth['accessToken'],
             ])->contentType("application/json")
             ->get(config('services.skip.host').'/v1/sikpkur/konven/plafon_debitur',[
-                'nik' => $params['nik']
+                'nik' => $params->nik
             ]);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
@@ -80,7 +80,7 @@ class SKIPService {
                 'Authorization' => 'Bearer '.$auth['accessToken'],
             ])->contentType("application/json")
             ->get(config('services.skip.host').'/v1/sikpkur/konven/calon_single',[
-                'nik' => $params['nik']
+                'nik' => $params->nik
             ]);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
