@@ -18,11 +18,11 @@ class Canvassing {
     public static function getDataPusat($request)
     {
         try {
+            // dd($request->current_user->kode_cabang);
             $data = Model::where('platfrom','<>',Model::WEB)
-            ->where('kode_cabang', $request->current_user->kode_cabang)
+            ->where('kode_cabang', (int)$request->current_user->kode_cabang)
+            ->where('step',Model::STEP_PENGAJUAN_BARU)
             ->where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU);
-                $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -56,9 +56,8 @@ class Canvassing {
         try {
             $data = Model::where('platfrom', Model::WEB)
             ->where('kode_cabang', $request->current_user->kode_cabang)
+            ->where('step',Model::STEP_PENGAJUAN_BARU)
             ->where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU);
-                $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
