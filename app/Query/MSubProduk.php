@@ -17,13 +17,18 @@ class MSubProduk {
         return ['items' => Model::where('kode_sub_produk',$kode)->first()];
     }
 
+    public static function byIdSubProduk($id_sub_produk)
+    {
+        return ['items' => Model::where('id_sub_produk',$id_sub_produk)->first()];
+    }
+
     public static function getAll($request)
     {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_sub_produk) $query->where('nama_sub_produk','ilike',"%$request->nama_sub_produk%");
-                if($request->kode_produk) $query->where('kode_produk',$request->kode_produk);
+                if($request->id_produk) $query->where('id_produk',$request->id_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),

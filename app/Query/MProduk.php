@@ -20,12 +20,18 @@ class MProduk {
         return ['items' => Model::where('kode_produk',$kode)->first()];
     }
 
+    public static function byIdProduk($id_produk)
+    {
+        return ['items' => Model::where('id_produk',$id_produk)->first()];
+    }
+
     public static function getAll($request)
     {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_produk) $query->where('nama_produk','ilike',"%$request->nama_produk%");
+                if($request->id_jenis_produk) $query->where('id_jenis_produk',$request->id_jenis_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
