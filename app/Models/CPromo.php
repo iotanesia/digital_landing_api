@@ -11,4 +11,15 @@ class CPromo extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'content_promo';
 
+    public $fillable = [
+        'judul',
+        'deskripsi',
+        'foto',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+    ];
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Models\CBanner;
+use App\Query\CBanner;
 
 class BannerController extends Controller
 {

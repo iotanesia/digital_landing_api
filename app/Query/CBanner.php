@@ -2,13 +2,13 @@
 
 namespace App\Query;
 use App\ApiHelper as Helper;
-use App\Models\CPromo as Model;
+use App\Models\CBanner as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class CPromo {
+class CBanner {
 
     public static function byId($id)
     {
@@ -25,7 +25,7 @@ class CPromo {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_produk) $query->where('nama_produk','ilike',"%$request->nama_produk%");
+                if($request->judul) $query->where('judul','ilike',"%$request->judul%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -47,7 +47,7 @@ class CPromo {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_produk) $require_fileds[] = 'nama_produk';
+            if(!$request->judul) $require_fileds[] = 'judul';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             if($request->foto){
