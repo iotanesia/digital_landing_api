@@ -23,7 +23,7 @@ class MJenisProduk {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_jenis_produk) $query->where('nama_jenis_produk','ilike',"%$request->nama_jenis_produk%");
-                if($request->tipe) $query->where('tipe',$request->tipe);
+                if($request->tipe_produk) $query->where('tipe_produk',$request->tipe_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
