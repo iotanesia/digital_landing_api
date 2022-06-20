@@ -9,4 +9,9 @@ class MSkemaEksternal extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'master_skema_eksternal';
+
+    public function manyRules()
+    {
+        return $this->hasMany(MapRulesSkemaEksternal::class,'id_skema_eksternal','id');
+    }
 }
