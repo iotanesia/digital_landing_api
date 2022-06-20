@@ -80,16 +80,40 @@ class MCabang {
         }
     }
 
-    public static function getDistanceBetweenPoints($lat1, $lon1, $lat2, $lon2) {
-        $theta = $lon1 - $lon2;
-        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
-        $miles = acos($miles);
-        $miles = rad2deg($miles);
-        $miles = $miles * 60 * 1.1515;
-        $feet  = $miles * 5280;
-        $yards = $feet / 3;
-        $kilometers = $miles * 1.609344;
-        $meters = $kilometers * 1000;
-        return compact('miles','feet','yards','kilometers','meters'); 
+    public static function getDistanceBetweenPoints($request) {
+        $lat1 = $request->lat;
+        $lon1 = $request->long;
+        $counter = 0;
+        $data = Model::whereNotNull('lng')->whereNotNull('lat')->get();
+
+        foreach($data as $key => $val) {
+            $lat2 = $val->lat;
+            $lon2 = $val->lng;
+            $theta = $lon1 - $lon2;
+            $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+            $miles = acos($miles);
+            $miles = rad2deg($miles);
+            $miles = $miles * 60 * 1.1515;
+            $feet  = $miles * 5280;
+            $yards = $feet / 3;
+            $kilometers = $miles * 1.609344;
+            $meters = $kilometers * 1000;
+
+            if($key == 0) {
+                $counter = $miles;
+
+            } elseif($counter > $miles) {
+                $counter = $miles;
+                $idCabang = $val->id_cabang;
+            }
+        }
+
+        return ['items' => Model::where('id_cabang', $idCabang)->first()];
+
+        // $feet  = $miles * 5280;
+        // $yards = $feet / 3;
+        // $kilometers = $miles * 1.609344;
+        // $meters = $kilometers * 1000;
+        // return compact('miles','feet','yards','kilometers','meters'); 
     }
 }

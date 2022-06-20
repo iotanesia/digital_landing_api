@@ -113,4 +113,15 @@ class CabangController extends Controller
             return Helper::setErrorResponse($th);
         }
     }
+
+    public function getLocation(Request $request) {
+        try {
+            // return MCabang::getDistanceBetweenPoints($request);
+            return Helper::resultResponse(
+                MCabang::getDistanceBetweenPoints($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 }
