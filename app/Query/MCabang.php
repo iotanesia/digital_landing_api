@@ -107,8 +107,7 @@ class MCabang {
                 $idCabang = $val->id_cabang;
             }
         }
-
-        return ['items' => Model::where('id_cabang', $idCabang)->first()];
+        return $idCabang;
 
         // $feet  = $miles * 5280;
         // $yards = $feet / 3;

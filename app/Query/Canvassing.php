@@ -158,11 +158,12 @@ class Canvassing {
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->kode_cabang);
             $image = $request->foto;  // your base64 encoded
             $request->foto =(string) Str::uuid().'.png';
-
+            $kode_cabang = MCabang::getDistanceBetweenPoints($request->lat_long_lokasi_usaha); 
+            $params['kode_cabang'] = $kode_cabang;
             $store = Model::create($params);
             $params['step'] = ModelsEform::STEP_INPUT_EFORM;
             $params['id_canvassing'] = $store->id;
-            $storeEform = ModelsEform::create($params);
+            ModelsEform::create($params);
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
             Storage::put($request->foto, base64_decode($image));
