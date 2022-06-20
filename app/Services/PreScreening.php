@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\MKabupaten;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-class PreScreening {
+class Prescreening {
     static function convertData($param,$value) {
         try {
             if($param == 'status_pernikahan') {

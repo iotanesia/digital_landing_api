@@ -9,4 +9,9 @@ class MapRulesSkemaEksternal extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'map_rules_skema_eksternal';
+
+    public function refMetode()
+    {
+        return $this->belongsTo(MMetodeEksternal::class,'id_metode','id');
+    }
 }

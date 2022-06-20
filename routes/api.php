@@ -263,7 +263,7 @@ Route::prefix('v1')
                 Route::get('/{id}',[EformController::class,'show']);
             });
             Route::prefix('mobile')->group(function () {
-                Route::post('/',[EformController::class,'storeMobile']);
+                Route::post('/',[EformController::class,'prescreening']);
             });
         });
 
