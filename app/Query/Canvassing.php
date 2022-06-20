@@ -153,7 +153,7 @@ class Canvassing {
             $params['status'] = ModelsCanvassing::STS_HOT;
             $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
             $params['platfrom'] = ModelsCanvassing::WEB;
-            $params['nomor_aplikasi'] =Helper::generateNoApliksi();
+            $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->kode_cabang);
             $image = $request->foto;  // your base64 encoded
             $request->foto =(string) Str::uuid().'.png';
 
@@ -229,7 +229,7 @@ class Canvassing {
              if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
              $params = $request->all();
              // default include params
-             $params['nomor_aplikasi'] = Helper::generateNoApliksi();
+             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->kode_cabang);
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
              $image = $request->foto;  // your base64 encoded

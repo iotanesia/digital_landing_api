@@ -64,6 +64,7 @@ class Eform {
 
             return [
                 'items' => [
+                    'id' => $data->id,
                     'nik' => $data->nik,
                     'nama' => $data->nama,
                     'no_hp' => $data->no_hp,
@@ -174,7 +175,7 @@ class Eform {
                     'status' => $cekSikp['message'] != 'Data ditemukan' ? 0 : 1,
                 ];
                 ModelsPrescreening::create($dataSend);
-    
+
                 if($cekSikp['message'] != 'Data ditemukan') {
                     $params['status'] = Model::TIDAK_LOLOS;
                 }
