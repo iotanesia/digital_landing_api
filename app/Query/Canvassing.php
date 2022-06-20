@@ -200,8 +200,8 @@ class Canvassing {
             $require_fileds = [];
             if(!$request->id_canvassing) $require_fileds[] = 'id_canvassing';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-            $request->informasi_aktifitas = 'e-form: Input Via Web';
             $data = Model::find($request->id_canvassing);
+            $request->informasi_aktifitas = $data->platfrom == 'WEB' ? 'e-form: Input Via Web' : ($data->platfrom == 'MOBILE' ? 'e-form: Input Via Mobile' : 'e-form: Input Via Data Pusat');
             $data->step = ModelsCanvassing::STEP_INPUT_CANVASSING;
             $data->nirk = $request->current_user->nirk; // assign rm
             $data->save();
