@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function refRoleProduk()
     {
-        return $this->belongsTo(RoleProduk::class,'id_user','id');
+        return $this->belongsTo(RoleProduk::class,'id','id_user');
     }
 
     public function manyRoleProduk()

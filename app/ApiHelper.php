@@ -325,4 +325,9 @@ class ApiHelper {
         return $ip;
     }
 
+    public static function generateNoApliksi()
+    {
+        return mt_rand(10000,99999).'-'.request()->current_user->kode_cabang.''.Carbon::now()->format('dmY');
+    }
+
 }

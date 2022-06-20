@@ -27,6 +27,11 @@ class RoleProduk extends Model
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
     }
 
+    public function refJenisProduk()
+    {
+        return $this->belongsTo(MJenisProduk::class,'id_jenis_produk','id_jenis_produk');
+    }
+
     public static function boot()
     {
         parent::boot();

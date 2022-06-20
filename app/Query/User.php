@@ -22,10 +22,11 @@ class User {
         })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         // if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
+        $user->id_jenis_produk = $user->refRoleProduk->id_jenis_produk ?? null;
         $user->role_produk = $user->manyRoleProduk->map(function ($item){
             return [
-                'id_produk' => $item->id_produk,
-                'nama_produk' => $item->refProduk->nama_produk ?? null,
+                'id_jenis_produk' => $item->id_jenis_produk,
+                'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
             ];
         });
         $user->nama_role = $user->refRole->nama_role ?? null;

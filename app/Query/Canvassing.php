@@ -142,6 +142,7 @@ class Canvassing {
             if(!$request->kode_pos) $require_fileds[] = 'kode_pos';
             if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
+            if(!$request->id_jenis_produk) $require_fileds[] = 'id_jenis_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             // if(!$request->lokasi) $require_fileds[] = 'lokasi';
             if(!$request->kode_cabang) $require_fileds[] = 'kode_cabang';
@@ -153,7 +154,7 @@ class Canvassing {
             $params['status'] = ModelsCanvassing::STS_HOT;
             $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
             $params['platfrom'] = ModelsCanvassing::WEB;
-            $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
+            $params['nomor_aplikasi'] =Helper::generateNoApliksi();
             $image = $request->foto;  // your base64 encoded
             $request->foto =(string) Str::uuid().'.png';
 
@@ -229,15 +230,13 @@ class Canvassing {
              if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
              $params = $request->all();
              // default include params
-            //  $params['status'] = ModelsCanvassing::STS_COLD;
-            //  $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
-             $params['nomor_aplikasi'] = mt_rand(10000000,99999999);
+             $params['nomor_aplikasi'] = Helper::generateNoApliksi();
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
              $image = $request->foto;  // your base64 encoded
              $request->foto =(string) Str::uuid().'.png';
              $params['step'] = $request->status == ModelsCanvassing::STS_HOT ? ModelsCanvassing::STEP_SUDAH_CANVASSING : ModelsCanvassing::STEP_PROSES_CANVASSING;
-
+             $params['id_jenis_produk'] = $request->current_user->id_jenis_produk;
              if($request->id) {
                  $store = Model::where('id', $request->id)->first()->fill($params);
                  $store->save();
@@ -272,8 +271,8 @@ class Canvassing {
                 if(!$data) throw new \Exception("Data not found.", 400);
                 return [
                     'items' => isset($data->manyAktifitas) ? $data->manyAktifitas->map(function($item) {
-                        $item->nama_tujuan_pemasaran = $item->refTujuanPemasaran->nama_tujuan_pemasaran ?? null; 
-                        $item->nama_cara_pemasaran = $item->refCaraPemasaran->nama_cara_pemasaran ?? null; 
+                        $item->nama_tujuan_pemasaran = $item->refTujuanPemasaran->nama_tujuan_pemasaran ?? null;
+                        $item->nama_cara_pemasaran = $item->refCaraPemasaran->nama_cara_pemasaran ?? null;
                         unset($item->refCaraPemasaran,$item->refTujuanPemasaran);
                         return $item;
                      }): [],
