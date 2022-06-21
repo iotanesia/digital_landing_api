@@ -36,6 +36,7 @@ class Eform extends Model
         'step',
         'status',
         'id_canvassing',
+        'kode_cabang',
         'created_at',
         'created_by',
         'updated_at',
