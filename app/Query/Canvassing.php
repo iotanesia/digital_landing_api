@@ -250,7 +250,7 @@ class Canvassing {
              if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
              $params = $request->all();
              // default include params
-             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->kode_cabang);
+            //  $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->kode_cabang);
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
              $params['step'] = $request->status == ModelsCanvassing::STS_HOT ? ModelsCanvassing::STEP_SUDAH_CANVASSING : ModelsCanvassing::STEP_PROSES_CANVASSING;
