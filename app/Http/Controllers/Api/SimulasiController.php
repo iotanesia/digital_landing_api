@@ -43,7 +43,7 @@ class SimulasiController extends Controller
     {
         try {
 
-            $amount = self::pmt($request->bunga, $request->jangka_waktu, $request->plafond_kredit);
+            $amount = self::pmt(str_replace(',','.',str_replace('.','',$request->plafond_kredit)),$request->jangka_waktu, str_replace(',','.',str_replace('.','',$request->plafond_kredit)));
             $data['estimasi_angsuran_per_bulan'] =  $amount;
             $data['estimasi_minimal_penghasilan'] = self::estimationSalary($amount);
             return Helper::resultResponse(
