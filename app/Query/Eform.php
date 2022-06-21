@@ -250,41 +250,44 @@ class Eform {
     public static function aktifitas($id)
     {
         try {
-            return [
-                'items' => [
-                    [
-                        'label' => 'prescreening',
-                        'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'lolos',
-                        'status_kode' => 2
-                    ],
-                    [
-                        'label' => 'analisa kredit',
-                        'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Sedang diproses',
-                        'status_kode' => 1
-                    ],
-                    [
-                        'label' => 'approved',
-                        'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null,
-                        'status_kode' => 0
-                    ],
-                    [
-                        'label' => 'cetak dokumen',
-                        'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null,
-                        'status_kode' => 0
+            $data = Model::find($id);
+            $data->step = [
+                [
+                    'label' => 'prescreening',
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'lolos',
+                    'status_kode' => 2
+                ],
+                [
+                    'label' => 'analisa kredit',
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Sedang diproses',
+                    'status_kode' => 1
+                ],
+                [
+                    'label' => 'approved',
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'status' => null,
+                    'status_kode' => 0
+                ],
+                [
+                    'label' => 'cetak dokumen',
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'status' => null,
+                    'status_kode' => 0
 
-                    ],
-                    [
-                        'label' => 'disbrusment',
-                        'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null,
-                        'status_kode' => 0
+                ],
+                [
+                    'label' => 'disbrusment',
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'status' => null,
+                    'status_kode' => 0
 
-                    ]
                 ]
+            ];
+            
+            return [
+                'items' => [ $data ]
             ];
         } catch (\Throwable $th) {
             throw $th;
