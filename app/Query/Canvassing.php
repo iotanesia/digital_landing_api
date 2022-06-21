@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Jobs\EformPrescreeningJobs;
+use App\Mail\EFormMail;
 use App\Models\Canvassing as ModelsCanvassing;
 use App\Models\Eform as ModelsEform;
 use Carbon\Carbon;
 use App\Models\Aktifitas;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class Canvassing {
@@ -152,8 +155,9 @@ class Canvassing {
             if($request->nirk)  $request->informasi_aktifitas = 'e-form: Input Via Web';
             $params = $request->all();
             // default include params
-            $params['status'] = ModelsCanvassing::STS_HOT;
-            $params['step'] = ModelsCanvassing::STEP_PROSES_CANVASSING;
+            $params['step'] = ModelsCanvassing::STEP_PENGAJUAN_BARU;
+            if($request->nirk) $params['step'] = ModelsCanvassing::STEP_INPUT_CANVASSING;
+            $params['status'] = ModelsCanvassing::STS_WARN;
             $params['platfrom'] = ModelsCanvassing::WEB;
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->kode_cabang);
             $image = $request->foto;  // your base64 encoded
@@ -161,12 +165,27 @@ class Canvassing {
             // $kode_cabang = MCabang::getDistanceBetweenPoints($request->lat_long_lokasi_usaha);
             // $params['kode_cabang'] = $kode_cabang;
             $store = Model::create($params);
-            $params['step'] = ModelsEform::STEP_INPUT_EFORM;
+            $params['step'] = ModelsEform::STEP_PRESCREENING;
+            $params['step_proses_prescreening'] = Prescreening::PROSES;
             $params['id_canvassing'] = $store->id;
-            ModelsEform::create($params);
+            $eform = ModelsEform::create($params);
+            $params['id'] = $eform->id;
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
             Storage::put($request->foto, base64_decode($image));
+            // prescreening
+            $data = [
+                'items' => $params
+            ];
+            $prescreening = (new EformPrescreeningJobs($data));
+            dispatch($prescreening);
+            $email = $store->email;
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+            ];
+            Mail::to($email)->send(new EFormMail($mail_data));
             return [
                 'items' => $store
             ];
@@ -249,8 +268,8 @@ class Canvassing {
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
              if($request->status == ModelsCanvassing::STS_HOT) {
                  $params['id_canvassing'] =  $store->id;
-                 $params['step'] =  ModelsCanvassing::STEP_PENGAJUAN_BARU;
-                 ModelsEform::create($params);
+                 $checkEform = Eform::byIdCanvassing($store->id);
+                 if(!$checkEform) ModelsEform::create($params);
              }
 
              if($is_transaction) DB::commit();

@@ -48,12 +48,14 @@ class Eform extends Model
         'step_proses_prescreening'
     ];
 
-    const STEP_PENGAJUAN_BARU = 0;
-    const STEP_INPUT_EFORM = 1;
-    const STEP_PROSES_EFORM = 2;
-    const STEP_SUDAH_EFORM = 3;
-    const LOLOS = 1;
-    const TIDAK_LOLOS = 0;
+    const STEP_CANVASING = 0;
+    const STEP_PRESCREENING = 1;
+    // const STEP_PROSES_EFORM = 2;
+    // const STEP_SUDAH_EFORM = 3;
+    // const LOLOS = 1;
+    // const TIDAK_LOLOS = 0;
+
+
 
     public function refCabang()
     {

@@ -54,8 +54,8 @@ class Prescreening {
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
 
-                        $status = 'sedang proses';
-                        if($item->status_prescreening) $status = self::score($item->manyAktifitas) == 0 ? 'tidak lolos' : 'lolos';
+                        $status = 'menunggu proses';
+                        if($item->step_proses_prescreening) $status = self::score($item->manyAktifitas) == 0 ? 'tidak lolos' : 'lolos';
                         return [
                             'id' => $item->id,
                             'nama' => $item->nama,
@@ -127,6 +127,7 @@ class Prescreening {
             $email = $store->email;
             $mail_data = [
                 "fullname" => $store->nama,
+                "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
             ];
             Mail::to($email)->send(new EFormMail($mail_data));

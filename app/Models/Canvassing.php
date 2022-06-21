@@ -49,6 +49,7 @@ class Canvassing extends Model
         'deleted_by',
     ];
 
+    const STS_WARN = 'WARM';
     const STS_COLD = 'COLD';
     const STS_HOT = 'HOT';
 

@@ -21,11 +21,16 @@ use Illuminate\Support\Str;
 
 class Eform {
 
+    public static function byIdCanvassing($id_canvassing)
+    {
+        return Model::where('id_canvassing',$id_canvassing)->first();
+    }
+
     public static function getData($request)
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU)->where('kode_cabang',$request->current_user->kode_cabang);
+                $query->where('step',Model::STEP_CANVASING)->where('kode_cabang',$request->current_user->kode_cabang);
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -127,7 +132,7 @@ class Eform {
 
             //tahap prescreening
             // $cekDhnDki = MDhnDki::cekDhn($request->nik);
-            $params['status'] = Model::LOLOS;
+            // $params['status'] = Model::LOLOS;
 
             // $dataSend = [
             //     'metode' => 'DHN DKI',
@@ -183,7 +188,7 @@ class Eform {
 
             $params['nomor_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';
-            $params['step'] = ModelsEform::STEP_INPUT_EFORM;
+            $params['step'] = ModelsEform::STEP_PRESCREENING;
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
             if(MSubProduk::cekPlafon($request->id_sub_produk,$request->plafon)) throw new \Exception('Plafon tidak sesuai',500);
 
