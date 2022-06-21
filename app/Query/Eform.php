@@ -127,7 +127,7 @@ class Eform {
 
             //tahap prescreening
             // $cekDhnDki = MDhnDki::cekDhn($request->nik);
-            // $params['status'] = Model::LOLOS;
+            $params['status'] = Model::LOLOS;
 
             // $dataSend = [
             //     'metode' => 'DHN DKI',
