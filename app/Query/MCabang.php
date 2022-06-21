@@ -84,7 +84,7 @@ class MCabang {
         $lat1 = $request->lat;
         $lon1 = $request->long;
         $counter = 0;
-        $data = Model::whereNotNull('lng')->whereNotNull('lat')->get();
+        $data = Model::whereNotNull('lng')->whereNotNull('lat')->whereNotNull('kode_cabang')->get();
 
         foreach($data as $key => $val) {
             $lat2 = $val->lat;
