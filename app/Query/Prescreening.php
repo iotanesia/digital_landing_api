@@ -119,6 +119,7 @@ class Prescreening {
             $store = ModelsEform::find($request->id);
             $params = $request->all();
             $params['step_proses_prescreening'] = self::PROSES;
+            $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->current_user->kode_cabang);
             $store->fill($params);
             $store->save();
             if($is_transaction) DB::commit();

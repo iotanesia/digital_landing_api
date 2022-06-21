@@ -253,8 +253,6 @@ class Canvassing {
              $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->kode_cabang);
              $params['kode_cabang'] = $request->current_user->kode_cabang;
              $params['nirk'] = $request->current_user->nirk;
-             $image = $request->foto;  // your base64 encoded
-             $request->foto =(string) Str::uuid().'.png';
              $params['step'] = $request->status == ModelsCanvassing::STS_HOT ? ModelsCanvassing::STEP_SUDAH_CANVASSING : ModelsCanvassing::STEP_PROSES_CANVASSING;
              $params['id_jenis_produk'] = $request->current_user->id_jenis_produk;
              if($request->id) {
@@ -267,10 +265,20 @@ class Canvassing {
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
              if($request->status == ModelsCanvassing::STS_HOT) {
                  $params['id_canvassing'] =  $store->id;
+
                  $checkEform = Eform::byIdCanvassing($store->id);
-                 if(!$checkEform) ModelsEform::create($params);
+
+                 if(!$checkEform) {
+                     $params['step'] = Prescreening::BELUM_DIPROSES;
+                     unset(
+                        $params['status']
+                     );
+                     ModelsEform::create($params);
+                 }
              }
 
+             $image = $request->foto;  // your base64 encoded
+             $request->foto =(string) Str::uuid().'.png';
              if($is_transaction) DB::commit();
              Storage::put($request->foto, base64_decode($image));
              return [
