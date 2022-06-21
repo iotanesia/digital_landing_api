@@ -3,10 +3,13 @@
 namespace App\Query;
 use App\ApiHelper as Helper;
 use App\Jobs\EformPrescreeningJobs;
+use App\Mail\EFormMail;
 use App\Models\Eform as ModelsEform;
 use App\Models\Prescreening as ModelsPrescreening;
 use Illuminate\Support\Facades\DB;
 use App\Query\Eform;
+use Illuminate\Support\Facades\Mail;
+
 class Prescreening {
 
     const BELUM_DIPROSES = 0;
@@ -102,7 +105,7 @@ class Prescreening {
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
             if(!$request->id_kelurahan) $require_fileds[] = 'id_kelurahan';
             if(!$request->kode_pos) $require_fileds[] = 'kode_pos';
-            if(!$request->alamat) $require_fileds[] = 'alamat';
+            if(!$request->alamat_detail) $require_fileds[] = 'alamat_detail';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafon) $require_fileds[] = 'plafon';
@@ -121,6 +124,15 @@ class Prescreening {
             if($is_transaction) DB::commit();
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
+
+            // $email = $store->email;
+            // $mail_data = [
+            //     "fullname" => $store->nama,
+            //     "nomor_aplikasi" => $store->nomor_aplikasi,
+            // ];
+            // Mail::to($email)->send(new EFormMail($mail_data));
+
+
             unset($store->foto);
             return [
                 'items' => $store

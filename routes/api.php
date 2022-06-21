@@ -54,7 +54,7 @@ Route::prefix('v1')
 
     Route::post('/login',[AuthControler::class,'login']);
     Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
-    Route::get('/mail',[EmailController::class,'index'])->middleware('log.prescreening');
+    Route::get('/mail',[EmailController::class,'index']);
 
     Route::group(['middleware' => 'access'],function () {
 

@@ -325,15 +325,15 @@
                         <table>
                             <tr>
                                 <td width="120">NIK</td>
-                                <td><b>12345767811923</b></td>
+                                <td><b>{{$nik}}</b></td>
                             </tr>
                             <tr>
                                 <td>Nama</td>
-                                <td><b>Agus Heriyanto</b></td>
+                                <td><b>{{$fullname}}</b></td>
                             </tr>
                             <tr>
                                 <td>Nomor Aplikasi</td>
-                                <td><b>12345767811923</b></td>
+                                <td><b>{{$nomor_aplikasi}}</b></td>
                             </tr>
                         </table>
                         <p>Kunjungi Menu Cek status untuk mengetahui status proses permohonan dan untuk proses selanjutnya.</p>

@@ -18,15 +18,17 @@ class EmailController extends Controller
      */
     public function index()
     {
-        $params = [
-            'nik' => '3216070000000009'
-        ];
-        dd(SKIPService::getCalonSingle($params));
-        // $email = 'aleekhabib@gmail.com';
-        // $mail_data = [
-        //     "fullname" => 'test'
+        // $params = [
+        //     'nik' => '3216070000000009'
         // ];
-        // $tes = Mail::to($email)->send(new EFormMail($mail_data));
+        // dd(SKIPService::getCalonSingle($params));
+        $email = 'aleekhabib@gmail.com';
+        $mail_data = [
+            "nik" => 'test',
+            "fullname" => 'test',
+            "nomor_aplikasi" => 'test'
+        ];
+        $tes = Mail::to($email)->send(new EFormMail($mail_data));
     }
 
     /**
