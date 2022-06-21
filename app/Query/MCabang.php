@@ -84,8 +84,8 @@ class MCabang {
         $lat1 = $request->lat;
         $lon1 = $request->long;
         $counter = 0;
+        $idCabang = null;
         $data = Model::whereNotNull('lng')->whereNotNull('lat')->whereNotNull('kode_cabang')->get();
-
         foreach($data as $key => $val) {
             $lat2 = $val->lat;
             $lon2 = $val->lng;
@@ -98,21 +98,22 @@ class MCabang {
             $yards = $feet / 3;
             $kilometers = $miles * 1.609344;
             $meters = $kilometers * 1000;
-
             if($key == 0) {
                 $counter = $miles;
+                $idCabang = null;
 
             } elseif($counter > $miles) {
                 $counter = $miles;
                 $idCabang = $val->id_cabang;
             }
         }
+
         return ['items' => Model::where('id_cabang', $idCabang)->first()];
 
         // $feet  = $miles * 5280;
         // $yards = $feet / 3;
         // $kilometers = $miles * 1.609344;
         // $meters = $kilometers * 1000;
-        // return compact('miles','feet','yards','kilometers','meters'); 
+        // return compact('miles','feet','yards','kilometers','meters');
     }
 }

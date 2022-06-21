@@ -267,7 +267,7 @@ Route::prefix('v1')
                     Route::get('/aktifitas/{id}',[EformController::class,'getAktifitasPrescreening']);
                     Route::get('/{id}',[EformController::class,'getDetailPrescreening']);
                 });
-
+                Route::get('/aktifitas/{id}',[EformController::class,'aktifitas']);
                 Route::get('/{id}',[EformController::class,'show']);
             });
             Route::prefix('mobile')->group(function () {

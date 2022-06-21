@@ -246,4 +246,41 @@ class Eform {
             throw $th;
         }
     }
+
+    public static function aktifitas($id)
+    {
+        try {
+            return [
+                'items' => [
+                    [
+                        'label' => 'prescreening',
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'status' => 'lolos'
+                    ],
+                    [
+                        'label' => 'analisa kredit',
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'status' => 'Sedang diproses'
+                    ],
+                    [
+                        'label' => 'approved',
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'status' => null
+                    ],
+                    [
+                        'label' => 'cetak dokumen',
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'status' => null
+                    ],
+                    [
+                        'label' => 'disbrusment',
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'status' => null
+                    ]
+                ]
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
