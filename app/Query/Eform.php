@@ -126,60 +126,60 @@ class Eform {
             $params = $request->all();
 
             //tahap prescreening
-            $cekDhnDki = MDhnDki::cekDhn($request->nik);
+            // $cekDhnDki = MDhnDki::cekDhn($request->nik);
             $params['status'] = Model::LOLOS;
 
-            $dataSend = [
-                'metode' => 'DHN DKI',
-                'keterangan' => 'DHN DKI',
-                'status' => $cekDhnDki ? 0 : 1,
-            ];
-            ModelsPrescreening::create($dataSend);
+            // $dataSend = [
+            //     'metode' => 'DHN DKI',
+            //     'keterangan' => 'DHN DKI',
+            //     'status' => $cekDhnDki ? 0 : 1,
+            // ];
+            // ModelsPrescreening::create($dataSend);
 
-            MDhnDki::create();
-            if(!$cekDhnDki) {
-                $cekDhnBi = MDhnBi::cekDhn($request->nik);
-                $dataSend = [
-                    'metode' => 'DHN BI',
-                    'keterangan' => 'DHN BI',
-                    'status' => $cekDhnBi ? 0 : 1,
-                ];
-                ModelsPrescreening::create($dataSend);
+            // MDhnDki::create();
+            // if(!$cekDhnDki) {
+            //     $cekDhnBi = MDhnBi::cekDhn($request->nik);
+            //     $dataSend = [
+            //         'metode' => 'DHN BI',
+            //         'keterangan' => 'DHN BI',
+            //         'status' => $cekDhnBi ? 0 : 1,
+            //     ];
+            //     ModelsPrescreening::create($dataSend);
 
-                if($cekDhnBi) {
-                    $params['status'] = Model::TIDAK_LOLOS;
-                }
-            } else {
-                $params['status'] = Model::TIDAK_LOLOS;
-            }
+            //     if($cekDhnBi) {
+            //         $params['status'] = Model::TIDAK_LOLOS;
+            //     }
+            // } else {
+            //     $params['status'] = Model::TIDAK_LOLOS;
+            // }
 
-            if($params['status'] == Model::LOLOS) {
-                $cekDukcapil = PreScreening::dukcapil($request);
-                // $cekClik = PreScreening::clik($cekDukcapil);
+            // if($params['status'] == Model::LOLOS) {
+            //     $cekDukcapil = PreScreening::dukcapil($request);
+            //     // $cekClik = PreScreening::clik($cekDukcapil);
 
-                // if($cekClik['Code'] == '10-143') {
-                //     $params['status'] = Model::TIDAK_LOLOS;
-                // }
+            //     // if($cekClik['Code'] == '10-143') {
+            //     //     $params['status'] = Model::TIDAK_LOLOS;
+            //     // }
 
-                // $dataSend = [
-                //     'metode' => 'CLIK',
-                //     'keterangan' => $cekClik['Description'],
-                //     'status' => $cekClik['Code'] == '10-143' ? 0 : 1,
-                // ];
-                ModelsPrescreening::create($dataSend);
-                $cekSikp = SKIPService::getCalonSingle($request);
+            //     // $dataSend = [
+            //     //     'metode' => 'CLIK',
+            //     //     'keterangan' => $cekClik['Description'],
+            //     //     'status' => $cekClik['Code'] == '10-143' ? 0 : 1,
+            //     // ];
+            //     ModelsPrescreening::create($dataSend);
+            //     $cekSikp = SKIPService::getCalonSingle($request);
 
-                $dataSend = [
-                    'metode' => 'SIKP',
-                    'keterangan' => $cekSikp['message'],
-                    'status' => $cekSikp['message'] != 'Data ditemukan' ? 0 : 1,
-                ];
-                ModelsPrescreening::create($dataSend);
+            //     $dataSend = [
+            //         'metode' => 'SIKP',
+            //         'keterangan' => $cekSikp['message'],
+            //         'status' => $cekSikp['message'] != 'Data ditemukan' ? 0 : 1,
+            //     ];
+            //     ModelsPrescreening::create($dataSend);
 
-                if($cekSikp['message'] != 'Data ditemukan') {
-                    $params['status'] = Model::TIDAK_LOLOS;
-                }
-            }
+            //     if($cekSikp['message'] != 'Data ditemukan') {
+            //         $params['status'] = Model::TIDAK_LOLOS;
+            //     }
+            // }
 
             $params['nomor_aplikasi'] = mt_rand(10000,99999).'-'.$request->current_user->kode_cabang.Carbon::now()->format('dmY');
             $params['foto'] = (string) Str::uuid().'.png';

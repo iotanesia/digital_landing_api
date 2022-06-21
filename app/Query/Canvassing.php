@@ -18,9 +18,11 @@ class Canvassing {
     public static function getDataPusat($request)
     {
         try {
-            $data = Model::where('platfrom','<>',Model::WEB)->where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU);
-                $query->whereNull('nirk');
+            // dd($request->current_user->kode_cabang);
+            $data = Model::where('platfrom','<>',Model::WEB)
+            ->where('kode_cabang', (int)$request->current_user->kode_cabang)
+            ->where('step',Model::STEP_PENGAJUAN_BARU)
+            ->where(function ($query) use ($request){
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -53,9 +55,9 @@ class Canvassing {
     {
         try {
             $data = Model::where('platfrom', Model::WEB)
+            ->where('kode_cabang', $request->current_user->kode_cabang)
+            ->where('step',Model::STEP_PENGAJUAN_BARU)
             ->where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU);
-                $query->whereNull('nirk');
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
@@ -156,11 +158,12 @@ class Canvassing {
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->kode_cabang);
             $image = $request->foto;  // your base64 encoded
             $request->foto =(string) Str::uuid().'.png';
-
+            // $kode_cabang = MCabang::getDistanceBetweenPoints($request->lat_long_lokasi_usaha); 
+            // $params['kode_cabang'] = $kode_cabang;
             $store = Model::create($params);
             $params['step'] = ModelsEform::STEP_INPUT_EFORM;
             $params['id_canvassing'] = $store->id;
-            $storeEform = ModelsEform::create($params);
+            ModelsEform::create($params);
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
             Storage::put($request->foto, base64_decode($image));
@@ -197,8 +200,8 @@ class Canvassing {
             $require_fileds = [];
             if(!$request->id_canvassing) $require_fileds[] = 'id_canvassing';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-            $request->informasi_aktifitas = 'e-form: Input Via Web';
             $data = Model::find($request->id_canvassing);
+            $request->informasi_aktifitas = $data->platfrom == 'WEB' ? 'e-form: Input Via Web' : ($data->platfrom == 'MOBILE' ? 'e-form: Input Via Mobile' : 'e-form: Input Via Data Pusat');
             $data->step = ModelsCanvassing::STEP_INPUT_CANVASSING;
             $data->nirk = $request->current_user->nirk; // assign rm
             $data->save();
