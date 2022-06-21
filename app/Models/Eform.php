@@ -44,6 +44,7 @@ class Eform extends Model
         'deleted_by',
         'alamat_detail',
         'foto',
+        'status_prescreening'
     ];
 
     const STEP_PENGAJUAN_BARU = 0;
@@ -91,6 +92,11 @@ class Eform extends Model
     public function manyProduk()
     {
         return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+    }
+
+    public function manyAktifitas()
+    {
+        return $this->hasMany(Prescreening::class,'id_eform','id');
     }
 
 }

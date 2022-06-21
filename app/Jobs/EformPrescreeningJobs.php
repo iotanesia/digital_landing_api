@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Query\Eform;
 use App\Query\MSkemaEkternal;
 use App\SkemaEksternal;
 use Illuminate\Bus\Queueable;
@@ -10,7 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-
+use App\Query\Prescreening;
+use Illuminate\Support\Facades\Log;
 class EformPrescreeningJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -33,8 +35,8 @@ class EformPrescreeningJobs implements ShouldQueue
      */
     public function handle()
     {
+        $data = $this->data['items'];
         try {
-            $data = $this->data['items'];
             $skema = MSkemaEkternal::skema($data);
             foreach ($skema->manyRules->map(function ($item){
                 $item->rules = $item->refMetode->fungsi ?? null;
@@ -49,7 +51,6 @@ class EformPrescreeningJobs implements ShouldQueue
                     'id_map_rules_skema_eksternal' => $rule['id'],
                     'data' => $data
                 ];
-
                 // kondisi jika cut of
                 $process = SkemaEksternal::rules($params);
                 if($rule['is_cut_off']) {
@@ -58,6 +59,9 @@ class EformPrescreeningJobs implements ShouldQueue
             }
         } catch (\Throwable $th) {
             throw $th;
+        } finally{
+            Eform::updateStsPrescreening($data['id'],Prescreening::SELESAI,false);
+            // proses selesai
         }
     }
 }

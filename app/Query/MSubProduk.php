@@ -92,4 +92,13 @@ class MSubProduk {
             throw $th;
         }
     }
+
+    public static function plafond($id, $plafon) {
+        try {
+            $sub_produk = Model::find($id);
+            return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -259,7 +259,12 @@ Route::prefix('v1')
         Route::prefix('eform')->group(function () {
             Route::prefix('main')->group(function () {
                 Route::get('/',[EformController::class,'index']);
-                Route::post('/prescreening',[EformController::class,'prescreening']);
+                Route::prefix('prescreening')->group(function (){
+                    Route::get('/',[EformController::class,'getDataPrescreening']);
+                    Route::get('/aktifitas/{id}',[EformController::class,'getAktifitasPrescreening']);
+                    Route::get('/{id}',[EformController::class,'getDetailPrescreening']);
+                });
+
                 Route::get('/{id}',[EformController::class,'show']);
             });
             Route::prefix('mobile')->group(function () {

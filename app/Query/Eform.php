@@ -206,4 +206,19 @@ class Eform {
             throw $th;
         }
     }
+
+    public static function updateStsPrescreening($id,$sts,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $eform = Model::find($id);
+            $eform->status_prescreening = $sts;
+            $eform->save();
+            if($is_transaction) DB::commit();
+            return $eform;
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
 }
