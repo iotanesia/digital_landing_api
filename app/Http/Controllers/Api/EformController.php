@@ -175,7 +175,7 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::aktifitas($id)
+                Eform::aktifitas($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

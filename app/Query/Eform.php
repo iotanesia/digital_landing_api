@@ -247,10 +247,10 @@ class Eform {
         }
     }
 
-    public static function aktifitas($id)
+    public static function aktifitas($request)
     {
         try {
-            $data = Model::find($id);
+            $data = Model::where('no_aplikasi', $request->nomor_aplikasi)->where('nik', $request->nik)->first();
             $data->step = [
                 [
                     'label' => 'prescreening',
