@@ -118,4 +118,15 @@ class MProduk {
             throw $th;
         }
     }
+
+    public static function plafon($id, $plafon) {
+        try {
+            $produk = Model::where('id_produk',$id)->first();
+            if(!$produk) return false;
+            if($plafon > $produk->maks_plafon) return true;
+            if($plafon > $produk->min_plafon) return true;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

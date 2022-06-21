@@ -110,7 +110,7 @@ class Prescreening {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafon) $require_fileds[] = 'plafon';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
-            if(MSubProduk::plafon($request->id_sub_produk,$request->plafon)) throw new \Exception('Plafon tidak sesuai',500);
+            if(!MProduk::plafon($request->id_sub_produk,$request->plafon)) throw new \Exception('Plafon tidak sesuai',400);
 
             $data = Eform::byId($request->id);
             if(!$data) throw new \Exception("Data not found.", 400);
