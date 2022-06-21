@@ -51,10 +51,11 @@ class SKIPCalonSingle {
             ]);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
-            // ditambah status2
+            $result = $response->json();
+            if(!in_array($result['code'],['12'])) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             return [
-                'response' => $response->json(),
-                'message' => '',
+                'response' => $result['data'],
+                'message' => $result['message'],
             ];
         } catch (\Throwable $th) {
             // throw $th;

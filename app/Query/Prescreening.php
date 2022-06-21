@@ -19,6 +19,16 @@ class Prescreening {
     public static function byId($id)
     {
         $data =  ModelsEform::find($id);
+        $data->nama_propinsi = $data->refPropinsi->nama_propinsi ?? null;
+        $data->nama_kabupaten = $data->refKabupaten->nama_kabupaten ?? null;
+        $data->nama_kecamatan = $data->refKecamatan->nama_kecamatan ?? null;
+        $data->nama_kelurahan = $data->refKelurahan->nama_kelurahan ?? null;
+        unset(
+            $data->refPropinsi,
+            $data->refKabupaten,
+            $data->refKecamatan,
+            $data->refKelurahan,
+        );
         return [
             'items' => $data,
         ];
