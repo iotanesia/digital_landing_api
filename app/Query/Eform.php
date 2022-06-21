@@ -25,7 +25,7 @@ class Eform {
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                $query->where('step',Model::STEP_PENGAJUAN_BARU)->whereNull('nomor_aplikasi')->where('kode_cabang',$request->current_user->kode_cabang);
+                $query->where('step',Model::STEP_PENGAJUAN_BARU)->where('kode_cabang',$request->current_user->kode_cabang);
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
