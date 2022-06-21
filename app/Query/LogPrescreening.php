@@ -11,12 +11,7 @@ class LogPrescreening {
     {
         DB::beginTransaction();
         try {
-            $params = [
-                'request' => $request->all(),
-                'response' => $request->response,
-                'id_prescreening' => $request->id_prescreening,
-            ];
-            Model::create($params);
+            Model::create($request);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -131,7 +131,7 @@ class Prescreening {
                 "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
             ];
-            Mail::to($email)->send(new EFormMail($mail_data));
+            // Mail::to($email)->send(new EFormMail($mail_data));
             unset($store->foto);
             return [
                 'items' => $store
@@ -146,7 +146,7 @@ class Prescreening {
     {
        if($is_transaction) DB::beginTransaction();
        try {
-            ModelsPrescreening::create($request);
+            $store = ModelsPrescreening::create($request);
             if($is_transaction) DB::commit();
             return true;
        } catch (\Throwable $th) {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\MKabupaten;
+use App\Query\LogPrescreening;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,7 +25,7 @@ class Dukcapil {
 
     public static function prescreening($params)
     {
-
+        $result = null;
         try {
             $response = Http::withHeaders([
                 'token' => env('DIGI_TOKEN')
@@ -35,17 +36,27 @@ class Dukcapil {
             ]);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            $result = $response->json();
             return [
                 'response' => $response->json()['data'],
                 'message' => '' // diisi response message
             ];
 
         } catch (\Throwable $th) {
-            // throw $th;
+            $result = json_decode($th->getMessage());
             return [
                 'response' => false,
                 'message' => $th->getMessage() // diisi response message
             ];
+        } finally {
+            LogPrescreening::store([
+                'request' => json_encode([
+                    'trx_id' => 1,
+                    'nik' => $params['nik']
+                ]),
+                'response' => json_encode($result),
+                'id_eform' => $params['id_eform']
+            ]);
         }
     }
 }

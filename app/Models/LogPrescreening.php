@@ -14,7 +14,7 @@ class LogPrescreening extends Model
     public $fillable = [
         'request',
         'response',
-        'id_prescreening',
+        'id_eform',
         'method',
         'created_at',
         'created_by',
@@ -32,6 +32,6 @@ class LogPrescreening extends Model
         static::updating(function ($model){
             $model->updated_by = request()->current_user->id;
         });
-      
+
     }
 }
