@@ -61,8 +61,9 @@ class Prescreening {
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'nik' => $item->nik,
                             'foto' => $item->foto,
-                            'status' => $status,
-                            'status_proses_prescreening' => $item->status_prescreening,
+                            'status' => $item->status,
+                            'status_proses_prescreening' => $status,
+                            'step_proses_prescreening' => $item->step_proses_prescreening,
                             'created_at' => $item->created_at,
                         ];
                     }),
@@ -114,7 +115,7 @@ class Prescreening {
             if(!$skema) throw new \Exception("Skema Ekternal belum terdaftar.", 400);
             $store = ModelsEform::find($request->id);
             $params = $request->all();
-            $params['status_prescreening'] = self::PROSES;
+            $params['step_proses_prescreening'] = self::PROSES;
             $store->fill($params);
             $store->save();
             if($is_transaction) DB::commit();

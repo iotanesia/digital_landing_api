@@ -260,6 +260,7 @@ Route::prefix('v1')
         Route::prefix('eform')->group(function () {
             Route::prefix('main')->group(function () {
                 Route::get('/',[EformController::class,'index']);
+                Route::post('/keputusan',[EformController::class,'keputusan']);
                 Route::prefix('prescreening')->group(function (){
                     Route::get('/',[EformController::class,'getDataPrescreening']);
                     Route::get('/aktifitas/{id}',[EformController::class,'getAktifitasPrescreening']);

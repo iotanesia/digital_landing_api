@@ -60,7 +60,7 @@ class EformPrescreeningJobs implements ShouldQueue
         } catch (\Throwable $th) {
             throw $th;
         } finally{
-            Eform::updateStsPrescreening($data['id'],Prescreening::SELESAI,false);
+            Eform::updateStepPrescreening($data['id'],Prescreening::SELESAI,false);
             // proses selesai
         }
     }

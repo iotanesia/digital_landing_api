@@ -60,6 +60,23 @@ class EformController extends Controller
         }
     }
 
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function keputusan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Eform::decision($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -44,7 +44,7 @@ class Eform extends Model
         'deleted_by',
         'alamat_detail',
         'foto',
-        'status_prescreening'
+        'step_proses_prescreening'
     ];
 
     const STEP_PENGAJUAN_BARU = 0;
