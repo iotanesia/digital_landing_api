@@ -124,15 +124,12 @@ class Prescreening {
             if($is_transaction) DB::commit();
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
-
-            // $email = $store->email;
-            // $mail_data = [
-            //     "fullname" => $store->nama,
-            //     "nomor_aplikasi" => $store->nomor_aplikasi,
-            // ];
-            // Mail::to($email)->send(new EFormMail($mail_data));
-
-
+            $email = $store->email;
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+            ];
+            Mail::to($email)->send(new EFormMail($mail_data));
             unset($store->foto);
             return [
                 'items' => $store
