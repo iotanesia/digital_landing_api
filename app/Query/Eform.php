@@ -255,27 +255,34 @@ class Eform {
                     [
                         'label' => 'prescreening',
                         'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'lolos'
+                        'status' => 'lolos',
+                        'status_kode' => 2
                     ],
                     [
                         'label' => 'analisa kredit',
                         'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Sedang diproses'
+                        'status' => 'Sedang diproses',
+                        'status_kode' => 1
                     ],
                     [
                         'label' => 'approved',
                         'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null
+                        'status' => null,
+                        'status_kode' => 0
                     ],
                     [
                         'label' => 'cetak dokumen',
                         'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null
+                        'status' => null,
+                        'status_kode' => 0
+
                     ],
                     [
                         'label' => 'disbrusment',
                         'tanggal' => Carbon::now()->format('Y-m-d'),
-                        'status' => null
+                        'status' => null,
+                        'status_kode' => 0
+
                     ]
                 ]
             ];
