@@ -251,6 +251,8 @@ class Eform {
     {
         try {
             $data = Model::where('no_aplikasi', $request->nomor_aplikasi)->where('nik', $request->nik)->first();
+
+            if(!$data) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
             $data->step = [
                 [
                     'label' => 'prescreening',
