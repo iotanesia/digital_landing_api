@@ -206,4 +206,39 @@ class Eform {
             throw $th;
         }
     }
+
+    public static function updateStepPrescreening($id,$sts,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $eform = Model::find($id);
+            $eform->step_proses_prescreening = $sts;
+            $eform->save();
+            if($is_transaction) DB::commit();
+            return $eform;
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public static function decision($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $require_fileds = [];
+            if(!$request->id) $require_fileds[] = 'id';
+            if(!$request->status) $require_fileds[] = 'status';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+
+            $eform = Model::find($request->id);
+            $eform->status = $request->status;
+            $eform->save();
+            if($is_transaction) DB::commit();
+            return $eform;
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
 }

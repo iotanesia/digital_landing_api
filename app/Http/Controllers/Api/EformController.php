@@ -42,6 +42,75 @@ class EformController extends Controller
         }
     }
 
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getDataPrescreening(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Prescreening::getAll($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function keputusan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Eform::decision($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getDetailPrescreening(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                Prescreening::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getAktifitasPrescreening(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                Prescreening::aktifitas($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -94,16 +163,6 @@ class EformController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
