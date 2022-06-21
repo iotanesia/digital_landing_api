@@ -39,5 +39,20 @@ class SimulasiController extends Controller
         return round($amount / ($prosentase/100),2);
     }
 
+    public function processWeb(Request $request)
+    {
+        try {
+
+            $amount = self::pmt($request->bunga, $request->jangka_waktu, $request->plafond_kredit);
+            $data['estimasi_angsuran_per_bulan'] =  $amount;
+            $data['estimasi_minimal_penghasilan'] = self::estimationSalary($amount);
+            return Helper::resultResponse(
+               ['items' => $data]
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
 
 }

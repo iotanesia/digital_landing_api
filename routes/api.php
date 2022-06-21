@@ -255,6 +255,7 @@ Route::prefix('v1')
         // simulasi
         Route::prefix('simulasi')->group(function () {
             Route::post('/kredit',[SimulasiController::class,'process']);
+            Route::post('/kredit-web',[SimulasiController::class,'processWeb']);
         });
         // eform
         Route::prefix('eform')->group(function () {
