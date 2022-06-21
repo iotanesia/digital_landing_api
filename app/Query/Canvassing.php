@@ -21,7 +21,6 @@ class Canvassing {
     public static function getDataPusat($request)
     {
         try {
-            // dd($request->current_user->kode_cabang);
             $data = Model::where('platfrom','<>',Model::WEB)
             ->where('kode_cabang', (int)$request->current_user->kode_cabang)
             ->where('step',Model::STEP_PENGAJUAN_BARU)
@@ -304,6 +303,8 @@ class Canvassing {
         }
      }
 
+
+     // profil rm
      public static function getData($request)
      {
          try {
