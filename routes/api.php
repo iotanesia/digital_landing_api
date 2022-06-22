@@ -262,13 +262,13 @@ Route::prefix('v1')
         Route::prefix('eform')->group(function () {
             Route::prefix('main')->group(function () {
                 Route::get('/',[EformController::class,'index']);
+                Route::get('/aktifitas',[EformController::class,'aktifitas']);
                 Route::post('/keputusan',[EformController::class,'keputusan']);
                 Route::prefix('prescreening')->group(function (){
                     Route::get('/',[EformController::class,'getDataPrescreening']);
                     Route::get('/aktifitas/{id}',[EformController::class,'getAktifitasPrescreening']);
                     Route::get('/{id}',[EformController::class,'getDetailPrescreening']);
                 });
-                Route::get('/aktifitas/{id}',[EformController::class,'aktifitas']);
                 Route::get('/{id}',[EformController::class,'show']);
             });
             Route::prefix('mobile')->group(function () {
