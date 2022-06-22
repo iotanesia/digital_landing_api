@@ -54,6 +54,7 @@ class SKIPCalonSingle {
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();
             if(!in_array($result['code'],['12'])) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            dd($result);
             return [
                 'response' => $result['data'],
                 'message' => $result['message'],
