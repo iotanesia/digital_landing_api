@@ -61,7 +61,6 @@ class SKIPCalonSingle {
                 'response_data' => $result
             ];
         } catch (\Throwable $th) {
-            throw $th;
             $result = json_decode($th->getMessage(),true);
             return [
                 'response' => false,
