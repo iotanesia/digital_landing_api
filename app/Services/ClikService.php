@@ -74,7 +74,6 @@ class ClikService {
 
             ];
         } catch (\Throwable $th) {
-            throw $th;
             return [
                 'response' => false,
                 'message' => $th->getMessage(), // diisi response message
