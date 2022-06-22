@@ -11,7 +11,7 @@ class MapPenjaminanSegmen {
     public static function retrive($request)
     {
         return [
-            'items' => Model::where('nirk',$request->current_user->nirk)->first()
+            'items' => Model::where('nirk',$request->current_user->nirk)->get()
         ];
     }
 }
