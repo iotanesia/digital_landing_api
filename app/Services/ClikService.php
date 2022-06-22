@@ -10,6 +10,7 @@ class ClikService {
 
     public static function prescreening($params)
     {
+        $result = null;
         try {
             $data = $params['data'];
             // service dukcapil
@@ -77,7 +78,7 @@ class ClikService {
             return [
                 'response' => false,
                 'message' => $th->getMessage(), // diisi response message
-                'request_body' => $request,
+                'request_body' => null,
                 'response_data' => $result
             ];
         }
