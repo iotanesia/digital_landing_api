@@ -184,7 +184,7 @@ class Canvassing {
                 "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
             ];
-            // Mail::to($email)->send(new EFormMail($mail_data));
+            Mail::to($email)->send(new EFormMail($mail_data));
             return [
                 'items' => $store
             ];
