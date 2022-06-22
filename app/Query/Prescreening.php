@@ -140,7 +140,7 @@ class Prescreening {
             $store->fill($params);
             $store->save();
             if($is_transaction) DB::commit();
-            Storage::put($request->foto, base64_decode($image));
+            if($request->foto) Storage::put($request->foto, base64_decode($image));
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
             $email = $store->email;
