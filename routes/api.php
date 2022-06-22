@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\CanvassingController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\FileController;
@@ -273,6 +274,10 @@ Route::prefix('v1')
             Route::prefix('mobile')->group(function () {
                 Route::post('/',[EformController::class,'prescreening']);
             });
+        });
+
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/segmen-penjaminan',[DashboardController::class,'segmenPenjaminan']);
         });
 
     });
