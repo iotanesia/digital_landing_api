@@ -160,7 +160,7 @@ class Canvassing {
             $params['platfrom'] = ModelsCanvassing::WEB;
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->kode_cabang);
             $image = $request->foto;  // your base64 encoded
-            $request->foto =(string) Str::uuid().'.png';
+            $params['foto'] =(string) Str::uuid().'.png';
             // $kode_cabang = MCabang::getDistanceBetweenPoints($request->lat_long_lokasi_usaha);
             // $params['kode_cabang'] = $kode_cabang;
             $store = Model::create($params);
@@ -171,10 +171,10 @@ class Canvassing {
             $params['id'] = $eform->id;
             $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
             if($is_transaction) DB::commit();
-            Storage::put($request->foto, base64_decode($image));
+            Storage::put($params['foto'], base64_decode($image));
             // prescreening
             $data = [
-                'items' => $params
+                'items' => $eform
             ];
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
@@ -184,7 +184,7 @@ class Canvassing {
                 "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
             ];
-            Mail::to($email)->send(new EFormMail($mail_data));
+            // Mail::to($email)->send(new EFormMail($mail_data));
             return [
                 'items' => $store
             ];
@@ -255,6 +255,8 @@ class Canvassing {
              $params['nirk'] = $request->current_user->nirk;
              $params['step'] = $request->status == ModelsCanvassing::STS_HOT ? ModelsCanvassing::STEP_SUDAH_CANVASSING : ModelsCanvassing::STEP_PROSES_CANVASSING;
              $params['id_jenis_produk'] = $request->current_user->id_jenis_produk;
+             $image = $request->foto;  // your base64 encoded
+             $params['foto'] =(string) Str::uuid().'.png';
              if($request->id) {
                  $store = Model::where('id', $request->id)->first()->fill($params);
                  $store->save();
@@ -265,9 +267,7 @@ class Canvassing {
              $store->refAktifitas()->create(self::setParamsRefAktifitas($request,$store));
              if($request->status == ModelsCanvassing::STS_HOT) {
                  $params['id_canvassing'] =  $store->id;
-
                  $checkEform = Eform::byIdCanvassing($store->id);
-
                  if(!$checkEform) {
                      $params['step'] = Prescreening::BELUM_DIPROSES;
                      unset(
@@ -277,10 +277,9 @@ class Canvassing {
                  }
              }
 
-             $image = $request->foto;  // your base64 encoded
-             $request->foto =(string) Str::uuid().'.png';
+
              if($is_transaction) DB::commit();
-             Storage::put($request->foto, base64_decode($image));
+             Storage::put($params['foto'], base64_decode($image));
              return [
                  'items' => $store
              ];

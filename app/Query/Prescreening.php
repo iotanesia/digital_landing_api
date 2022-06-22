@@ -60,6 +60,7 @@ class Prescreening {
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"$request->nomor_aplikasi%");
                 if($request->nik) $query->where('nik',$request->nik);
+                $query->where('step',ModelsEform::STEP_PRESCREENING);
                 //  $query->where('id',28);
 
                  // belum difilter berdasrkan cabang
