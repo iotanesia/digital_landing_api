@@ -26,37 +26,33 @@ class Dukcapil {
     public static function prescreening($params)
     {
         $result = null;
+        $request = [
+            'trx_id' => 1,
+            'nik' => $params['nik']
+        ];
         try {
             $response = Http::withHeaders([
                 'token' => env('DIGI_TOKEN')
             ])->contentType("application/json")
-            ->post(config('services.dukcapil.host'),[
-                "trx_id" => 1,
-                "nik" => $params['nik']
-            ]);
+            ->post(config('services.dukcapil.host'),$request);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();
             return [
                 'response' => $response->json()['data'],
-                'message' => '' // diisi response message
+                'message' => '', // diisi response message,
+                'request_body' => $request,
+                'response_data' => $result
             ];
 
         } catch (\Throwable $th) {
             $result = json_decode($th->getMessage());
             return [
                 'response' => false,
-                'message' => $th->getMessage() // diisi response message
+                'message' => $th->getMessage(), // diisi response message
+                'request_body' => $request,
+                'response_data' => $result
             ];
-        } finally {
-            LogPrescreening::store([
-                'request' => json_encode([
-                    'trx_id' => 1,
-                    'nik' => $params['nik']
-                ]),
-                'response' => json_encode($result),
-                'id_eform' => $params['id_eform']
-            ]);
         }
     }
 }

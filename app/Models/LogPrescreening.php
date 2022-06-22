@@ -16,6 +16,7 @@ class LogPrescreening extends Model
         'response',
         'id_eform',
         'method',
+        'id_prescreening',
         'created_at',
         'created_by',
         'updated_at',
@@ -26,12 +27,6 @@ class LogPrescreening extends Model
     {
         parent::boot();
 
-        static::creating(function ($model){
-            $model->created_by = request()->current_user->id;
-        });
-        static::updating(function ($model){
-            $model->updated_by = request()->current_user->id;
-        });
 
     }
 }

@@ -157,6 +157,12 @@ class Prescreening {
        if($is_transaction) DB::beginTransaction();
        try {
             $store = ModelsPrescreening::create($request);
+            $store->refLog()->create([
+                'id_prescreening' => $store->id,
+                'id_eform' => $request['id_eform'],
+                'request' => $request['request_body'],
+                'response' => $request['response_data'],
+            ]);
             if($is_transaction) DB::commit();
             return true;
        } catch (\Throwable $th) {

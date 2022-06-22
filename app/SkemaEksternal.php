@@ -23,6 +23,10 @@ class SkemaEksternal {
                         'id_eform' => $params['id_eform'],
                         'status' => 1,
                         'id_map_rules_skema_eksternal' => $params['id_map_rules_skema_eksternal'],
+                        'request_body' => json_encode([
+                            'nik' => $params['nik']
+                        ]),
+                        'response_data' => $proses ? 'Data ditemukan' : 'Data tidak ditemukan',
                     ]);
                     return true;
                 }else {
@@ -32,6 +36,10 @@ class SkemaEksternal {
                         'id_eform' => $params['id_eform'],
                         'status' => 0,
                         'id_map_rules_skema_eksternal' => $params['id_map_rules_skema_eksternal'],
+                        'request_body' => json_encode([
+                            'nik' => $params['nik']
+                        ]),
+                        'response_data' => $proses ? 'Data ditemukan' : 'Data tidak ditemukan',
                     ]);
                     return false;
                 }
@@ -48,6 +56,8 @@ class SkemaEksternal {
                         'id_eform' => $params['id_eform'],
                         'status' => 1,
                         'id_map_rules_skema_eksternal' => $params['id_map_rules_skema_eksternal'],
+                        'request_body' => json_encode($proses['request_body']),
+                        'response_data' => json_encode( $proses['response_data']),
                     ]);
                     return true;
                 }else {
@@ -57,6 +67,8 @@ class SkemaEksternal {
                         'id_eform' => $params['id_eform'],
                         'status' => 0,
                         'id_map_rules_skema_eksternal' => $params['id_map_rules_skema_eksternal'],
+                        'request_body' => json_encode($proses['request_body']),
+                        'response_data' => json_encode( $proses['response_data']),
                     ]);
                     return false;
                 }

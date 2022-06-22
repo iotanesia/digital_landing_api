@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use kamermans\OAuth2\GrantType\ClientCredentials;
 use kamermans\OAuth2\OAuth2Subscriber;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-class SKIPCalonSingle {
+class SKIPPlafon {
 
     public static function getAccessToken()
     {
@@ -49,7 +49,7 @@ class SKIPCalonSingle {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$auth['accessToken'],
             ])->contentType("application/json")
-            ->get(config('services.skip.host').'/v1/sikpkur/konven/calon_single',$request);
+            ->get(config('services.skip.host').'/v1/sikpkur/konven/plafon_debitur',$request);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();

@@ -68,13 +68,18 @@ class ClikService {
             //10-143
             return [
                 'response' => $result,
-                'message' => $result['Description'] // diisi response message
+                'message' => $result['Description'], // diisi response message
+                'request_body' => $request,
+                'response_data' => $result
+
             ];
         } catch (\Throwable $th) {
             throw $th;
             return [
                 'response' => false,
-                'message' => $th->getMessage() // diisi response message
+                'message' => $th->getMessage(), // diisi response message
+                'request_body' => $request,
+                'response_data' => $result
             ];
         }
     }
