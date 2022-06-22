@@ -9,7 +9,8 @@ use App\Models\Prescreening as ModelsPrescreening;
 use Illuminate\Support\Facades\DB;
 use App\Query\Eform;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 class Prescreening {
 
     const BELUM_DIPROSES = 0;
@@ -130,9 +131,12 @@ class Prescreening {
             $params = $request->all();
             $params['step_proses_prescreening'] = self::PROSES;
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->current_user->kode_cabang);
+            $image = $request->foto;  // your base64 encoded
+            $params['foto'] =(string) Str::uuid().'.png';
             $store->fill($params);
             $store->save();
             if($is_transaction) DB::commit();
+            Storage::put($request->foto, base64_decode($image));
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
             $email = $store->email;
@@ -141,7 +145,7 @@ class Prescreening {
                 "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
             ];
-            // Mail::to($email)->send(new EFormMail($mail_data));
+            Mail::to($email)->send(new EFormMail($mail_data));
             unset($store->foto);
             return [
                 'items' => $store
