@@ -28,6 +28,11 @@ return [
         'jenis' => 'service',
         'query' => '\App\Services\SKIPCalonSingle'
     ],
+    'fitur-plafon' => [
+        'label' => 'fitur-plafon',
+        'jenis' => 'service',
+        'query' => '\App\Services\SKIPPlafon'
+    ],
 
 
 ];

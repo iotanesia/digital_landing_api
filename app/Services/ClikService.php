@@ -10,25 +10,28 @@ class ClikService {
 
     public static function prescreening($params)
     {
+        $result = null;
         try {
             $data = $params['data'];
             // service dukcapil
-            $dataNasabah = Dukcapil::prescreening($params);
+            $dataNasabah = SKIPCalonSingle::prescreening($params);
             if(!$dataNasabah['response']) throw new \Exception($dataNasabah['message'], 400);
+            $dataNasabah = $dataNasabah['response'];
+            // dd($dataNasabah);
             $request = [
-                "SubjectRefDate" =>date('Y-m-d'),
-                "Gender" => substr($dataNasabah['jenis_kelamin'],0,1),
-                "MarriageStatus" => Dukcapil::convertData('status_pernikahan',$dataNasabah['status_perkawinan']),
+                "SubjectRefDate" => date('Y-m-d'),
+                "Gender" => $dataNasabah['jns_kelamin'] == 1 ? 'P' : 'L' ,
+                "MarriageStatus" => $dataNasabah['maritas_sts'],
                 "EducationalStatusCode" => "04",
-                "NameAsId" => $dataNasabah['nama_lengkap'],
-                "FullName" => $dataNasabah['nama_lengkap'],
+                "NameAsId" => $data['nama'],
+                "FullName" => $data['nama'],
                 "MothersName" => "",
-                "BirthDate" => Carbon::parse(str_replace('/','-',$dataNasabah['tanggal_lahir']))->format('Y-m-d'),
-                "BirthPlace" => $dataNasabah['tempat_lahir'],
-                "Address" => $dataNasabah['alamat'],
-                "Subdistrict" => $dataNasabah['kelurahan'],
-                "District" => $dataNasabah['kecamatan'],
-                // "City" => (string) MKabupaten::getIdClik($request->id_kabupaten),
+                "BirthDate" => $data['tanggal_lahir'],
+                "BirthPlace" => $data['tempat_lahir'],
+                "Address" => $data['alamat_detail'],
+                "Subdistrict" => $data['nama_kelurahan'],
+                "District" => $data['nama_kecamatan'],
+                "City" => $data['nama_kabupaten'],
                 "City" => "0198",
                 "PostalCode" => $data['kode_pos'],
                 "Country" => "ID",
@@ -48,8 +51,8 @@ class ClikService {
                 "ContractRequestDate" => "2020-10-10",
                 "Currency" => "IDR",
                 "ApplicationAmount" => (string) $data['plafon'],
-                "DueDate" => date('Y-m-d', strtotime(' + '.$data['jangka_waktu'].' month', strtotime(date('Y-m-d')))),
-                "OriginalAgreementNumber" => (string)$data['jangka_waktu'],
+                "DueDate" => Carbon::now()->addMonth($data['jangka_waktu'])->format('Y-m-d'),
+                "OriginalAgreementNumber" => (string) $data['jangka_waktu'],
                 "OriginalAgreementDate" => date('Y-m-d'),
                 "Role" => "B",
                 "ProviderContractNo" => "",
@@ -60,15 +63,23 @@ class ClikService {
             ->post(config('services.clik.host').'/NewApplicationEnquiry',$request);
             Log::info(json_encode($response->json()));
             if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            $result = $response->json();
+            if(!in_array($result['Code'],['E08','10-143'])) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            //E08
+            //10-143
             return [
-                'response' => $response->json()['data'],
-                'message' => '' // diisi response message
+                'response' => $result,
+                'message' => $result['Description'], // diisi response message
+                'request_body' => $request,
+                'response_data' => $result
+
             ];
         } catch (\Throwable $th) {
-            // throw $th;
             return [
                 'response' => false,
-                'message' => $th->getMessage() // diisi response message
+                'message' => $th->getMessage(), // diisi response message
+                'request_body' => null,
+                'response_data' => $result
             ];
         }
     }

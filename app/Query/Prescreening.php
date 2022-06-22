@@ -9,7 +9,8 @@ use App\Models\Prescreening as ModelsPrescreening;
 use Illuminate\Support\Facades\DB;
 use App\Query\Eform;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 class Prescreening {
 
     const BELUM_DIPROSES = 0;
@@ -19,6 +20,20 @@ class Prescreening {
     public static function byId($id)
     {
         $data =  ModelsEform::find($id);
+        $data->nama_propinsi = $data->refPropinsi->nama_propinsi ?? null;
+        $data->nama_kabupaten = $data->refKabupaten->nama_kabupaten ?? null;
+        $data->nama_kecamatan = $data->refKecamatan->nama_kecamatan ?? null;
+        $data->nama_kelurahan = $data->refKelurahan->nama_kelurahan ?? null;
+        $status = 'menunggu proses';
+        if($data->step_proses_prescreening) $status = self::score($data->manyAktifitas) == 0 ? 'tidak lolos' : 'lolos';
+        $data->status_proses_prescreening = $status;
+        unset(
+            $data->manyAktifitas,
+            $data->refPropinsi,
+            $data->refKabupaten,
+            $data->refKecamatan,
+            $data->refKelurahan,
+        );
         return [
             'items' => $data,
         ];
@@ -120,9 +135,12 @@ class Prescreening {
             $params = $request->all();
             $params['step_proses_prescreening'] = self::PROSES;
             $params['nomor_aplikasi'] =Helper::generateNoApliksi($request->current_user->kode_cabang);
+            $image = $request->foto;  // your base64 encoded
+            $params['foto'] =(string) Str::uuid().'.png';
             $store->fill($params);
             $store->save();
             if($is_transaction) DB::commit();
+            if($request->foto) Storage::put($request->foto, base64_decode($image));
             $prescreening = (new EformPrescreeningJobs($data));
             dispatch($prescreening);
             $email = $store->email;
@@ -146,7 +164,13 @@ class Prescreening {
     {
        if($is_transaction) DB::beginTransaction();
        try {
-            ModelsPrescreening::create($request);
+            $store = ModelsPrescreening::create($request);
+            $store->refLog()->create([
+                'id_prescreening' => $store->id,
+                'id_eform' => $request['id_eform'],
+                'request' => $request['request_body'],
+                'response' => $request['response_data'],
+            ]);
             if($is_transaction) DB::commit();
             return true;
        } catch (\Throwable $th) {

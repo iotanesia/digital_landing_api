@@ -28,18 +28,15 @@ class Prescreening extends Model
         return $this->belongsTo(MMetodeEksternal::class,'id','id_map_rules_skema_eksternal');
     }
 
+    public function refLog()
+    {
+        return $this->belongsTo(LogPrescreening::class,'id','id_prescreening');
+    }
+
     public static function boot()
     {
         parent::boot();
 
-        static::creating(function ($model){
-            $model->created_by = request()->current_user->id;
-        });
-        static::updating(function ($model){
-            $model->updated_by = request()->current_user->id;
-        });
-        static::deleting(function ($model){
-            $model->deleted_by = request()->current_user->id;
-        });
+        
     }
 }
