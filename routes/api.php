@@ -56,13 +56,11 @@ Route::prefix('v1')
     Route::post('/login',[AuthControler::class,'login']);
     Route::get('/refresh-token',[AuthControler::class,'refreshToken']);
     Route::get('/mail',[EmailController::class,'index']);
+    Route::prefix('file')->group(function () {
+        Route::get('/{filename}',[FileController::class,'show']);
+    });
 
     Route::group(['middleware' => 'access'],function () {
-
-        Route::prefix('file')->group(function () {
-            Route::get('/{filename}',[FileController::class,'show']);
-        });
-
         // reoute canvasing
         Route::prefix('canvasing')->group(function () {
             Route::prefix('web')->group(function () {
