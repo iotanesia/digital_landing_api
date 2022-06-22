@@ -38,23 +38,25 @@ class EformPrescreeningJobs implements ShouldQueue
         $data = $this->data['items'];
         try {
             $skema = MSkemaEkternal::skema($data);
-            foreach ($skema->manyRules->map(function ($item){
-                $item->rules = $item->refMetode->fungsi ?? null;
-                $item->metode = $item->refMetode->metode ?? null;
-                return $item;
-            })->toArray() as $key => $rule) {
-                $params = [
-                    'nik' => $data['nik'],
-                    'id_eform' => $data['id'],
-                    'rules' => $rule['rules'],
-                    'metode' => $rule['metode'],
-                    'id_map_rules_skema_eksternal' => $rule['id'],
-                    'data' => $data
-                ];
-                // kondisi jika cut of
-                $process = SkemaEksternal::rules($params);
-                if($rule['is_cut_off']) {
-                    if(!$process) break; // stop
+            if(isset($skema->manyRules)){
+                foreach ($skema->manyRules->map(function ($item){
+                    $item->rules = $item->refMetode->fungsi ?? null;
+                    $item->metode = $item->refMetode->metode ?? null;
+                    return $item;
+                })->toArray() as $key => $rule) {
+                    $params = [
+                        'nik' => $data['nik'],
+                        'id_eform' => $data['id'],
+                        'rules' => $rule['rules'],
+                        'metode' => $rule['metode'],
+                        'id_map_rules_skema_eksternal' => $rule['id'],
+                        'data' => $data
+                    ];
+                    // kondisi jika cut of
+                    $process = SkemaEksternal::rules($params);
+                    if($rule['is_cut_off']) {
+                        if(!$process) break; // stop
+                    }
                 }
             }
         } catch (\Throwable $th) {
