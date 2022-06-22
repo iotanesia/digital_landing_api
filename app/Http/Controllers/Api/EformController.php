@@ -171,7 +171,7 @@ class EformController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function aktifitas(Request $request, $id)
+    public function aktifitas(Request $request)
     {
         try {
             return Helper::resultResponse(
