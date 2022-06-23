@@ -121,6 +121,10 @@ class Canvassing {
                     'tempat_lahir_pasangan' => $data->tempat_lahir_pasangan,
                     'tanggal_lahir_pasangan' => $data->tanggal_lahir_pasangan,
                     'nama_produk' => $data->refProduk->nama_produk ?? null,
+                    'nama_propinsi' => $data->refPropinsi->nama_propinsi ?? null,
+                    'nama_kelurahan' => $data->refKelurahan->nama_kelurahan ?? null,
+                    'nama_kabupaten' => $data->refKabupaten->nama_kabupaten ?? null,
+                    'nama_kecamatan' => $data->refKecamatan->nama_kecamatan ?? null
                 ],
                 'attributes' => null,
             ];

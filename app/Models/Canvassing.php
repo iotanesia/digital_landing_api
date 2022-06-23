@@ -91,4 +91,24 @@ class Canvassing extends Model
     {
         return $this->belongsTo(MCaraPemasaran::class,'id_cara_pemasaran','id_cara_pemasaran');
     }
+
+    public function refPropinsi()
+    {
+        return $this->belongsTo(MPropinsi::class,'id_propinsi','id_propinsi');
+    }
+
+    public function refKelurahan()
+    {
+        return $this->belongsTo(MKelurahan::class,'id_kelurahan','id_kelurahan');
+    }
+
+    public function refKecamatan()
+    {
+        return $this->belongsTo(MKecamatan::class,'id_kecamatan','id_kecamatan');
+    }
+
+    public function refKabupaten()
+    {
+        return $this->belongsTo(MKabupaten::class,'id_kabupaten','id_kabupaten');
+    }
 }
