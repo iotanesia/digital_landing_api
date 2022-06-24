@@ -19,7 +19,9 @@ class MKabupaten {
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_kabupaten) $query->where('nama_kabupaten','ilike',"%$request->nama_kabupaten%");
                 if($request->id_propinsi) $query->where('id_propinsi',$request->id_propinsi);
-            })->paginate($request->limit);
+            })
+            ->orderBy('id_kabupaten','asc')
+            ->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
