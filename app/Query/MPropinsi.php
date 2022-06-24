@@ -18,7 +18,9 @@ class MPropinsi {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_propinsi) $query->where('nama_propinsi','ilike',"%$request->nama_propinsi%");
-            })->paginate($request->limit);
+            })
+            ->orderBy('id_propinsi','asc')
+            ->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
