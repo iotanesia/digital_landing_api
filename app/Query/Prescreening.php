@@ -24,6 +24,8 @@ class Prescreening {
         $data->nama_kabupaten = $data->refKabupaten->nama_kabupaten ?? null;
         $data->nama_kecamatan = $data->refKecamatan->nama_kecamatan ?? null;
         $data->nama_kelurahan = $data->refKelurahan->nama_kelurahan ?? null;
+        $data->nama_produk = $data->refProduk->nama_produk ?? null;
+        $data->nama_sub_produk = $data->refSubProduk->nama_sub_produk ?? null;
         $status = 'menunggu proses';
         if($data->step_proses_prescreening) $status = self::score($data->manyAktifitas) == 0 ? 'tidak lolos' : 'lolos';
         $data->status_proses_prescreening = $status;
