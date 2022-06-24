@@ -19,7 +19,9 @@ class MKelurahan {
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_kelurahan) $query->where('nama_kelurahan','ilike',"%$request->nama_kelurahan%");
                 if($request->id_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
-            })->paginate($request->limit);
+            })
+            ->orderBy('id_kelurahan','asc')
+            ->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
