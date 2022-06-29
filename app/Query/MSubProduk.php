@@ -5,6 +5,8 @@ use App\ApiHelper as Helper;
 use App\Models\MSubProduk as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 class MSubProduk {
 
     public static function byId($id)
@@ -55,8 +57,13 @@ class MSubProduk {
             if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
             if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            if($request->banner_produk){
+                $banner = $request->banner_produk;  // your base64 encoded
+                $namabanner =(string) Str::uuid().'.png';
+            }
 
             $store = Model::create($request->all());
+            if($request->banner_sub_produk) Storage::put($namabanner, base64_decode($banner));
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {

@@ -18,6 +18,7 @@ class MSubProduk extends Model
         'rasio_pembayaran_utang',
         'maks_period',
         'maks_plafon',
+        'banner_sub_produk',
         'created_at',
         'created_by',
         'updated_at',
