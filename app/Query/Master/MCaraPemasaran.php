@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
-use App\Models\MCaraPemasaran as Model;
+use App\Models\Master\MCaraPemasaran as Model;
 use Illuminate\Support\Facades\DB;
 
 class MCaraPemasaran {
