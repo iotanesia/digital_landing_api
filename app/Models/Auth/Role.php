@@ -11,4 +11,9 @@ class Role extends Model
     protected $table = 'roles';
     protected $connection = 'auth';
 
+    public function refRolesProduk()
+    {
+        return $this->belongsTo(RoleProduk::class,'id','id_role');
+    }
+
 }

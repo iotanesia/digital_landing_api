@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function refUserRole()
     {
-        return $this->belongsTo(UserRole::class,'id_user','id');
+        return $this->belongsTo(UserRole::class,'id','id_user');
     }
 
     public function manyUserRole()

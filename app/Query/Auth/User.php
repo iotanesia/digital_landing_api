@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Models\Auth\UserRole;
 
 class User {
 
@@ -17,22 +18,32 @@ class User {
         if (!$params->password) $required_params[] = 'password';
         if (count($required_params)) throw new \Exception("Parameter berikut harus diisi: " . implode(", ", $required_params));
 
-        $user = Model::where(function ($query) use ($params){
+        $user = Model::with([
+            'manyUserRole' => function ($query){
+                $query->where('is_current','<>',UserRole::is_current);
+            },
+            'refUserRole' => function ($query){
+                $query->where('is_current',UserRole::is_current);
+            },
+        ])->where(function ($query) use ($params){
             $query->where('nirk',$params->nirk);
         })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         // if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
         $user->roles = $user->manyUserRole->map(function ($item){
             return [
-                // 'id_jenis_produk' => $item->id_jenis_produk,
-                // 'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
+                'id_role' => $item->id_role,
+                'nama_role' => $item->refRole->nama ?? null,
             ];
         });
-        // $user->nama_role = $user->refRole->nama_role ?? null;
-        // unset(
-        //     $user->refRole,
-        //     $user->manyRoleProduk,
-        // );
+        $user->id_role = $user->refUserRole->id_role ?? null;
+        $user->nama_role = $user->refUserRole->refRole->nama ?? null;
+        $user->id_produk = $user->refUserRole->refRole->refRolesProduk ?? null;
+        // $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProduk;
+        unset(
+            $user->refUserRole,
+            $user->manyUserRole,
+        );
         $user->access_token = Helper::createJwt($user);
         $user->refresh_token = Helper::createJwt($user, TRUE);
         $user->expires_in = Helper::decodeJwt($user->access_token)->exp;
