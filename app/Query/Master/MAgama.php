@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Constants\Constants;
-use App\Models\MHubungan as Model;
+use App\Models\Master\MAgama as Model;
 use Illuminate\Support\Facades\DB;
-
-class MHubungan {
+use App\Constants\Constants;
+class MAgama {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_hubungan', $id)->first()];
+        return Model::find($id);
     }
 
     public static function getAll($request)
@@ -18,15 +17,17 @@ class MHubungan {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_hubungan) $query->where('nama_hubungan','ilike',"%$request->nama_hubungan%");
+                if($request->agama) $query->where('agama','ilike',"%$request->agama%");
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return $item;
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -40,7 +41,7 @@ class MHubungan {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_hubungan) $require_fileds[] = 'nama_hubungan';
+            if(!$request->agama) $require_fileds[] = 'agama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

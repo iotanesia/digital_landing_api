@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MJenisKelamin;
+use App\Query\Master\MJenisKelamin;
 class JenisKelaminController extends Controller
 {
     /**

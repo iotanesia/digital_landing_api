@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MJenisPekerjaan;
+use App\Query\Master\MJenisPekerjaan;
 class JenisPekerjaanController extends Controller
 {
     /**

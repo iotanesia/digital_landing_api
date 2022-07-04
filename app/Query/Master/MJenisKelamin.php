@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
-use App\Models\MJenisKelamin as Model;
+use App\Models\Master\MJenisKelamin as Model;
 use Illuminate\Support\Facades\DB;
 
 class MJenisKelamin {

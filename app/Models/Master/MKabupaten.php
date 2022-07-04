@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MJenisInstansi extends Model
+class MKabupaten extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_jenis_instansi';
-    protected $primaryKey = 'id_jenis_instansi';
+    protected $table = 'master_kabupaten';
+    protected $connection = 'master';
+
     public $fillable = [
-        'nama_jenis_instansi',
+        'id_propinsi',
+        'id_kabupaten',
+        'nama_kabupaten',
         'created_at',
         'created_by',
         'updated_at',
@@ -33,5 +36,14 @@ class MJenisInstansi extends Model
         static::deleting(function ($model){
             $model->deleted_by = request()->current_user->id;
         });
+    }
+
+    public static function getIdClik($id) {
+        try {
+            // return MKabupaten::where('id_kabupaen', $id)->first()->id_clik;
+            return MKabupaten::whereNotNull('id_clik')->first()->id_click;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

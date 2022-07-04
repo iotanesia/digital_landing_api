@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MHubungan;
+use App\Query\Master\MHubungan;
 class HubunganController extends Controller
 {
     /**

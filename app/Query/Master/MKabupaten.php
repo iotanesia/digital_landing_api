@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Constants\Constants;
-use App\Models\MJenisPekerjaan as Model;
+use App\Models\Master\MKabupaten as Model;
 use Illuminate\Support\Facades\DB;
-
-class MJenisPekerjaan {
+use App\Constants\Constants;
+class MKabupaten {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_jenis_pekerjaan', $id)->first()];
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)
@@ -18,15 +17,18 @@ class MJenisPekerjaan {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_jenikelamin) $query->where('nama_jenikelamin','ilike',"%$request->nama_jenikelamin%");
-            })->paginate($request->limit);
+                if($request->nama_kabupaten) $query->where('nama_kabupaten','ilike',"%$request->nama_kabupaten%");
+                if($request->id_propinsi) $query->where('id_propinsi',$request->id_propinsi);
+            })
+            ->orderBy('id_kabupaten','asc')
+            ->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -40,8 +42,9 @@ class MJenisPekerjaan {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_jenis_pekerjaan) $require_fileds[] = 'nama_jenis_pekerjaan';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),500);
+            if(!$request->agama) $require_fileds[] = 'agama';
+            if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();

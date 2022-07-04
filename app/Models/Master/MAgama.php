@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +10,7 @@ class MAgama extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'master_agama';
     protected $primaryKey = 'id_agama';
+    protected $connection = 'master';
     public $fillable = [
         'agama',
         'created_at',

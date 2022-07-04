@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +10,7 @@ class MJenisKelamin extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'master_jenis_kelamin';
     protected $primaryKey = 'id_jenis_kelamin';
+    protected $connection = 'master';
     public $fillable = [
         'nama_jenis_kelamin',
         'created_at',

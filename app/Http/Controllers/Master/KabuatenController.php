@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MKabupaten;
+use App\Query\Master\MKabupaten;
 
 class KabuatenController extends Controller
 {

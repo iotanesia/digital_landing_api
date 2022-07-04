@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MKelurahan extends Model
+class MJenisInstansi extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $table = 'master_kelurahan';
-
+    use HasFactory, SoftDeletes;
+    protected $table = 'master_jenis_instansi';
+    protected $primaryKey = 'id_jenis_instansi';
+    protected $connection = 'master';
     public $fillable = [
-        'id_kecamatan',
-        'id_kelurahan',
-        'nama_kelurahan',
+        'nama_jenis_instansi',
         'created_at',
         'created_by',
         'updated_at',
@@ -36,5 +35,4 @@ class MKelurahan extends Model
             $model->deleted_by = request()->current_user->id;
         });
     }
-
 }

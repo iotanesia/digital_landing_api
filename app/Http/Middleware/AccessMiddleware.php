@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\User;
+use App\Query\Auth\User;
 use Firebase\JWT\ExpiredException;
 use Illuminate\Support\Str;
 class AccessMiddleware

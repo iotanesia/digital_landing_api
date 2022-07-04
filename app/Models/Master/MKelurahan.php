@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MKabupaten extends Model
+class MKelurahan extends Model
 {
-    use HasFactory, SoftDeletes;
-    protected $table = 'master_kabupaten';
+    use HasFactory,SoftDeletes;
+    protected $table = 'kelurahan';
+    protected $connection = 'master';
 
     public $fillable = [
-        'id_propinsi',
-        'id_kabupaten',
-        'nama_kabupaten',
+        'id_kecamatan',
+        'id_kelurahan',
+        'nama_kelurahan',
         'created_at',
         'created_by',
         'updated_at',
@@ -37,12 +38,4 @@ class MKabupaten extends Model
         });
     }
 
-    public static function getIdClik($id) {
-        try {
-            // return MKabupaten::where('id_kabupaen', $id)->first()->id_clik;
-            return MKabupaten::whereNotNull('id_clik')->first()->id_click;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 }

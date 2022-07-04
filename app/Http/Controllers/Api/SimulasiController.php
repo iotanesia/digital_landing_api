@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\MKreditMinPenghasilan;
-use App\Query\User;
+use App\Query\Auth\User;
 
 class SimulasiController extends Controller
 {

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MKelurahan as Model;
-use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
-class MKelurahan {
+use App\Models\Master\MJenisInstansi as Model;
+use Illuminate\Support\Facades\DB;
+
+class MJenisInstansi {
 
     public static function byId($id)
     {
-        return ['items' => Model::find($id)];
+        return ['items' => Model::where('id_jenis_instansi', $id)->first()];
     }
 
     public static function getAll($request)
@@ -17,18 +18,15 @@ class MKelurahan {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_kelurahan) $query->where('nama_kelurahan','ilike',"%$request->nama_kelurahan%");
-                if($request->id_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
-            })
-            ->orderBy('id_kelurahan','asc')
-            ->paginate($request->limit);
+                if($request->nama_jenis_instansi) $query->where('nama_jenis_instansi','ilike',"%$request->nama_jenis_instansi%");
+            })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => (int) $data->perPage(),
+                        'per_page' => $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -42,8 +40,7 @@ class MKelurahan {
         try {
 
             $require_fileds = [];
-            if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
-            if(!$request->nama_kelurahan) $require_fileds[] = 'nama_kelurahan';
+            if(!$request->nama_jenis_instansi) $require_fileds[] = 'nama_jenis_instansi';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

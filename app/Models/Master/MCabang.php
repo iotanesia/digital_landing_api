@@ -10,6 +10,7 @@ class MCabang extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'cabang';
     protected $primaryKey = 'id_cabang';
+    protected $connection = 'master';
     public $fillable = [
         'nama_cabang',
         'created_at',
