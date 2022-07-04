@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Auth;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $connection = 'auth';
     /**
      * The attributes that are mass assignable.
      *
@@ -52,13 +53,15 @@ class User extends Authenticatable
         return $this->belongsTo(MCabang::class,'kode_cabang','kode_cabang');
     }
 
-    public function refRoleProduk()
+    public function refUserRole()
     {
-        return $this->belongsTo(RoleProduk::class,'id','id_user');
+        return $this->belongsTo(UserRole::class,'id_user','id');
     }
 
-    public function manyRoleProduk()
+    public function manyUserRole()
     {
-        return $this->hasMany(RoleProduk::class,'id_user','id');
+        return $this->hasMany(UserRole::class,'id_user','id');
     }
+
+
 }

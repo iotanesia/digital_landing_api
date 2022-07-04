@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class RoleProduk extends Model
+class MCabang extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'role_produk';
-
+    protected $table = 'cabang';
+    protected $primaryKey = 'id_cabang';
     public $fillable = [
-        'id_user',
-        'id_produk',
+        'nama_cabang',
         'created_at',
         'created_by',
         'updated_at',
@@ -21,16 +19,6 @@ class RoleProduk extends Model
         'deleted_at',
         'deleted_by',
     ];
-
-    public function refProduk()
-    {
-        return $this->belongsTo(MProduk::class,'id_produk','id_produk');
-    }
-
-    public function refJenisProduk()
-    {
-        return $this->belongsTo(MJenisProduk::class,'id_jenis_produk','id_jenis_produk');
-    }
 
     public static function boot()
     {

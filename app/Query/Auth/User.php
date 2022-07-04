@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Query;
-use App\Models\User as Model;
+namespace App\Query\Auth;
+use App\Models\Auth\User as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -22,18 +22,17 @@ class User {
         })->first();
         if(!$user) throw new \Exception("Pengguna belum terdaftar.");
         // if (!Hash::check($params->password, $user->password)) throw new \Exception("Email atau password salah.",400);
-        $user->id_jenis_produk = $user->refRoleProduk->id_jenis_produk ?? null;
-        $user->role_produk = $user->manyRoleProduk->map(function ($item){
+        $user->roles = $user->manyUserRole->map(function ($item){
             return [
-                'id_jenis_produk' => $item->id_jenis_produk,
-                'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
+                // 'id_jenis_produk' => $item->id_jenis_produk,
+                // 'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
             ];
         });
-        $user->nama_role = $user->refRole->nama_role ?? null;
-        unset(
-            $user->refRole,
-            $user->manyRoleProduk,
-        );
+        // $user->nama_role = $user->refRole->nama_role ?? null;
+        // unset(
+        //     $user->refRole,
+        //     $user->manyRoleProduk,
+        // );
         $user->access_token = Helper::createJwt($user);
         $user->refresh_token = Helper::createJwt($user, TRUE);
         $user->expires_in = Helper::decodeJwt($user->access_token)->exp;
