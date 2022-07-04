@@ -16,4 +16,11 @@ class UserRole extends Model
         'is_current',
     ];
 
+    const is_current = 1;
+
+    public function refRole()
+    {
+        return $this->belongsTo(Role::class,'id_role','id');
+    }
+
 }

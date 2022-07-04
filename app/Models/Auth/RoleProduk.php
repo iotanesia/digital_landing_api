@@ -4,11 +4,10 @@ namespace App\Models\Auth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RoleProduk extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $table = 'roles_produk';
     protected $connection = 'auth';
 
