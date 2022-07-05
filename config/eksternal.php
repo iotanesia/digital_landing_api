@@ -6,12 +6,12 @@ return [
     'dhn-bi' => [
         'label' => 'dhn-bi',
         'jenis' => 'database',
-        'query' => '\App\Query\MDhnBI'
+        'query' => '\App\Query\Master\MDhnBI'
     ],
     'dhn-dki' => [
         'label' => 'dhn-dki',
         'jenis' => 'database',
-        'query' => '\App\Query\MDhnDki'
+        'query' => '\App\Query\Master\MDhnDki'
     ],
     'dukcapil' => [
         'label' => 'dukcapil',

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\MKabupaten;
+use App\Models\Master\MKabupaten;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 class Prescreening {

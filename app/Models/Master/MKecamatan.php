@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MKecamatan extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_kecamatan';
+    protected $table = 'kecamatan';
+    protected $connection = 'master';
 
     public $fillable = [
         'id_kabupaten',
