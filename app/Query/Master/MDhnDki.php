@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Query\Master;
-use App\Models\MDhnDki as Model;
+use App\Models\Master\MDhnDki as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
