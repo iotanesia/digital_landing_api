@@ -4,11 +4,25 @@ namespace App\Query\Transaksi;
 use App\Models\Transaksi\Eform as Model;
 use App\ApiHelper as Helper;
 use App\Query\Master\MCabang;
+use App\Services\DwhService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class Eform {
+
+
+    public static function dwhMikro($request)
+    {
+        try {
+            $data = DwhService::mikro($request->all());
+            return [
+                'items' => $data
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 
     // detail data aktifitas pemasaran
     public static function byId($id_aktifitas_pemasaran)

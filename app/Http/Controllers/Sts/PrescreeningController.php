@@ -1,30 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Sts;
 
 use App\Http\Controllers\Controller;
-use App\ApiHelper as Helper;
 use Illuminate\Http\Request;
-use App\Query\Transaksi\Eform;
+use App\ApiHelper as Helper;
+use App\Query\Status\StsPrescreening;
 
-class EformController extends Controller
+class PrescreeningController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function check(Request $request)
-    {
-        try {
-            return Helper::resultResponse(
-                Eform::dwhMikro($request)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +16,13 @@ class EformController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                StsPrescreening::getAll($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -40,7 +30,7 @@ class EformController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         //
     }
@@ -55,30 +45,12 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::storeEform($request)
+                StsPrescreening::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
     }
-
-     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeMobile(Request $request)
-    {
-        try {
-            return Helper::resultResponse(
-                Eform::storeMobileform($request)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
-    }
-
 
     /**
      * Display the specified resource.
@@ -88,27 +60,13 @@ class EformController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
-    }
-
-     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function pipeline(Request $request,$id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function history(Request $request,$id)
-    {
-        //
+        try {
+            return Helper::resultResponse(
+                StsPrescreening::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -117,7 +75,7 @@ class EformController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function edit($id)
     {
         //
     }
@@ -131,7 +89,13 @@ class EformController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                StsPrescreening::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -142,6 +106,12 @@ class EformController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                StsPrescreening::destroy($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 }
