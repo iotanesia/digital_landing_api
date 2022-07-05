@@ -3,6 +3,7 @@
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\Eform as Model;
 use App\ApiHelper as Helper;
+use App\Query\Master\MCabang;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -37,20 +38,23 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-
-            //code
             $require_fileds = [];
+            $dataSend = $request->all();
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->email) $require_fileds[] = 'email';
             if(!$request->npwp) $require_fileds[] = 'npwp';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
-            if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-
-            Model::create($request);
+            $dataSend['is_presecreening'] = 1;
+            $dataSend['is_pipeline'] = 0;
+            $dataSend['is_cutoff'] = 0;
+            $dataSend['platform'] = 'WEB';
+            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
+            $store = Model::create($dataSend);
             if($is_transaction) DB::commit();
+            return ['items' => $store];
 
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
@@ -63,9 +67,28 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-
-            //code
+            $require_fileds = [];
+            $dataSend = $request->all();
+            if(!$request->nama) $require_fileds[] = 'Nama nasabah';
+            if(!$request->nik) $require_fileds[] = 'nik';
+            if(!$request->email) $require_fileds[] = 'email';
+            if(!$request->npwp) $require_fileds[] = 'npwp';
+            if(!$request->no_hp) $require_fileds[] = 'no_hp';
+            if(!$request->alamat_usaha) $require_fileds[] = 'alamat usaha';
+            if(!$request->plafond) $require_fileds[] = 'plafond';
+            if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $dataSend['id_cabang'] = $request->current_user->id_cabang;
+            $dataSend['id_produk'] = $request->current_user->id_produk->id_produk;
+            $dataSend['nirk'] = $request->current_user->nirk;
+            $dataSend['is_presecreening'] = 1;
+            $dataSend['is_pipeline'] = 0;
+            $dataSend['is_cutoff'] = 0;
+            $dataSend['platform'] = 'MOBILE';
+            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
+            $store = Model::create($dataSend);
             if($is_transaction) DB::commit();
+            return ['items' => $store];
 
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();

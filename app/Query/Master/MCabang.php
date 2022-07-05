@@ -84,11 +84,13 @@ class MCabang {
         $lat1 = $request->lat;
         $lon1 = $request->long;
         $counter = 0;
-        $idCabang = null;
-        $data = Model::whereNotNull('lng')->whereNotNull('lat')->whereNotNull('kode_cabang')->get();
+        $data = Model::select('*')
+                ->whereNotNull('lng')
+                ->whereNotNull('lat')
+                ->get();
         foreach($data as $key => $val) {
-            $lat2 = $val->lat;
-            $lon2 = $val->lng;
+            $lat2 = str_replace(',','.', $val->lat);
+            $lon2 = str_replace(',','.', $val->lng);
             $theta = $lon1 - $lon2;
             $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
             $miles = acos($miles);
@@ -100,20 +102,19 @@ class MCabang {
             $meters = $kilometers * 1000;
             if($key == 0) {
                 $counter = $miles;
-                $idCabang = null;
+                $MCabang = $val;
 
             } elseif($counter > $miles) {
                 $counter = $miles;
-                $idCabang = $val->id_cabang;
+                $MCabang = $val;
             }
         }
 
-        return ['items' => Model::where('id_cabang', $idCabang)->first()];
+        return ['items' => $MCabang];
+    }
 
-        // $feet  = $miles * 5280;
-        // $yards = $feet / 3;
-        // $kilometers = $miles * 1.609344;
-        // $meters = $kilometers * 1000;
-        // return compact('miles','feet','yards','kilometers','meters');
+    public static function getCabangBbrv($id)
+    {
+        return Model::where('id_cabang', $id)->first()->cabang_bbrv;
     }
 }

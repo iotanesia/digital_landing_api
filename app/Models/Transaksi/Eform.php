@@ -39,6 +39,7 @@ class Eform extends Model
         'is_cutoff',
         'is_prescreening',
         'platform',
+        'nirk',
         'created_at',
         'created_by',
         'updated_at',

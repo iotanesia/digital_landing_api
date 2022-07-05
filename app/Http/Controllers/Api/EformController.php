@@ -54,7 +54,13 @@ class EformController extends Controller
      */
     public function storeMobile(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::storeMobileform($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
 
