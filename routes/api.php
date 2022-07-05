@@ -78,6 +78,7 @@ Route::prefix('v1')
         // eform
         Route::prefix('eform')->group(function () {
            /* get data  */ Route::get('/',[EformController::class,'index']);
+           /* get data  */ Route::post('/check-nasabah',[EformController::class,'check']);
            /* input data eform web */ Route::post('/web',[EformController::class,'store']);
            /* input data mobile form */ Route::post('/mobile',[EformController::class,'storeMobile']);
            /* info prescreening  */ Route::get('/info-prescreening/{id}',[EformController::class,'prescreening']);

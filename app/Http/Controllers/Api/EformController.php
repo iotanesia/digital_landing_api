@@ -4,9 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\ApiHelper as Helper;
+use App\Query\Transaksi\Eform;
 
 class EformController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function check(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Eform::dwhMikro($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
