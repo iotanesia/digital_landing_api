@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\Api\AktifitasPemasaranController;
 use App\Http\Controllers\Api\AuthControler;
-use App\Http\Controllers\Api\CanvasingController;
-use App\Http\Controllers\Api\CanvassingController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\EmailController;
