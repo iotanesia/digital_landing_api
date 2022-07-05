@@ -163,7 +163,6 @@ class Eform {
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend['id_cabang'] = $request->current_user->id_cabang;
             $dataSend['id_produk'] = $request->current_user->id_produk->id_produk;
-            $dataSend['nirk'] = $request->current_user->nirk;
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;

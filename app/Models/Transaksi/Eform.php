@@ -47,7 +47,6 @@ class Eform extends Model
         'is_cutoff',
         'is_prescreening',
         'platform',
-        'nirk',
         'created_at',
         'created_by',
         'updated_at',
@@ -74,5 +73,10 @@ class Eform extends Model
     public function refStatusPerkawinan()
     {
         return $this->belongsTo(MStatusPernikahan::class,'id_status_perkawinan','id');
+    }
+
+    public function refPipeline() 
+    {
+        return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
     }
 }
