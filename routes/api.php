@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AktifitasPemasaranController;
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\CanvasingController;
 use App\Http\Controllers\Api\CanvassingController;
@@ -63,21 +64,36 @@ Route::prefix('v1')
     Route::group(['middleware' => 'access'],function () {
         // reoute canvasing
         Route::prefix('aktifitas-pemasaran')->group(function () {
-
+           /* get data  */ Route::get('/',[AktifitasPemasaranController::class,'index']);
+           /* input data canvasing */ Route::post('/',[AktifitasPemasaranController::class,'store']);
+           /* info prescreening  */ Route::get('/info-prescreening',[AktifitasPemasaranController::class,'prescreening']);
+           /* histroy aktifitas  */ Route::get('/history-aktifitas',[AktifitasPemasaranController::class,'history']);
+           /* detail data  */ Route::get('/{id}',[AktifitasPemasaranController::class,'show']);
+           /* update data rm  */ Route::put('/{id}',[AktifitasPemasaranController::class,'update']);
         });
 
-         // simulasi
+        // simulasi
         Route::prefix('simulasi')->group(function () {
             Route::post('/kredit',[SimulasiController::class,'process']);
             Route::post('/kredit-web',[SimulasiController::class,'processWeb']);
         });
         // eform
         Route::prefix('eform')->group(function () {
-          
+           /* get data  */ Route::get('/',[EformController::class,'index']);
+           /* input data eform web */ Route::post('/web',[EformController::class,'store']);
+           /* input data mobile form */ Route::post('/mobile',[EformController::class,'storeMobile']);
+           /* info prescreening  */ Route::get('/info-prescreening/{id}',[EformController::class,'prescreening']);
+           /* histroy aktifitas  */ Route::get('/history-aktifitas/{id}',[EformController::class,'history']);
+           /* detail data  */ Route::get('/{id}',[EformController::class,'show']);
+           /* update data rm  */ Route::put('/{id}',[EformController::class,'update']);
         });
 
         Route::prefix('leads')->group(function () {
-
+            /* get data  */ Route::get('/',[EformController::class,'index']);
+            /* info prescreening  */ Route::get('/info-prescreening',[EformController::class,'prescreening']);
+            /* histroy aktifitas  */ Route::get('/history-aktifitas',[EformController::class,'history']);
+            /* detail data  */ Route::get('/{id}',[EformController::class,'show']);
+            /* update data rm  */ Route::put('/{id}',[EformController::class,'update']);
         });
         // users
         Route::prefix('user')->group(function () {

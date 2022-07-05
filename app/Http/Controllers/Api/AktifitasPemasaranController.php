@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\ApiHelper as Helper;
 class AktifitasPemasaranController extends Controller
 {
     /**
@@ -12,7 +12,24 @@ class AktifitasPemasaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                'under maintenance'
+                // MapPenjaminanSegmen::retrive($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function pipeline(Request $request,$id)
     {
         //
     }
@@ -22,7 +39,17 @@ class AktifitasPemasaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function history(Request $request,$id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
     {
         //
     }
@@ -44,7 +71,7 @@ class AktifitasPemasaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         //
     }
@@ -55,7 +82,7 @@ class AktifitasPemasaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         //
     }
@@ -78,7 +105,7 @@ class AktifitasPemasaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         //
     }
