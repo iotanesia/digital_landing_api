@@ -3,6 +3,7 @@
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\AktifitasPemasaran as Model;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -79,5 +80,26 @@ class AktifitasPemasaran {
     public static function getHistoryAktifitas($request)
     {
          //code
+    }
+
+    public static function getAll($request)
+    {
+        try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $data = Model::where(function ($query) use ($request){
+                if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
+            })->paginate($request->limit);
+                return [
+                    'items' => $data->items(),
+                    'attributes' => [
+                        'total' => $data->total(),
+                        'current_page' => $data->currentPage(),
+                        'from' => $data->currentPage(),
+                        'per_page' => $data->perPage(),
+                    ]
+                ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
