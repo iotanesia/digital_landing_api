@@ -39,6 +39,17 @@ class Eform {
         try {
 
             //code
+            $require_fileds = [];
+            if(!$request->nik) $require_fileds[] = 'nik';
+            if(!$request->email) $require_fileds[] = 'email';
+            if(!$request->npwp) $require_fileds[] = 'npwp';
+            if(!$request->no_hp) $require_fileds[] = 'no_hp';
+            if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
+            if(!$request->plafond) $require_fileds[] = 'plafond';
+            if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            Model::create($request);
             if($is_transaction) DB::commit();
 
         } catch (\Throwable $th) {

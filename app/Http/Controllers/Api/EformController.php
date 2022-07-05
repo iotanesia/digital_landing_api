@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\ApiHelper as Helper;
+use App\Query\Transaksi\Eform;
 use Illuminate\Http\Request;
 
 class EformController extends Controller
@@ -35,7 +37,13 @@ class EformController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::storeEform($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
      /**
