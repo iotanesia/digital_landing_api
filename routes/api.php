@@ -28,6 +28,11 @@ use App\Http\Controllers\Master\CaraPemasaranController;
 use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
 use App\Http\Controllers\Master\PromoController;
+use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
+use App\Http\Controllers\Sts\CutoffController;
+use App\Http\Controllers\Sts\PipelineController;
+use App\Http\Controllers\Sts\PrescreeningController;
+use App\Http\Controllers\Sts\TrackingController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -103,9 +108,52 @@ Route::prefix('v1')
             Route::get('/detail',[UserControler::class,'detail']);
         });
         // master
+        Route::prefix('sts')->group(function () {
+            Route::prefix('aktifitas-pemasaran')->group(function () {
+                Route::get('/',[StsAktifitasPemasaranController::class,'index']);
+                Route::post('/',[StsAktifitasPemasaranController::class,'store']);
+                Route::get('/{id}',[StsAktifitasPemasaranController::class,'index']);
+                Route::put('/{id}',[StsAktifitasPemasaranController::class,'update']);
+                Route::delete('/{id}',[StsAktifitasPemasaranController::class,'destroy']);
+            });
+
+            Route::prefix('cutoff')->group(function () {
+                Route::get('/',[CutoffController::class,'index']);
+                Route::post('/',[CutoffController::class,'store']);
+                Route::get('/{id}',[CutoffController::class,'index']);
+                Route::put('/{id}',[CutoffController::class,'update']);
+                Route::delete('/{id}',[CutoffController::class,'destroy']);
+            });
+
+            Route::prefix('pipeline')->group(function () {
+                Route::get('/',[PipelineController::class,'index']);
+                Route::post('/',[PipelineController::class,'store']);
+                Route::get('/{id}',[PipelineController::class,'index']);
+                Route::put('/{id}',[PipelineController::class,'update']);
+                Route::delete('/{id}',[PipelineController::class,'destroy']);
+            });
+
+            Route::prefix('prescreening')->group(function () {
+                Route::get('/',[PrescreeningController::class,'index']);
+                Route::post('/',[PrescreeningController::class,'store']);
+                Route::get('/{id}',[PrescreeningController::class,'index']);
+                Route::put('/{id}',[PrescreeningController::class,'update']);
+                Route::delete('/{id}',[PrescreeningController::class,'destroy']);
+            });
+
+            Route::prefix('tracking')->group(function () {
+                Route::get('/',[TrackingController::class,'index']);
+                Route::post('/',[TrackingController::class,'store']);
+                Route::get('/{id}',[TrackingController::class,'index']);
+                Route::put('/{id}',[TrackingController::class,'update']);
+                Route::delete('/{id}',[TrackingController::class,'destroy']);
+            });
+
+        });
+        // master
         Route::prefix('master')->group(function () {
              // route agama
-             Route::prefix('agama')->group(function () {
+            Route::prefix('agama')->group(function () {
                 Route::get('/',[AgamaController::class,'index']);
                 Route::post('/',[AgamaController::class,'store']);
                 Route::put('/{id}',[AgamaController::class,'update']);
