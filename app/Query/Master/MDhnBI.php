@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Query;
-use App\Models\MDhnDki as Model;
+namespace App\Query\Master;
+use App\Models\Master\MDhnBi as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
 
-class MDhnDki {
+class MDhnBI {
 
     public static function bynik($nik){
-        return Model::where('d24ktp',$nik)->first();
+        return Model::where('d30ktp',$nik)->first();
     }
 
     public static function prescreening($params){
-        $data = Model::where('d24ktp','ilike','%'.$params['nik'].'%')->first();
+        $data = Model::where('d30ktp','ilike','%'.$params['nik'].'%')->first();
         return $data ?? null;
     }
 

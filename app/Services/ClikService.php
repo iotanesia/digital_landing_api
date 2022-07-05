@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\MKabupaten;
+use App\Models\Master\MKabupaten;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

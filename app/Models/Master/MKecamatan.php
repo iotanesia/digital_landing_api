@@ -1,29 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MDhnBi extends Model
+class MKecamatan extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_dhn_bi';
+    protected $table = 'kecamatan';
+    protected $connection = 'master';
 
-    public $guardable = [
-        'id'
+    public $fillable = [
+        'id_kabupaten',
+        'id_kecamatan',
+        'nama_kecamatan',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
-
-    public static function cekDhn($nik) {
-        try {
-            $dhn = MDhnBi::where('d30ktp', $nik)->first();
-
-            return $dhn ?? false;
-
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 
     public static function boot()
     {

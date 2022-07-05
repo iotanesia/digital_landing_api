@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MJenisInstansi extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_jenis_instansi';
+    protected $table = 'jenis_instansi';
     protected $primaryKey = 'id_jenis_instansi';
     protected $connection = 'master';
     public $fillable = [

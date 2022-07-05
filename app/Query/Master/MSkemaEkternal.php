@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MSkemaEksternal as Model;
+use App\Models\Master\MSkemaEksternal as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 

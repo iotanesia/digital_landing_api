@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MTingkatPendidikan extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_tingkat_pendidikan';
+    protected $table = 'tingkat_pendidikan';
     protected $primaryKey = 'id';
+    protected $connection = 'master';
     public $fillable = [
         'nama_tingkat_pendidikan',
         'kode_tingkat_pendidikan',

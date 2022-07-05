@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MKabupaten extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_kabupaten';
+    protected $table = 'kabupaten';
     protected $connection = 'master';
 
     public $fillable = [
