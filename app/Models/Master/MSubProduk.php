@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class MJenisProduk extends Model
+class MSubProduk extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $table = 'master_jenis_produk';
+    use HasFactory, SoftDeletes;
+    protected $table = 'sub_produk';
+    protected $connection = 'master';
 
     public $fillable = [
-        'id_jenis_produk',
-        'nama_jenis_produk',
+        'kode_sub_produk',
+        'nama_sub_produk',
+        'kode_produk',
+        'suku_bunga',
+        'rasio_pembayaran_utang',
+        'maks_period',
+        'maks_plafon',
         'created_at',
         'created_by',
         'updated_at',
@@ -21,6 +26,17 @@ class MJenisProduk extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public static function cekPlafon($id, $plafon) {
+        try {
+            $sub_produk = MSubProduk::find($id);
+
+            return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 
     public static function boot()
     {

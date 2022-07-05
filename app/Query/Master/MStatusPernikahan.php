@@ -1,33 +1,30 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MPropinsi as Model;
+use App\Models\Master\MStatusPernikahan as Model;
 use Illuminate\Support\Facades\DB;
-use App\Constants\Constants;
-class MPropinsi {
+
+class MStatusPernikahan {
 
     public static function byId($id)
     {
-        return ['items' => Model::find($id)];
+        return ['items' => Model::where('id', $id)->first()];
     }
 
     public static function getAll($request)
     {
         try {
-            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_propinsi) $query->where('nama_propinsi','ilike',"%$request->nama_propinsi%");
-            })
-            ->orderBy('id_propinsi','asc')
-            ->paginate($request->limit);
+                if($request->nama_status_pernikahan) $query->where('nama_status_pernikahan','ilike',"%$request->nama_status_pernikahan%");
+            })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => (int) $data->perPage(),
+                        'per_page' => $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -41,7 +38,7 @@ class MPropinsi {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_propinsi) $require_fileds[] = 'nama_propinsi';
+            if(!$request->nama_status_pernikahan) $require_fileds[] = 'nama_status_pernikahan';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

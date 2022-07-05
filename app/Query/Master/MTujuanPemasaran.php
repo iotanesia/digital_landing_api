@@ -1,22 +1,24 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MStatusPernikahan as Model;
+use App\Constants\Constants;
+use App\Models\Master\MTujuanPemasaran as Model;
 use Illuminate\Support\Facades\DB;
 
-class MStatusPernikahan {
+class MTujuanPemasaran {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id', $id)->first()];
+        return ['items' => Model::where('id_tujuan_pemasaran', $id)->first()];
     }
 
     public static function getAll($request)
     {
         try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_status_pernikahan) $query->where('nama_status_pernikahan','ilike',"%$request->nama_status_pernikahan%");
+                if($request->nama_tujuan_pemasaran) $query->where('nama_tujuan_pemasaran','ilike',"%$request->nama_tujuan_pemasaran%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -38,7 +40,7 @@ class MStatusPernikahan {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_status_pernikahan) $require_fileds[] = 'nama_status_pernikahan';
+            if(!$request->nama_tujuan_pemasaran) $require_fileds[] = 'nama_tujuan_pemasaran';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

@@ -1,22 +1,32 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MStatusPernikahan extends Model
+class MProduk extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_status_pernikahan';
-    protected $primaryKey = 'id';
+    protected $table = 'produk';
+    protected $connection = 'master';
+
     public $fillable = [
-        'nama_status_pernikahan',
-        'kode_status_pernikahan',
+        'id_produk',
+        'nama_produk',
+        'deskripsi_produk',
+        'foto_produk',
+        'banner_produk',
+        'suku_bunga',
+        'rasio_pembayaran_utang',
+        'maks_period',
+        'maks_plafon',
         'created_at',
         'created_by',
         'updated_at',
         'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
 
     public static function boot()

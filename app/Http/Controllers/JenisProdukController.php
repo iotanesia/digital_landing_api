@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MJenisProduk;
+use App\Query\Master\MJenisProduk;
 
 class JenisProdukController extends Controller
 {

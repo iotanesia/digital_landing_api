@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MPropinsi extends Model
+
+class MJenisProduk extends Model
 {
-    use HasFactory, SoftDeletes;
-    protected $table = 'master_propinsi';
+    use HasFactory,SoftDeletes;
+    protected $table = 'jenis_produk';
+    protected $connection = 'master';
 
     public $fillable = [
-        'id_propinsi',
-        'nama_propinsi',
+        'id_jenis_produk',
+        'nama_jenis_produk',
         'created_at',
         'created_by',
         'updated_at',

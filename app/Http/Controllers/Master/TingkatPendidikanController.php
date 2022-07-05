@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MTingkatPendidikan;
+use App\Query\Master\MTingkatPendidikan;
 class TingkatPendidikanController extends Controller
 {
     /**

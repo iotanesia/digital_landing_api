@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MSubProduk;
+use App\Query\Master\MSubProduk;
 
 class SubProdukController extends Controller
 {

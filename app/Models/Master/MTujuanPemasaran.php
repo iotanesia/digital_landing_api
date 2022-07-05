@@ -1,31 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MProduk extends Model
+class MTujuanPemasaran extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_produk';
-
+    protected $table = 'tujuan_pemasaran';
+    protected $primaryKey = 'id_tujuan_pemasaran';
+    protected $connection = 'master';
     public $fillable = [
-        'id_produk',
-        'nama_produk',
-        'deskripsi_produk',
-        'foto_produk',
-        'banner_produk',
-        'suku_bunga',
-        'rasio_pembayaran_utang',
-        'maks_period',
-        'maks_plafon',
+        'nama_tujuan_pemasaran',
         'created_at',
         'created_by',
         'updated_at',
         'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function boot()

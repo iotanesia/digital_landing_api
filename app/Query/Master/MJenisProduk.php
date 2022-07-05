@@ -1,16 +1,20 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Constants\Constants;
-use App\Models\MTujuanPemasaran as Model;
+use App\Models\Master\MJenisProduk as Model;
 use Illuminate\Support\Facades\DB;
-
-class MTujuanPemasaran {
+use App\Constants\Constants;
+class MJenisProduk {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_tujuan_pemasaran', $id)->first()];
+        return ['items' => Model::find($id)];
+    }
+
+    public static function byIdJenisProduk($id_jenis_produk)
+    {
+        return ['items' => Model::where('id_jenis_produk',$id_jenis_produk)->first()];
     }
 
     public static function getAll($request)
@@ -18,7 +22,8 @@ class MTujuanPemasaran {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_tujuan_pemasaran) $query->where('nama_tujuan_pemasaran','ilike',"%$request->nama_tujuan_pemasaran%");
+                if($request->nama_jenis_produk) $query->where('nama_jenis_produk','ilike',"%$request->nama_jenis_produk%");
+                if($request->id_tipe_produk) $query->where('id_tipe_produk',$request->id_tipe_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -26,7 +31,7 @@ class MTujuanPemasaran {
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -40,7 +45,7 @@ class MTujuanPemasaran {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_tujuan_pemasaran) $require_fileds[] = 'nama_tujuan_pemasaran';
+            if(!$request->nama_jenis_produk) $require_fileds[] = 'nama_jenis_produk';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

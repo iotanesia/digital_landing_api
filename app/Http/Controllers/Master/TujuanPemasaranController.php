@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\MTujuanPemasaran;
+use App\Query\Master\MTujuanPemasaran;
 class TujuanPemasaranController extends Controller
 {
     /**

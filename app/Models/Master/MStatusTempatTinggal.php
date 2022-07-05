@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class MTingkatPendidikan extends Model
+class MStatusTempatTinggal extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'master_tingkat_pendidikan';
-    protected $primaryKey = 'id';
+    protected $table = 'status_tempat_tinggal';
+    protected $connection = 'master';
+    protected $primaryKey = 'id_status_tempat_tinggal';
     public $fillable = [
-        'nama_tingkat_pendidikan',
-        'kode_tingkat_pendidikan',
+        'nama_status_tempat_tinggal',
+        'kode_status_tempat_tinggal',
         'created_at',
         'created_by',
         'updated_at',

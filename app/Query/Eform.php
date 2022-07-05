@@ -10,7 +10,7 @@ use App\Constants\Group;
 use App\Models\Eform as ModelsEform;
 use App\Models\MDhnBi;
 use App\Models\MDhnDki;
-use App\Models\MSubProduk;
+use App\Models\Master\MSubProduk;
 use App\Models\Prescreening as ModelsPrescreening;
 use App\Services\Click;
 use App\Services\PreScreening;

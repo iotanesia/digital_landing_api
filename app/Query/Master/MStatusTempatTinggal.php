@@ -1,25 +1,16 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MSubProduk as Model;
-use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
-class MSubProduk {
+use App\Models\Master\MStatusTempatTinggal as Model;
+use Illuminate\Support\Facades\DB;
+
+class MStatusTempatTinggal {
 
     public static function byId($id)
     {
-        return ['items' => Model::find($id)];
-    }
-
-    public static function byKode($kode)
-    {
-        return ['items' => Model::where('kode_sub_produk',$kode)->first()];
-    }
-
-    public static function byIdSubProduk($id_sub_produk)
-    {
-        return ['items' => Model::where('id_sub_produk',$id_sub_produk)->first()];
+        return ['items' => Model::where('id', $id)->first()];
     }
 
     public static function getAll($request)
@@ -27,8 +18,7 @@ class MSubProduk {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_sub_produk) $query->where('nama_sub_produk','ilike',"%$request->nama_sub_produk%");
-                if($request->id_produk) $query->where('id_produk',$request->id_produk);
+                if($request->nama_status_tempat_tinggal) $query->where('nama_status_tempat_tinggal','ilike',"%$request->nama_status_tempat_tinggal%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -36,7 +26,7 @@ class MSubProduk {
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => (int) $data->perPage(),
+                        'per_page' => $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -50,10 +40,7 @@ class MSubProduk {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_sub_produk) $require_fileds[] = 'nama_sub_produk';
-            if(!$request->kode_sub_produk) $require_fileds[] = 'kode_sub_produk';
-            if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
-            if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
+            if(!$request->nama_status_tempat_tinggal) $require_fileds[] = 'nama_status_tempat_tinggal';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
@@ -89,16 +76,6 @@ class MSubProduk {
             return $delete;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
-            throw $th;
-        }
-    }
-
-    public static function plafon($id, $plafon) {
-        try {
-            $sub_produk = Model::where('id_sub_produk',$id)->first();
-            if(!$sub_produk) return true;
-            return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
-        } catch (\Throwable $th) {
             throw $th;
         }
     }
