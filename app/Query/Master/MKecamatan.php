@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Query;
+namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Models\MKecamatan as Model;
+use App\Models\Master\MKecamatan as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 class MKecamatan {
