@@ -32,7 +32,13 @@ class EformController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::getDataCurrent($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -88,7 +94,13 @@ class EformController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
      /**
@@ -131,7 +143,13 @@ class EformController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::updateDataRm($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

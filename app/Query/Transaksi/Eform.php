@@ -28,7 +28,44 @@ class Eform {
     // detail data aktifitas pemasaran
     public static function byId($id_aktifitas_pemasaran)
     {
-        //code
+        try {
+            $data = Model::find($id_aktifitas_pemasaran);
+            if(!$data) throw new \Exception("Data not found.", 400);
+
+            return [
+                'items' => [
+                    'id' => $data->id,
+                    'nik' => $data->nik,
+                    'nama' => $data->nama,
+                    'no_hp' => $data->no_hp,
+                    'email' => $data->email,
+                    'tempat_lahir' => $data->tempat_lahir,
+                    'tanggal_lahir' => $data->tgl_lahir,
+                    'nama_pasangan' => $data->nama_pasangan,
+                    'tempat_lahir_pasangan' => $data->tempat_lahir_pasangan,
+                    'tgl_lahir_pasangan' => $data->tgl_lahir_pasangan,
+                    'alamat_detail' => $data->alamat_detail,
+                    'lokasi' => $data->lokasi,
+                    'lokasi_usaha' => $data->lokasi_usaha,
+                    'status' => $data->status,
+                    'id_jenis_produk' => $data->id_jenis_produk,
+                    'id_status_perkawinan' => $data->id_status_perkawinan,
+                    'id_produk' => $data->id_produk,
+                    'id_sub_produk' => $data->id_sub_produk,
+                    'id_cabang' => $data->id_cabang,
+                    'plafon' => $data->plafon,
+                    'jangka_waktu' => $data->jangka_waktu,
+                    'npwp' => $data->npwp,
+                    'nama_produk' => $data->refProduk->nama ?? null,
+                    'nama_status_perkawinan' => $data->refStatusPerkawinan->nama ?? null,
+                    'nama_cabang' => $data->refCabang->nama_cabang ?? null,
+                    'nama_sub_produk' => $data->refSubProduk->nama ?? null
+                ],
+                'attributes' => null,
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     // list data mobile form
@@ -42,17 +79,31 @@ class Eform {
     {
         //code
         try {
-            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
-            })->paginate($request->limit);
+                        $query->where('is_pipeline',Constants::IS_NOL)
+                              ->whereIn('is_prescreening',[1,2])
+                              ->where('is_cutoff',Constants::IS_NOL)
+                              ->where('id_cabang',$request->current_user->id_cabang);
+                              if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+                              if($request->nik) $query->where('nik',$request->nik);
+                    })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'nama' => $item->nama,
+                            'nik' => $item->nik,
+                            'nama_produk' => $item->refProduk->nama ?? null,
+                            'nama_sub_produk' => $item->refSubProduk->nama ?? null,
+                            'created_at' => $item->created_at,
+                            'foto' => $item->foto
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -79,7 +130,7 @@ class Eform {
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-            $dataSend['is_presecreening'] = Constants::IS_ACTIVE;
+            $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
@@ -113,7 +164,7 @@ class Eform {
             $dataSend['id_cabang'] = $request->current_user->id_cabang;
             $dataSend['id_produk'] = $request->current_user->id_produk->id_produk;
             $dataSend['nirk'] = $request->current_user->nirk;
-            $dataSend['is_presecreening'] = Constants::IS_ACTIVE;
+            $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'MOBILE';
