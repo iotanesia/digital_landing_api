@@ -62,23 +62,22 @@ Route::prefix('v1')
 
     Route::group(['middleware' => 'access'],function () {
         // reoute canvasing
-        Route::prefix('canvasing')->group(function () {
-            Route::prefix('web')->group(function () {
-                Route::post('/',[CanvassingController::class,'storeWeb']);
-            });
+        Route::prefix('aktifitas-pemasaran')->group(function () {
 
-            Route::prefix('mobile')->group(function () {
-                Route::post('/',[CanvassingController::class,'storeMobile']);
-            });
+        });
 
-            Route::prefix('main')->group(function () {
-                Route::get('/',[CanvassingController::class,'index']);
-                Route::get('/data-pusat',[CanvassingController::class,'dataPusat']);
-                Route::get('/data-web',[CanvassingController::class,'dataWeb']);
-                Route::get('/{id}',[CanvassingController::class,'show']);
-                Route::post('/assign',[CanvassingController::class,'assign']);
-                Route::get('/riwayat-aktifitas/{id}',[CanvassingController::class,'riwayatAktifitas']);
-            });
+         // simulasi
+        Route::prefix('simulasi')->group(function () {
+            Route::post('/kredit',[SimulasiController::class,'process']);
+            Route::post('/kredit-web',[SimulasiController::class,'processWeb']);
+        });
+        // eform
+        Route::prefix('eform')->group(function () {
+          
+        });
+
+        Route::prefix('leads')->group(function () {
+
         });
         // users
         Route::prefix('user')->group(function () {
@@ -251,28 +250,7 @@ Route::prefix('v1')
                 Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
             });
         });
-        // simulasi
-        Route::prefix('simulasi')->group(function () {
-            Route::post('/kredit',[SimulasiController::class,'process']);
-            Route::post('/kredit-web',[SimulasiController::class,'processWeb']);
-        });
-        // eform
-        Route::prefix('eform')->group(function () {
-            Route::prefix('main')->group(function () {
-                Route::get('/',[EformController::class,'index']);
-                Route::get('/aktifitas',[EformController::class,'aktifitas']);
-                Route::post('/keputusan',[EformController::class,'keputusan']);
-                Route::prefix('prescreening')->group(function (){
-                    Route::get('/',[EformController::class,'getDataPrescreening']);
-                    Route::get('/aktifitas/{id}',[EformController::class,'getAktifitasPrescreening']);
-                    Route::get('/{id}',[EformController::class,'getDetailPrescreening']);
-                });
-                Route::get('/{id}',[EformController::class,'show']);
-            });
-            Route::prefix('mobile')->group(function () {
-                Route::post('/',[EformController::class,'prescreening']);
-            });
-        });
+
 
         Route::prefix('dashboard')->group(function () {
             Route::get('/segmen-penjaminan',[DashboardController::class,'segmenPenjaminan']);

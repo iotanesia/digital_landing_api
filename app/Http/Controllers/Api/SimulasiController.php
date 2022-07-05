@@ -34,9 +34,10 @@ class SimulasiController extends Controller
 
     static function estimationSalary($amount)
     {
-        $data = MKreditMinPenghasilan::isActive();
-        $prosentase = $data->prosentase ?? 60;
-        return round($amount / ($prosentase/100),2);
+        // $data = MKreditMinPenghasilan::isActive();
+        // $prosentase = $data->prosentase ?? 60;
+        // return round($amount / ($prosentase/100),2);
+        return 23;
     }
 
     public function processWeb(Request $request)

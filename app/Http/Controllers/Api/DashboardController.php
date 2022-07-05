@@ -13,7 +13,8 @@ class DashboardController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MapPenjaminanSegmen::retrive($request)
+                'under maintenance'
+                // MapPenjaminanSegmen::retrive($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
