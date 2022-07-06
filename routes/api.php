@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
+use App\Http\Controllers\Api\LeadsController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BannerController;
@@ -93,11 +94,11 @@ Route::prefix('v1')
         });
 
         Route::prefix('leads')->group(function () {
-            /* get data  */ Route::get('/',[EformController::class,'index']);
-            /* info prescreening  */ Route::get('/info-prescreening',[EformController::class,'prescreening']);
-            /* histroy aktifitas  */ Route::get('/history-aktifitas',[EformController::class,'history']);
-            /* detail data  */ Route::get('/{id}',[EformController::class,'show']);
-            /* update data rm  */ Route::put('/{id}',[EformController::class,'update']);
+            /* get data  */ Route::get('/',[LeadsController::class,'index']);
+            /* info prescreening  */ Route::get('/info-prescreening',[LeadsController::class,'prescreening']);
+            /* histroy aktifitas  */ Route::get('/history-aktifitas',[LeadsController::class,'history']);
+            /* detail data  */ Route::get('/{id}',[LeadsController::class,'show']);
+            /* update data rm  */ Route::put('/{id}',[LeadsController::class,'update']);
         });
         // users
         Route::prefix('user')->group(function () {
