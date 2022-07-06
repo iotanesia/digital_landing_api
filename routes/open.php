@@ -11,5 +11,6 @@ Route::middleware('client.api')->prefix('api/v1.0')->group(function () {
         Route::post('/check-nasabah',[EformController::class,'check']);
         Route::get('/check-data-nasabah',[EformController::class,'store']);
         Route::post('/detail',[EformController::class,'show']);
+        Route::post('/tracking-status',[EformController::class,'tracking']);
     });;
 });

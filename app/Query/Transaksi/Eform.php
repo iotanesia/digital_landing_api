@@ -75,8 +75,7 @@ class Eform {
 
     public static function byNomorAplikasi($request)
     {
-        $data = Model::where('nik',$request->nik)
-        ->where('nomor_aplikasi',$request->nomor_aplikasi)->first();
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)->first();
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
@@ -84,6 +83,8 @@ class Eform {
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->status = null; // dummy
+        $data->foto_ktp = null; // dummy
+        $data->foto_selfi = null; // dummy
         unset(
             $data->refStatusPerkawinan,
             $data->refCabang,
@@ -95,6 +96,7 @@ class Eform {
             $data->is_prescreening,
             $data->id_client_api,
             $data->id,
+            $data->foto,
         );
         return ['items' => $data];
     }
@@ -199,7 +201,7 @@ class Eform {
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
@@ -294,6 +296,65 @@ class Eform {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function tracking($request)
+    {
+        $data = self::byNomorAplikasi($request);
+        $ext = new \stdClass;
+        $ext->nomor_aplikasi = $data['items']->nomor_aplikasi;
+        $ext->nik = $data['items']->nik;
+        $ext->plafond = $data['items']->plafond;
+        $ext->npwp = $data['items']->npwp;
+        $ext->email = $data['items']->email;
+        $ext->no_hp = $data['items']->no_hp;
+        $ext->jangka_waktu = $data['items']->jangka_waktu;
+        $ext->foto_ktp = null;
+        $ext->foto_selfi = null;
+        if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
+        $ext->step = [
+            [
+                'label' => 'Prescreening',
+                'tanggal' => Carbon::now()->format('Y-m-d'),
+                'status' => 'lolos',
+                'keterangan' => null,
+                'step' => null
+            ],
+            [
+                'label' => 'Analisa Kredit',
+                'tanggal' => Carbon::now()->format('Y-m-d'),
+                'status' => 'Sedang Diproses',
+                'keterangan' => null,
+                'step' => 'Verifikasi Data'
+            ],
+            [
+                'label' => 'Approval',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+            ],
+            [
+                'label' => 'Cetak Dokumen',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+
+            ],
+            [
+                'label' => 'Disbursement',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+
+            ]
+        ];
+
+        return [
+            'items' => [ $ext ]
+        ];
     }
 
     // update data rm

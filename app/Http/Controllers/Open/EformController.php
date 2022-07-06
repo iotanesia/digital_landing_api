@@ -26,7 +26,7 @@ class EformController extends Controller
             return Helper::setErrorResponse($th);
         }
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -93,9 +93,15 @@ class EformController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function tracking(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::tracking($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

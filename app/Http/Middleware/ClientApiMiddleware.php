@@ -21,6 +21,7 @@ class ClientApiMiddleware
         $username = trim(Str::lower($_SERVER['PHP_AUTH_USER']));
         $password = $_SERVER['PHP_AUTH_PW'];
         $client = ClientApi::byUsername($username);
+        if(!$client) throw new \Exception("User tidak terdaftar.", 400);
         if (!Hash::check($password, $client->password)) throw new \Exception("username atau password salah.",400);
         $request->client = $client;
         return $next($request);
