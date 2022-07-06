@@ -150,6 +150,7 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
+            dd($request->current_user);
             $require_fileds = [];
             $dataSend = $request->all();
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
@@ -164,6 +165,9 @@ class Eform {
             $dataSend['id_cabang'] = $request->current_user->id_cabang;
             $dataSend['id_produk'] = $request->current_user->id_produk->id_produk;
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
+
+            $checkipeline = Pipeline::checkNasabah($request->nik);
+            dd($checkipeline);
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'MOBILE';

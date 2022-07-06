@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Query\Transaksi;
-use App\Models\Transaksi\AktifitasPemasaran as Model;
+use App\Models\Transaksi\Pipeline as Model;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
+use App\Query\Status\StsTracking;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -62,5 +64,18 @@ class Pipeline {
     public static function getHistoryAktifitas($request)
     {
          //code
+    }
+
+    public static function checkNasabah($nik) {
+        try {
+            $data = Model::where('nik', $nik)->first();
+            $result = ['is_pipeline'=>Constants::IS_ACTIVE,'is_cutoff'=>Constants::IS_NOL];
+
+            if($data && $data->tracking != StsTracking::getIdDisbursment(true)) $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_ACTIVE];
+
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

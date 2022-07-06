@@ -5,6 +5,7 @@ use App\ApiHelper as Helper;
 use App\Models\Status\StsPrescreening as Model;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 class StsTracking {
 
@@ -78,6 +79,15 @@ class StsTracking {
             return $delete;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function getIdDisbursment($id) {
+        try {
+            $result = Model::where('name', 'Disbursment')->first();
+            return $id ? $result->id : $result;
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
