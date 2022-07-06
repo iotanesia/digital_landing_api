@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Master\MAgama;
 use App\Models\Master\MCabang;
 use App\Models\Master\MKabupaten;
 use App\Models\Master\MKecamatan;
@@ -53,11 +54,17 @@ class Eform extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
+        'id_client_api'
     ];
 
     public function refCabang()
     {
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
+    }
+
+    public function refAgama()
+    {
+        return $this->belongsTo(MAgama::class,'id_agama','id');
     }
 
     public function refProduk()
@@ -75,7 +82,7 @@ class Eform extends Model
         return $this->belongsTo(MStatusPernikahan::class,'id_status_perkawinan','id');
     }
 
-    public function refPipeline() 
+    public function refPipeline()
     {
         return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
     }

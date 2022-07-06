@@ -66,6 +66,8 @@ class Kernel extends HttpKernel
         'write.log' => \App\Http\Middleware\WriteLogsMiddleware::class,
         'access' => \App\Http\Middleware\AccessMiddleware::class,
         'log.prescreening' => \App\Http\Middleware\LogPrescreeningMiddleware::class,
+        'client.api' => \App\Http\Middleware\ClientApiMiddleware::class,
+
 
     ];
 }
