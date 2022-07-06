@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Constants\Constants;
 use App\Jobs\MailSender;
 use App\Mail\PermohonanKredit;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -290,6 +291,64 @@ class Eform {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function tracking($request)
+    {
+        $data = self::byNomorAplikasi($request);
+        $ext = new \stdClass;
+        $ext->nomor_aplikasi = $data['items']->nomor_aplikasi;
+        $ext->nik = $data['items']->nik;
+        $ext->plafond = $data['items']->plafond;
+        $ext->npwp = $data['items']->npwp;
+        $ext->email = $data['items']->email;
+        $ext->no_hp = $data['items']->no_hp;
+        $ext->jangka_waktu = $data['items']->jangka_waktu;
+        $ext->foto = $data['items']->foto;
+        if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
+        $ext->step = [
+            [
+                'label' => 'prescreening',
+                'tanggal' => Carbon::now()->format('Y-m-d'),
+                'status' => 'lolos',
+                'keterangan' => null,
+                'step' => null
+            ],
+            [
+                'label' => 'analisa kredit',
+                'tanggal' => Carbon::now()->format('Y-m-d'),
+                'status' => 'Sedang Diproses',
+                'keterangan' => null,
+                'step' => 'Verifikasi Data'
+            ],
+            [
+                'label' => 'approval',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+            ],
+            [
+                'label' => 'cetak dokumen',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+
+            ],
+            [
+                'label' => 'disbrusment',
+                'tanggal' => null,
+                'status' => null,
+                'keterangan' => null,
+                'step' => null
+
+            ]
+        ];
+
+        return [
+            'items' => [ $ext ]
+        ];
     }
 
     // update data rm

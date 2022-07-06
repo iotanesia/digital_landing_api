@@ -97,7 +97,7 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::byNomorAplikasi($request)
+                Eform::tracking($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
