@@ -288,7 +288,8 @@ class Eform {
             $dataSend['platform'] = 'MOBILE';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $store = Model::create($dataSend);
-            if($checkipeline['is_pipeline']) $store->refPipeline->create(self::setParamsRefPipeline($request,$store));
+            // dd(self::setParamsRefPipeline($request,$store));
+            if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
@@ -362,6 +363,7 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
+            $require_fileds = [];
             if(!$request->id) $require_fileds[] = 'id';
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
             if(!$request->nik) $require_fileds[] = 'nik';
@@ -385,6 +387,8 @@ class Eform {
             if($checkipeline['is_pipeline']) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
 
+            return ['items' => $update];
+
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -394,8 +398,9 @@ class Eform {
     public static function setParamsRefPipeline($request,$data)
     {
          return [
-            'nomor_aplikasi' => $data->id,
+            'nomor_aplikasi' => $data->nomor_aplikasi,
             'id_user' => $request->current_user->id,
+            'nik' => $data->nik,
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'step_verifikasi' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,
