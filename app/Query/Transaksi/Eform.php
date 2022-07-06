@@ -265,7 +265,6 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            dd($request->current_user);
             $require_fileds = [];
             $dataSend = $request->all();
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
@@ -278,16 +277,15 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend['id_cabang'] = $request->current_user->id_cabang;
-            $dataSend['id_produk'] = $request->current_user->id_produk->id_produk;
+            $dataSend['id_produk'] = $request->current_user->id_produk;
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
-
             $checkipeline = Pipeline::checkNasabah($request->nik);
-            dd($checkipeline);
-            $dataSend['is_pipeline'] = Constants::IS_NOL;
-            $dataSend['is_cutoff'] = Constants::IS_NOL;
+            $dataSend['is_pipeline'] = $checkipeline['is_pipeline'];
+            $dataSend['is_cutoff'] = $checkipeline['is_cutoff'];
             $dataSend['platform'] = 'MOBILE';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
             $store = Model::create($dataSend);
+            if($checkipeline['is_pipeline']) $store->refPipeline->create();
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
