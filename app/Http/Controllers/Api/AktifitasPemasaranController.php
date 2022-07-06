@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
+use App\Query\Transaksi\AktifitasPemasaran;
 class AktifitasPemasaranController extends Controller
 {
     /**
@@ -15,10 +16,7 @@ class AktifitasPemasaranController extends Controller
     public function index(Request $request)
     {
         try {
-            return Helper::resultResponse(
-                'under maintenance'
-                // MapPenjaminanSegmen::retrive($request)
-            );
+            return Helper::resultResponse(AktifitasPemasaran::getAll($request));
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
@@ -62,7 +60,13 @@ class AktifitasPemasaranController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                AktifitasPemasaran::store($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -73,7 +77,13 @@ class AktifitasPemasaranController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                AktifitasPemasaran::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -96,7 +106,13 @@ class AktifitasPemasaranController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                AktifitasPemasaran::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
