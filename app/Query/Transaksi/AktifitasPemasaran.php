@@ -4,10 +4,16 @@ namespace App\Query\Transaksi;
 use App\Models\Transaksi\AktifitasPemasaran as Model;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
+use App\Jobs\EformPrescreeningJobs;
+use App\Jobs\MailSender;
+use App\Mail\EFormMail;
+use App\Mail\PermohonanKredit;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 class AktifitasPemasaran {
 
     // detail data aktifitas pemasaran
@@ -63,9 +69,22 @@ class AktifitasPemasaran {
             if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
             if(!$request->id_user) $require_fileds[] = 'id_user';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-
-            $store = Model::create($request->all());
+            $params = $request->all();
+            $image = $request->foto;  // your base64 encoded
+            $params['foto'] =(string) Str::uuid().'.png';
+            $store = Model::create($params);
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($params['foto'], base64_decode($image));
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
+
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();

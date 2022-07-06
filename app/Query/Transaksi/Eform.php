@@ -7,7 +7,10 @@ use App\Query\Master\MCabang;
 use App\Services\DwhService;
 use Illuminate\Support\Facades\Hash;
 use App\Constants\Constants;
+use App\Jobs\MailSender;
+use App\Mail\PermohonanKredit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class Eform {
@@ -204,6 +207,14 @@ class Eform {
             $dataSend['id_client_api'] = $request->client->id;
             $store = Model::create($dataSend);
             if($is_transaction) DB::commit();
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,
