@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Master\MCabang;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,7 +51,7 @@ class User extends Authenticatable
 
     public function refCabang()
     {
-        return $this->belongsTo(MCabang::class,'kode_cabang','kode_cabang');
+        return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
     }
 
     public function refUserRole()

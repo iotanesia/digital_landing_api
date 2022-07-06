@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Master\MProduk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,7 +25,7 @@ class RoleProduk extends Model
 
     public function refProduk()
     {
-        return $this->belongsTo(MProduk::class,'id_produk','id_produk');
+        return $this->belongsTo(MProduk::class,'id_produk','id');
     }
 
     public function refJenisProduk()
