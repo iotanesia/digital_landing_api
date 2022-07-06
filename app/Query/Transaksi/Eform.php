@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Constants\Constants;
 use App\Jobs\MailSender;
 use App\Mail\PermohonanKredit;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -203,7 +204,7 @@ class Eform {
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
-            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
+            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $dataSend['id_client_api'] = $request->client->id;
             $store = Model::create($dataSend);
             if($is_transaction) DB::commit();
@@ -249,7 +250,7 @@ class Eform {
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
-            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
+            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $store = Model::create($dataSend);
             if($is_transaction) DB::commit();
             return ['items' => $store];
@@ -283,9 +284,9 @@ class Eform {
             $dataSend['is_pipeline'] = $checkipeline['is_pipeline'];
             $dataSend['is_cutoff'] = $checkipeline['is_cutoff'];
             $dataSend['platform'] = 'MOBILE';
-            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi(MCabang::getCabangBbrv($request->id_cabang));
+            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $store = Model::create($dataSend);
-            if($checkipeline['is_pipeline']) $store->refPipeline->create();
+            if($checkipeline['is_pipeline']) $store->refPipeline->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
@@ -300,14 +301,44 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-
-            //code
+            if(!$request->id) $require_fileds[] = 'id';
+            if(!$request->nama) $require_fileds[] = 'Nama nasabah';
+            if(!$request->nik) $require_fileds[] = 'nik';
+            if(!$request->email) $require_fileds[] = 'email';
+            if(!$request->npwp) $require_fileds[] = 'npwp';
+            if(!$request->no_hp) $require_fileds[] = 'no_hp';
+            if(!$request->alamat_usaha) $require_fileds[] = 'alamat usaha';
+            if(!$request->plafond) $require_fileds[] = 'plafond';
+            if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $dataSend = $request->all();
+            $update = Model::find($request->id);
+            unset($dataSend['id']);
+            foreach($dataSend as $key => $val) {
+                $update->{$key} = $val;
+            }
+            $checkipeline = Pipeline::checkNasabah($request->nik);
+            $update->is_pipeline = $checkipeline['is_pipeline'];
+            $update->is_cutoff = $checkipeline['is_cutoff'];
+            $update->save();
+            if($checkipeline['is_pipeline']) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
 
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamsRefPipeline($request,$data)
+    {
+         return [
+            'nomor_aplikasi' => $data->id,
+            'id_user' => $request->current_user->id,
+            'tanggal' => Carbon::now()->format('Y-m-d'),
+            'step_verifikasi' => Constants::PROSES_VERIFIKASI,
+            'tracking'=>Constants::ANALISA_KREDIT,
+         ];
     }
 
     // list data pipeline eform
