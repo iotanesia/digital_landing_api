@@ -13,7 +13,7 @@ class AktifitasPemasaran {
     // detail data aktifitas pemasaran
     public static function byId($id_aktifitas_pemasaran)
     {
-        //code
+        return ['items' => Model::where('id', $id_aktifitas_pemasaran)->first()];
     }
 
     // list data

@@ -77,7 +77,13 @@ class AktifitasPemasaranController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                AktifitasPemasaran::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
