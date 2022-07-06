@@ -13,7 +13,14 @@ class AktifitasPemasaran {
     // detail data aktifitas pemasaran
     public static function byId($id_aktifitas_pemasaran)
     {
-        return ['items' => Model::where('id', $id_aktifitas_pemasaran)->first()];
+        $data = Model::where('id', $id_aktifitas_pemasaran)->first();
+        $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
+        $data->status_cutoff = $data->refStsCutoff->nama ?? null;
+        $data->status_pipeline = $data->refStsPipeline->nama ?? null;
+        unset($data->refStsPrescreening); 
+        unset($data->refStsCutoff);  
+        unset($data->refStsPipeline);  
+        return ['items' => $data];
     }
 
     // list data
@@ -24,7 +31,26 @@ class AktifitasPemasaran {
     */
     public static function getDataCurrent($request)
     {
-        //code
+        try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $data = Model::where(function ($query) use ($request){
+                if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
+                $query->where('id_user', request()->current_user->id);
+                $query->where('is_cutoff', 0);
+                $query->where('is_pipeline', 0);
+            })->paginate($request->limit);
+                return [
+                    'items' => $data->items(),
+                    'attributes' => [
+                        'total' => $data->total(),
+                        'current_page' => $data->currentPage(),
+                        'from' => $data->currentPage(),
+                        'per_page' => $data->perPage(),
+                    ]
+                ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     // input data
@@ -61,8 +87,17 @@ class AktifitasPemasaran {
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
-            if(!$request->id_user) $require_fileds[] = 'id_user';
+            if(!$request->status) $require_fileds[] = 'status';
+
+            if($request->is_cutoff) $require_fileds[] = 'is_cutoff';
+            if($request->is_pipeline) $require_fileds[] = 'is_pipeline';
+       
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $request->id_user = request()->current_user->id;
+            $request->is_prescreening = ((int) $request->status === 2 ? 1 : 0);
+
+            $request->request->add(['id_user' => request()->current_user->id,
+            'is_prescreening' => ((int) $request->status === 2 ? 1 : 0)]);
 
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();
@@ -111,22 +146,6 @@ class AktifitasPemasaran {
 
     public static function getAll($request)
     {
-        try {
-            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-            $data = Model::where(function ($query) use ($request){
-                if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
-            })->paginate($request->limit);
-                return [
-                    'items' => $data->items(),
-                    'attributes' => [
-                        'total' => $data->total(),
-                        'current_page' => $data->currentPage(),
-                        'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
-                    ]
-                ];
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+       
     }
 }

@@ -5,6 +5,9 @@ namespace App\Models\Transaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Status\StsPrescreening;
+use App\Models\Status\StsCutoff;
+use App\Models\Status\StsPipeline;
 
 class AktifitasPemasaran extends Model
 {
@@ -39,7 +42,7 @@ class AktifitasPemasaran extends Model
         'status',
         'is_pipeline',
         'is_cutoff',
-        'is_success_prescreening',
+        'is_prescreening',
         'created_at',
         'created_by',
         'updated_at',
@@ -47,6 +50,21 @@ class AktifitasPemasaran extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public function refStsPrescreening()
+    {
+        return $this->belongsTo(StsPrescreening::class,'is_prescreening','id_prescreening');
+    }
+
+    public function refStsCutoff()
+    {
+        return $this->belongsTo(StsCutoff::class,'is_cutoff','id_cutoff');
+    }
+
+    public function refStsPipeline()
+    {
+        return $this->belongsTo(StsPipeline::class,'is_pipeline','id_pipeline');
+    }
 
     public static function boot()
     {

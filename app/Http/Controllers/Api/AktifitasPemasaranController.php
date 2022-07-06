@@ -16,7 +16,7 @@ class AktifitasPemasaranController extends Controller
     public function index(Request $request)
     {
         try {
-            return Helper::resultResponse(AktifitasPemasaran::getAll($request));
+            return Helper::resultResponse(AktifitasPemasaran::getDataCurrent($request));
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
