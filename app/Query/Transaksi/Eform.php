@@ -83,6 +83,8 @@ class Eform {
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->status = null; // dummy
+        $data->foto_ktp = null; // dummy
+        $data->foto_selfi = null; // dummy
         unset(
             $data->refStatusPerkawinan,
             $data->refCabang,
@@ -94,6 +96,7 @@ class Eform {
             $data->is_prescreening,
             $data->id_client_api,
             $data->id,
+            $data->foto,
         );
         return ['items' => $data];
     }
@@ -304,32 +307,33 @@ class Eform {
         $ext->email = $data['items']->email;
         $ext->no_hp = $data['items']->no_hp;
         $ext->jangka_waktu = $data['items']->jangka_waktu;
-        $ext->foto = $data['items']->foto;
+        $ext->foto_ktp = null;
+        $ext->foto_selfi = null;
         if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
         $ext->step = [
             [
-                'label' => 'prescreening',
+                'label' => 'Prescreening',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'lolos',
                 'keterangan' => null,
                 'step' => null
             ],
             [
-                'label' => 'analisa kredit',
+                'label' => 'Analisa Kredit',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'Sedang Diproses',
                 'keterangan' => null,
                 'step' => 'Verifikasi Data'
             ],
             [
-                'label' => 'approval',
+                'label' => 'Approval',
                 'tanggal' => null,
                 'status' => null,
                 'keterangan' => null,
                 'step' => null
             ],
             [
-                'label' => 'cetak dokumen',
+                'label' => 'Cetak Dokumen',
                 'tanggal' => null,
                 'status' => null,
                 'keterangan' => null,
@@ -337,7 +341,7 @@ class Eform {
 
             ],
             [
-                'label' => 'disbrusment',
+                'label' => 'Disbursement',
                 'tanggal' => null,
                 'status' => null,
                 'keterangan' => null,
