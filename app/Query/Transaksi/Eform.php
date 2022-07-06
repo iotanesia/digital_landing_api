@@ -74,8 +74,7 @@ class Eform {
 
     public static function byNomorAplikasi($request)
     {
-        $data = Model::where('nik',$request->nik)
-        ->where('nomor_aplikasi',$request->nomor_aplikasi)->first();
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)->first();
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
@@ -198,7 +197,7 @@ class Eform {
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;

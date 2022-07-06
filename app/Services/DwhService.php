@@ -16,7 +16,7 @@ class DwhService {
                 'no_ktp' => $params['no_ktp'],
             ]);
             Log::info(json_encode($response->json()));
-            if($response->getStatusCode() != 200) throw new \Exception("Ekternal Service Error", 400);
+            if($response->getStatusCode() != 200) throw new \Exception("Data not found.", 400);
             $result = $response->json();
             return $result;
         } catch (\Throwable $th) {
