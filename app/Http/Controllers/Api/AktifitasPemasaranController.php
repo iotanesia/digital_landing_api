@@ -100,7 +100,13 @@ class AktifitasPemasaranController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                AktifitasPemasaran::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

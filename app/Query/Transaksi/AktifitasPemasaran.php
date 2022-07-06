@@ -76,14 +76,15 @@ class AktifitasPemasaran {
 
 
     // update data rm
-    public static function updateDataRm($request, $is_transaction = true)
+    public static function updated($request,$id,$is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
         try {
-
-            //code
+            $update = Model::find($id);
+            if(!$update) throw new \Exception("Data not found.", 400);
+            $update->update($request->all());
             if($is_transaction) DB::commit();
-
+            return $update;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
