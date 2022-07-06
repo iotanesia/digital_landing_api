@@ -9,7 +9,6 @@ class MJenisInstansi extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'jenis_instansi';
-    protected $primaryKey = 'id_jenis_instansi';
     protected $connection = 'master';
     public $fillable = [
         'nama_jenis_instansi',

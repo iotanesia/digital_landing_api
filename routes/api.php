@@ -29,6 +29,8 @@ use App\Http\Controllers\Master\CaraPemasaranController;
 use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
 use App\Http\Controllers\Master\PromoController;
+use App\Http\Controllers\Master\SubSubProdukController;
+use App\Http\Controllers\Master\TipeProdukController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -232,6 +234,25 @@ Route::prefix('v1')
                 Route::put('/{id}',[SubProdukController::class,'update']);
                 Route::delete('/{id}',[SubProdukController::class,'destroy']);
             });
+
+            // route sub produk
+            Route::prefix('sub-sub-produk')->group(function () {
+                Route::get('/',[SubSubProdukController::class,'index']);
+                Route::post('/',[SubSubProdukController::class,'store']);
+                Route::get('/{id}',[SubSubProdukController::class,'show']);
+                Route::put('/{id}',[SubSubProdukController::class,'update']);
+                Route::delete('/{id}',[SubSubProdukController::class,'destroy']);
+            });
+
+            // route tipe produk
+            Route::prefix('tipe-produk')->group(function () {
+                Route::get('/',[TipeProdukController::class,'index']);
+                Route::post('/',[TipeProdukController::class,'store']);
+                Route::get('/{id}',[TipeProdukController::class,'show']);
+                Route::put('/{id}',[TipeProdukController::class,'update']);
+                Route::delete('/{id}',[TipeProdukController::class,'destroy']);
+            });
+
             // route cabang
             Route::prefix('cabang')->group(function () {
                 Route::get('/',[CabangController::class,'index']);

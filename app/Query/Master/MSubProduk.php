@@ -28,7 +28,7 @@ class MSubProduk {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_sub_produk) $query->where('nama_sub_produk','ilike',"%$request->nama_sub_produk%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->id_produk) $query->where('id_produk',$request->id_produk);
             })->paginate($request->limit);
                 return [

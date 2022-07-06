@@ -2,11 +2,11 @@
 
 namespace App\Query\Master;
 use App\ApiHelper as Helper;
-use App\Constants\Constants;
-use App\Models\Master\MCaraPemasaran as Model;
+use App\Models\Master\MTipeProduk as Model;
 use Illuminate\Support\Facades\DB;
+use App\Constants\Constants;
 
-class MCaraPemasaran {
+class MTipeProduk {
 
     public static function byId($id)
     {
@@ -18,7 +18,8 @@ class MCaraPemasaran {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_cara_pemasaran) $query->where('nama_cara_pemasaran','ilike',"%$request->nama_cara_pemasaran%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+                if($request->id_sub_produk) $query->where('id_sub_produk',$request->id_sub_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -26,7 +27,7 @@ class MCaraPemasaran {
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -40,7 +41,7 @@ class MCaraPemasaran {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_cara_pemasaran) $require_fileds[] = 'nama_cara_pemasaran';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
@@ -76,6 +77,16 @@ class MCaraPemasaran {
             return $delete;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function plafon($id, $plafon) {
+        try {
+            $sub_produk = Model::where('id_sub_produk',$id)->first();
+            if(!$sub_produk) return true;
+            return ($plafon > $sub_produk->maks_plafon || $plafon > $sub_produk->min_plafon);
+        } catch (\Throwable $th) {
             throw $th;
         }
     }

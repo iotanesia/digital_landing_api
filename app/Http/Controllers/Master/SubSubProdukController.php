@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Master\MSubProduk;
+use App\Query\Master\MSubSubProduk;
 
-class SubProdukController extends Controller
+class SubSubProdukController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class SubProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MSubProduk::getAll($request)
+                MSubSubProduk::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class SubProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MSubProduk::store($request)
+                MSubSubProduk::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class SubProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MSubProduk::byId($id)
+                MSubSubProduk::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -91,7 +91,7 @@ class SubProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MSubProduk::updated($request,$id)
+                MSubSubProduk::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -108,10 +108,11 @@ class SubProdukController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MSubProduk::destroy($id)
+                MSubSubProduk::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
     }
+
 }

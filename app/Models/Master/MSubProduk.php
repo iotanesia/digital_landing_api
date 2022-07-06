@@ -12,13 +12,16 @@ class MSubProduk extends Model
     protected $connection = 'master';
 
     public $fillable = [
-        'kode_sub_produk',
-        'nama_sub_produk',
-        'kode_produk',
+        'id_produk',
+        'nama',
         'suku_bunga',
         'rasio_pembayaran_utang',
         'maks_period',
         'maks_plafon',
+        'title',
+        'banner',
+        'deskripsi',
+        'foto',
         'created_at',
         'created_by',
         'updated_at',
