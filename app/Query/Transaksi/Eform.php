@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Eform {
 
@@ -253,7 +255,15 @@ class Eform {
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie_ktp;  // your base64 encoded
+            // dd(base64_decode($image_selfie));
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie_ktp'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie_ktp'], base64_decode($image_selfie));
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
@@ -287,10 +297,16 @@ class Eform {
             $dataSend['is_cutoff'] = $checkipeline['is_cutoff'];
             $dataSend['platform'] = 'MOBILE';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie_ktp;  // your base64 encoded
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie_ktp'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
-            // dd(self::setParamsRefPipeline($request,$store));
             if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie_ktp'], base64_decode($image_selfie));
             return ['items' => $store];
 
         } catch (\Throwable $th) {
