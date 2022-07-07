@@ -43,7 +43,6 @@ class Eform extends Model
         'plafond',
         'jangka_waktu',
         'id_cabang',
-        'foto',
         'is_pipeline',
         'is_cutoff',
         'is_prescreening',
