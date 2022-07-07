@@ -2,6 +2,7 @@
 
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\AktifitasPemasaran as Model;
+use App\Models\Transaksi\AktifitaPemasaranRiwayat as ModelRiwayat;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use Illuminate\Support\Facades\Hash;
@@ -96,10 +97,18 @@ class AktifitasPemasaran {
             $request->id_user = request()->current_user->id;
             $request->is_prescreening = ((int) $request->status === 2 ? 1 : 0);
 
-            $request->request->add(['id_user' => request()->current_user->id,
-            'is_prescreening' => ((int) $request->status === 2 ? 1 : 0)]);
+            $request->request->add(
+                ['id_user' => request()->current_user->id,
+                 'is_prescreening' => ((int) $request->status === 2 ? 1 : 0)
+                ]);
 
             $store = Model::create($request->all());
+
+            if ((int) $request->status === 1 || (int) $request->status === 2) {
+                $store = ModelRiwayat::create($request->all());
+            }
+
+            dd($store->id);
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
