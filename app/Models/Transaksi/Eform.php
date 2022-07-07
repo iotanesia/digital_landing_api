@@ -21,6 +21,7 @@ class Eform extends Model
     protected $table = 'eform';
     protected $connection = 'transaksi';
     public $fillable = [
+        'id',
         'nomor_aplikasi',
         'nik',
         'cif',

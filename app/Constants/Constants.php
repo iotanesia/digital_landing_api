@@ -19,4 +19,8 @@ class Constants
     const APPROVAL = 3;
     const CETAK_DOKUMEN = 4;
     const DISBURSMENT = 5;
+
+    const MODEL_PRESCREENING = [
+        'eform' => '\App\Query\Transaksi\EformPrescreening',
+    ];
 }
