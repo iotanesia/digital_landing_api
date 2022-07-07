@@ -260,9 +260,26 @@ class AktifitasPemasaran {
     }
 
     // list history aktifitas
-    public static function getHistoryAktifitas($request)
+    public static function getHistoryAktifitas($request, $id)
     {
-         //code
+        try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $data = ModelRiwayat::where(function ($query) use ($id){
+                $query->where('id_aktifitas_pemasaran', $id);
+                
+            })->paginate($request->limit);
+                return [
+                    'items' => $data->items(),
+                    'attributes' => [
+                        'total' => $data->total(),
+                        'current_page' => $data->currentPage(),
+                        'from' => $data->currentPage(),
+                        'per_page' => $data->perPage(),
+                    ]
+                ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public static function getAll($request)

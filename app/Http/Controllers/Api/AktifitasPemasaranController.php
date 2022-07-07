@@ -40,7 +40,7 @@ class AktifitasPemasaranController extends Controller
     public function history(Request $request,$id)
     {
         try {
-            return Helper::resultResponse(AktifitasPemasaran::getHistoryAktifitas($request));
+            return Helper::resultResponse(AktifitasPemasaran::getHistoryAktifitas($request, $id));
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
