@@ -62,5 +62,9 @@ return [
         'client_id' => env('SKIP_CLIENT_ID'),
         'client_secret' => env('SKIP_CLIENT_SECRET'),
     ],
+    'dwh' => [
+        'host' => env('DWH_HOST','http://10.32.3.168:12008'),
+    ],
+
 
 ];

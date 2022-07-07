@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\ApiHelper as Helper;
+use App\Query\Transaksi\Leads;
 class LeadsController extends Controller
 {
     /**
@@ -14,7 +15,13 @@ class LeadsController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Leads::getDataCurrent($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
      /**
@@ -55,7 +62,13 @@ class LeadsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Leads::store($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -66,7 +79,13 @@ class LeadsController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Leads::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -89,7 +108,13 @@ class LeadsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Leads::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

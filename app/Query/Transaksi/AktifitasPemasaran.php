@@ -5,10 +5,16 @@ use App\Models\Transaksi\AktifitasPemasaran as Model;
 use App\Models\Transaksi\AktifitaPemasaranRiwayat as ModelRiwayat;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
+use App\Jobs\EformPrescreeningJobs;
+use App\Jobs\MailSender;
+use App\Mail\EFormMail;
+use App\Mail\PermohonanKredit;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 class AktifitasPemasaran {
 
     // detail data aktifitas pemasaran
@@ -102,13 +108,26 @@ class AktifitasPemasaran {
                  'is_prescreening' => ((int) $request->status === 2 ? 1 : 0)
                 ]);
 
-            $store = Model::create($request->all());
+            // if ((int) $request->status === 1 || (int) $request->status === 2) {
+            //     $store = ModelRiwayat::create($request->all());
+            // }
 
-            if ((int) $request->status === 1 || (int) $request->status === 2) {
-                $store = ModelRiwayat::create($request->all());
-            }
-
+            $params = $request->all();
+            $image = $request->foto;  // your base64 encoded
+            $params['foto'] =(string) Str::uuid().'.png';
+            $store = Model::create($params);
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($params['foto'], base64_decode($image));
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
+
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();

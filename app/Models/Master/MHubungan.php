@@ -9,7 +9,6 @@ class MHubungan extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'hubungan';
-    protected $primaryKey = 'id_hubungan';
     protected $connection = 'master';
     public $fillable = [
         'nama_hubungan',

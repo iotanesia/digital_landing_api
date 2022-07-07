@@ -9,7 +9,6 @@ class MCaraPemasaran extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'cara_pemasaran';
-    protected $primaryKey = 'id_cara_pemasaran';
     protected $connection = 'master';
     public $fillable = [
         'nama_cara_pemasaran',

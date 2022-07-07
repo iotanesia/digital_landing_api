@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\ApiHelper as Helper;
 use Illuminate\Http\Request;
+use App\Query\Transaksi\Eform;
 
 class EformController extends Controller
 {
@@ -12,9 +14,31 @@ class EformController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function check(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Eform::dwhMikro($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::getDataCurrent($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -35,7 +59,13 @@ class EformController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::storeEform($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
      /**
@@ -46,7 +76,13 @@ class EformController extends Controller
      */
     public function storeMobile(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::storeMobileform($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
 
@@ -58,7 +94,13 @@ class EformController extends Controller
      */
     public function show(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
      /**
@@ -101,7 +143,13 @@ class EformController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Eform::updateDataRm($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

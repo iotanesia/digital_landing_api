@@ -38,8 +38,8 @@ class User {
         });
         $user->id_role = $user->refUserRole->id_role ?? null;
         $user->nama_role = $user->refUserRole->refRole->nama ?? null;
-        $user->id_produk = $user->refUserRole->refRole->refRolesProduk ?? null;
-        // $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProduk;
+        $user->id_produk = $user->refUserRole->refRole->refRolesProduk->id_produk ?? null;
+        $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProduk->nama ?? null;
         unset(
             $user->refUserRole,
             $user->manyUserRole,
@@ -82,24 +82,29 @@ class User {
 
     public static function byId($id)
     {
-        $data =  Model::with(['refRole', 'refCabang'])->find($id);
-        $data->id_jenis_produk = $data->refRoleProduk->id_jenis_produk ?? null;
-        $data->role_produk = $data->manyRoleProduk->map(function ($item){
+        $user =  Model::with(['refRole', 'refCabang'])->find($id);
+        $user->roles = $user->manyUserRole->map(function ($item){
             return [
-                'id_jenis_produk' => $item->id_jenis_produk,
-                'nama_jenis_produk' => $item->refJenisProduk->nama_jenis_produk ?? null,
+                'id_role' => $item->id_role,
+                'nama_role' => $item->refRole->nama ?? null,
             ];
         });
-        $data->nama_role = $data->refRole->nama_role ?? null;
-        $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
+        $user->id_role = $user->refUserRole->id_role ?? null;
+        $user->nama_role = $user->refUserRole->refRole->nama ?? null;
+        $user->id_produk = $user->refUserRole->refRole->refRolesProduk->id_produk ?? null;
+        $user->nama_role =  $user->refUserRole->refRole->nama ?? null;
+        $user->nama_cabang = $user->refCabang->nama_cabang ?? null;
+        $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProdu->namak ?? null;
+
         unset(
-            $data->refRole,
-            $data->refCabang,
-            $data->refRoleProduk,
-            $data->manyRoleProduk
+            $user->refRole,
+            $user->refCabang,
+            // $user->refRoleProduk,
+            $user->manyUserRole,
+            $user->refUserRole
         );
         return [
-            'items' => $data,
+            'items' => $user,
             'attributes' => null
         ];
     }
