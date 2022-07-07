@@ -108,7 +108,6 @@ class AktifitasPemasaran {
                 $store = ModelRiwayat::create($request->all());
             }
 
-            dd($store->id);
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
