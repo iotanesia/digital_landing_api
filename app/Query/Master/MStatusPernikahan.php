@@ -77,4 +77,31 @@ class MStatusPernikahan {
             throw $th;
         }
     }
+
+    public static function getStatusMenikah($id) {
+        try {
+            $result = Model::where('nama', 'Menikah')->first();
+            return $id ? $result->id : $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function getStatusBelumMenikah($id) {
+        try {
+            $result = Model::where('nama', 'Belum Menikah')->first();
+            return $id ? $result->id : $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function getStatusCerai($id) {
+        try {
+            $result = Model::where('nama', 'Cerai')->first();
+            return $id ? $result->id : $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
