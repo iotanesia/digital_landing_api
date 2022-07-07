@@ -249,6 +249,8 @@ class Eform {
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
+            if(!$request->foto_selfie_ktp) $require_fileds[] = 'Foto  selfie Ktp';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
