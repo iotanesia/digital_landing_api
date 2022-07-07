@@ -16,7 +16,7 @@ class AktifitasPemasaranController extends Controller
     public function index(Request $request)
     {
         try {
-            return Helper::resultResponse(AktifitasPemasaran::getAll($request));
+            return Helper::resultResponse(AktifitasPemasaran::getDataCurrent($request));
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
@@ -39,7 +39,11 @@ class AktifitasPemasaranController extends Controller
      */
     public function history(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(AktifitasPemasaran::getHistoryAktifitas($request));
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -108,7 +112,7 @@ class AktifitasPemasaranController extends Controller
     {
         try {
             return Helper::resultResponse(
-                AktifitasPemasaran::updated($request,$id)
+                AktifitasPemasaran::updated($request, $id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
