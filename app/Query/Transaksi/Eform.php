@@ -250,7 +250,7 @@ class Eform {
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
-            if(!$request->foto_selfie_ktp) $require_fileds[] = 'Foto  selfie Ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'Foto  selfie Ktp';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
@@ -258,14 +258,14 @@ class Eform {
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
-            $image_selfie = $request->foto_selfie_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
             // dd(base64_decode($image_selfie));
             $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
-            $dataSend['foto_selfie_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
             // after commit process
             Storage::put($dataSend['foto_ktp'], base64_decode($image));
-            Storage::put($dataSend['foto_selfie_ktp'], base64_decode($image_selfie));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
@@ -300,15 +300,15 @@ class Eform {
             $dataSend['platform'] = 'MOBILE';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
-            $image_selfie = $request->foto_selfie_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
             $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
-            $dataSend['foto_selfie_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
             if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             // after commit process
             Storage::put($dataSend['foto_ktp'], base64_decode($image));
-            Storage::put($dataSend['foto_selfie_ktp'], base64_decode($image_selfie));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             return ['items' => $store];
 
         } catch (\Throwable $th) {
