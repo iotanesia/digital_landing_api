@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Constants;
+use Carbon\Carbon;
 
 class Leads {
 
@@ -97,13 +98,28 @@ class Leads {
         try {
             $update = Model::find($id);
             if(!$update) throw new \Exception("Data not found.", 400);
-            $update->update($request->all());
+            $update->id_user = $request->current_user->id;
+            $update->save();
+            $update->refPipeline()->create(self::setParamsPipeline($request,$update));
             if($is_transaction) DB::commit();
             return $update;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamsPipeline($request,$data)
+    {
+        return [
+            'nomor_aplikasi' => $data->nomor_aplikasi,
+            'tracking' => 2,
+            'id_tipe_calon_nasabah' => 2,
+            'id_user' =>  $request->current_user->id,
+            'nik' =>  $data->nik,
+            'tanggal' =>  Carbon::now()->format('Y-m-d'),
+            'step_verifikasi' =>  0,
+        ];
     }
     // update data rm
      /*
