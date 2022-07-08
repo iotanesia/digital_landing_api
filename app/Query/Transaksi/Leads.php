@@ -25,17 +25,17 @@ class Leads {
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
-            unset($data->refMJenisKelamin); 
-            unset($data->refMAgama);  
+            unset($data->refMJenisKelamin);
+            unset($data->refMAgama);
             unset($data->refMStatusPernikahan);
-            unset($data->refMProduk); 
+            unset($data->refMProduk);
             unset($data->refMSubProduk);
-            unset($data->refMCabang);  
-            unset($data->refStsPrescreening); 
-            unset($data->refStsCutoff);  
-            unset($data->refStsPipeline); 
+            unset($data->refMCabang);
+            unset($data->refStsPrescreening);
+            unset($data->refStsCutoff);
+            unset($data->refStsPipeline);
         }
-         
+
         return ['items' => $data];
     }
 
@@ -61,6 +61,8 @@ class Leads {
                             'cif' => $item->cif,
                             'nik' => $item->nik,
                             'foto' => $item->foto,
+                            'produk' => $item->refMProduk->nama ?? null,
+                            'sub_produk' => $item->refMSubProduk->nama ?? null,
                             'created_at' => $item->created_at,
                         ];
                     }),
@@ -145,7 +147,7 @@ class Leads {
         }
     }
 
-    
+
     // list data pipeline eform
     public static function getDataPipeline($request)
     {
