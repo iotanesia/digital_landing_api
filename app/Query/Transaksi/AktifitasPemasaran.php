@@ -47,7 +47,7 @@ class AktifitasPemasaran {
                 $data->refStsCutoff,
                 $data->refStsPipeline,
             );
-            
+
         }
 
         return ['items' => $data];
@@ -129,10 +129,9 @@ class AktifitasPemasaran {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
             if(!$request->status) $require_fileds[] = 'status';
-
-            if($request->is_cutoff) $require_fileds[] = 'is_cutoff';
-            if($request->is_pipeline) $require_fileds[] = 'is_pipeline';
-            if($request->is_prescreening) $require_fileds[] = 'is_prescreening';
+            if(!$request->is_cutoff) $require_fileds[] = 'is_cutoff';
+            if(!$request->is_pipeline) $require_fileds[] = 'is_pipeline';
+            if(!$request->is_prescreening) $require_fileds[] = 'is_prescreening';
 
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 

@@ -86,7 +86,7 @@ class MStatusPernikahan {
 
     public static function getStatusMenikah($id) {
         try {
-            $result = Model::where('nama', 'Menikah')->first();
+            $result = Model::where('nama', 'KAWIN')->first();
             return $id ? $result->id : $result;
         } catch (\Throwable $th) {
             throw $th;
