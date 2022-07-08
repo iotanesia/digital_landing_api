@@ -8,9 +8,12 @@ use App\Services\DwhService;
 use Illuminate\Support\Facades\Hash;
 use App\Constants\Constants;
 use App\Jobs\MailSender;
+use App\Jobs\PrescreeningJobs;
 use App\Mail\PermohonanKredit;
+use App\Sp\SpListPipeline;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -81,16 +84,33 @@ class Eform {
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
-        $data->nama_agama = $data->refAgama->nama ?? null;
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+        $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
         $data->status = null; // dummy
         $data->foto_ktp = null; // dummy
         $data->foto_selfi = null; // dummy
+        $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
+            return [
+                'id_perizinan' => $item->id_perizinan,
+                'npwp' => $item->npwp,
+                'nama_usaha' => $item->nama_usaha,
+                'profil_usaha' => $item->profil_usaha,
+                'alamat_usaha' => $item->alamat_usaha,
+                'mulai_operasi' => $item->mulai_operasi,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        }); // dummy
         unset(
             $data->refStatusPerkawinan,
             $data->refCabang,
             $data->refAgama,
+            $data->cif,
+            $data->platform,
+            $data->id_agama,
             $data->refProduk,
             $data->refSubProduk,
             $data->is_pipeline,
@@ -99,6 +119,8 @@ class Eform {
             $data->id_client_api,
             $data->id,
             $data->foto,
+            $data->manyProfilUsaha,
+            $data->refJenisKelamin
         );
         return ['items' => $data];
     }
@@ -112,13 +134,15 @@ class Eform {
     */
     public static function getListClientData($request)
     {
-        //code
+        $filter_tanggal = Helper::filterByDate($request);
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request, $filter_tanggal){
                         $query->where('id_client_api',$request->client->id);
                         if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                         if($request->nik) $query->where('nik',$request->nik);
-                    })->paginate($request->limit);
+                        // if($request->status) $query->where('status',$request->status);
+                        if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
+                    })->orderBy('id','desc')->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [
@@ -193,6 +217,7 @@ class Eform {
     */
     public static function storeClientEform($request, $is_transaction = true)
     {
+
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
@@ -201,8 +226,9 @@ class Eform {
             if(!$request->email) $require_fileds[] = 'email';
             if(!$request->npwp) $require_fileds[] = 'npwp';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
-            if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
+            if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(!$request->profil_usaha) $require_fileds[] = 'profil_usaha';
             if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
@@ -211,7 +237,15 @@ class Eform {
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $dataSend['id_client_api'] = $request->client->id;
             $store = Model::create($dataSend);
+            if($request->profil_usaha) $store->manyProfilUsaha()->createMany(self::setParamsProfilUsaha($dataSend,$store->id));
             if($is_transaction) DB::commit();
+
+            // prescreening
+            $pscrng = (new PrescreeningJobs([
+                'items' => $store,
+                'modul' => 'eform'
+            ]));
+            dispatch($pscrng);
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -229,6 +263,14 @@ class Eform {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamsProfilUsaha($request,$id_eform)
+    {
+         return array_map(function ($item) use ($id_eform){
+            $item['id_eform'] = $id_eform;
+            return $item;
+         },$request['profil_usaha']);
     }
 
     // input data eform web
@@ -320,7 +362,7 @@ class Eform {
             // after commit process
             Storage::put($store['foto_ktp'], base64_decode($image));
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
-            
+
             return ['items' => $store];
 
         } catch (\Throwable $th) {
@@ -437,6 +479,30 @@ class Eform {
          ];
     }
 
+    // update informasi nasabah dari digi data
+    public static function digiData($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->nama = $store->nama ?? $request['nama'];
+            $store->tempat_lahir = $store->tempat_lahir ?? $request['tempat_lahir'];
+            $store->id_jenis_kelamin = $store->id_jenis_kelamin ?? $request['id_jenis_kelamin'];
+            $store->tgl_lahir = $store->tgl_lahir ?? $request['tgl_lahir'];
+            $store->alamat = $store->alamat ?? $request['alamat'];
+            $store->id_status_perkawinan = $store->id_status_perkawinan ?? $request['id_status_perkawinan'];
+            $store->id_propinsi = $store->id_propinsi ?? $request['id_propinsi'];
+            $store->id_kabupaten = $store->id_kabupaten ?? $request['id_kabupaten'];
+            $store->id_kecamatan = $store->id_kecamatan ?? $request['id_kecamatan'];
+            $store->id_kelurahan = $store->id_kelurahan ?? $request['id_kelurahan'];
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
     // list data pipeline eform
     public static function getDataPipeline($request)
     {
@@ -454,4 +520,6 @@ class Eform {
     {
          //code
     }
+
+
 }

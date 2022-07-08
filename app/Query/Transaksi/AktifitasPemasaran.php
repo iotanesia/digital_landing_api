@@ -25,14 +25,26 @@ class AktifitasPemasaran {
         $data = Model::where('id', $id_aktifitas_pemasaran)->first();
 
         if ($data) {
+            $data->jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
+            $data->agama = $data->refMAgama->nama ?? null;
+            $data->status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
+            $data->produk = $data->refMProduk->nama ?? null;
+            $data->sub_produk = $data->refMSubProduk->nama ?? null;
+            $data->cabang = $data->refMCabang->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
-            unset($data->refStsPrescreening); 
-            unset($data->refStsCutoff);  
-            unset($data->refStsPipeline); 
+            unset($data->refMJenisKelamin);
+            unset($data->refMAgama);
+            unset($data->refMStatusPernikahan);
+            unset($data->refMProduk);
+            unset($data->refMSubProduk);
+            unset($data->refMCabang);
+            unset($data->refStsPrescreening);
+            unset($data->refStsCutoff);
+            unset($data->refStsPipeline);
         }
-         
+
         return ['items' => $data];
     }
 
@@ -51,10 +63,20 @@ class AktifitasPemasaran {
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
-                
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'nama' => $item->nama,
+                            'nik' => $item->no_hp,
+                            'nomor_aplikasi' => $item->nomor_aplikasi,
+                            'cif' => $item->cif,
+                            'nik' => $item->nik,
+                            'foto' => $item->foto,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
@@ -106,9 +128,9 @@ class AktifitasPemasaran {
             if($request->is_cutoff) $require_fileds[] = 'is_cutoff';
             if($request->is_pipeline) $require_fileds[] = 'is_pipeline';
             if($request->is_prescreening) $require_fileds[] = 'is_prescreening';
-       
+
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-           
+
             $params = $request->all();
             $params['id_user'] = request()->current_user->id;
 
@@ -124,7 +146,7 @@ class AktifitasPemasaran {
                         $is_prescreening = 3;
                         $is_pipeline = 0;
                         $is_cutoff = 0;
-                    } 
+                    }
                 } else {
                     $is_prescreening = 0;
                 }
@@ -132,7 +154,7 @@ class AktifitasPemasaran {
                 $params['is_prescreening'] = $is_prescreening;
                 $params['is_pipeline'] = $is_pipeline;
                 $params['is_cutoff'] = $is_cutoff;
-            }  
+            }
 
             if ((int) $request->status === 1) {
                 $params['is_prescreening'] = null;
@@ -197,7 +219,7 @@ class AktifitasPemasaran {
                         $is_prescreening = 3;
                         $is_pipeline = 0;
                         $is_cutoff = 0;
-                    } 
+                    }
                 } else {
                     $is_prescreening = 0;
                 }
@@ -205,7 +227,7 @@ class AktifitasPemasaran {
                 $params['is_prescreening'] = $is_prescreening;
                 $params['is_pipeline'] = $is_pipeline;
                 $params['is_cutoff'] = $is_cutoff;
-            }  
+            }
 
             if ((int) $request->status === 1) {
                 $params['is_prescreening'] = null;
@@ -239,7 +261,7 @@ class AktifitasPemasaran {
                 $reqRiwayat['lokasi'] = $request->lokasi;
                 $store = ModelRiwayat::create($reqRiwayat);
             }
-            
+
             if($is_transaction) DB::commit();
             return $update;
         } catch (\Throwable $th) {
@@ -267,7 +289,7 @@ class AktifitasPemasaran {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = ModelRiwayat::where(function ($query) use ($id){
                 $query->where('id_aktifitas_pemasaran', $id);
-                
+
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -283,8 +305,33 @@ class AktifitasPemasaran {
         }
     }
 
+    // update informasi nasabah dari digi data
+    public static function digiData($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->nama = $store->nama ?? $request['nama'];
+            $store->tempat_lahir = $store->tempat_lahir ?? $request['tempat_lahir'];
+            $store->id_jenis_kelamin = $store->id_jenis_kelamin ?? $request['id_jenis_kelamin'];
+            $store->tgl_lahir = $store->tgl_lahir ?? $request['tgl_lahir'];
+            $store->alamat = $store->alamat ?? $request['alamat'];
+            $store->id_status_perkawinan = $store->id_status_perkawinan ?? $request['id_status_perkawinan'];
+            $store->id_propinsi = $store->id_propinsi ?? $request['id_propinsi'];
+            $store->id_kabupaten = $store->id_kabupaten ?? $request['id_kabupaten'];
+            $store->id_kecamatan = $store->id_kecamatan ?? $request['id_kecamatan'];
+            $store->id_kelurahan = $store->id_kelurahan ?? $request['id_kelurahan'];
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    
     public static function getAll($request)
     {
-       
+
     }
 }

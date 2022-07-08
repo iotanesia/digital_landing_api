@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class MJenisKelamin {
 
+    public static function idByNama($nama)
+    {
+        $data = Model::where('nama',$nama)->first();
+        return $data->id ?? null;
+    }
+
     public static function byId($id)
     {
         return ['items' => Model::find($id)];

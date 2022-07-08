@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\MKreditMinPenghasilan;
 use App\Query\Auth\User;
+use App\Query\Master\KreditMinimumPenghasilan;
 
 class SimulasiController extends Controller
 {
@@ -34,10 +35,9 @@ class SimulasiController extends Controller
 
     static function estimationSalary($amount)
     {
-        // $data = MKreditMinPenghasilan::isActive();
-        // $prosentase = $data->prosentase ?? 60;
-        // return round($amount / ($prosentase/100),2);
-        return 23;
+        $data = KreditMinimumPenghasilan::isActive();
+        $prosentase = $data->prosentase ?? 60;
+        return round($amount / ($prosentase/100),2);
     }
 
     public function processWeb(Request $request)

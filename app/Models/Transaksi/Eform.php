@@ -4,6 +4,7 @@ namespace App\Models\Transaksi;
 
 use App\Models\Master\MAgama;
 use App\Models\Master\MCabang;
+use App\Models\Master\MJenisKelamin;
 use App\Models\Master\MKabupaten;
 use App\Models\Master\MKecamatan;
 use App\Models\Master\MKelurahan;
@@ -21,6 +22,7 @@ class Eform extends Model
     protected $table = 'eform';
     protected $connection = 'transaksi';
     public $fillable = [
+        'id',
         'nomor_aplikasi',
         'nik',
         'cif',
@@ -65,6 +67,11 @@ class Eform extends Model
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
     }
 
+    public function refJenisKelamin()
+    {
+        return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin','id');
+    }
+
     public function refAgama()
     {
         return $this->belongsTo(MAgama::class,'id_agama','id');
@@ -88,5 +95,10 @@ class Eform extends Model
     public function refPipeline()
     {
         return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
+    public function manyProfilUsaha()
+    {
+        return $this->hasMany(EformProfilUsaha::class,'id_eform','id');
     }
 }

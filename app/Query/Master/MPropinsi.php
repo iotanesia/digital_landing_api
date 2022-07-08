@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 class MPropinsi {
 
+
+    public static function idByNama($nama)
+    {
+        $data = Model::where('nama',$nama)->first();
+        return $data->id_propinsi ?? null;
+    }
+
     public static function byId($id)
     {
         return ['items' => Model::find($id)];

@@ -20,4 +20,16 @@ class Constants
     const APPROVAL = 3;
     const CETAK_DOKUMEN = 4;
     const DISBURSMENT = 5;
+
+    const MODEL_PRESCREENING = [
+        'eform' => '\App\Query\Transaksi\EformPrescreening',
+        'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',
+        'leads' => '\App\Query\Transaksi\LeadsPrescreening',
+    ];
+
+    const MODEL_DIGIDATA = [
+        'eform' => '\App\Query\Transaksi\Eform',
+        'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaran',
+        'leads' => '\App\Query\Transaksi\Leads',
+    ];
 }
