@@ -28,7 +28,7 @@ class SpListPipeline {
                     'nik' => $pipeline[2],
                     'tipe_calon_nasabah' => $pipeline[3],
                     'nama' => $pipeline[4],
-                    'foto_selfi' => $pipeline[5],
+                    'foto_selfie' => $pipeline[5],
                     'id_parent' => $pipeline[6],
                     'created_at' => $pipeline[7],
                 ];

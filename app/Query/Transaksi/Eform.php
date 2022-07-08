@@ -89,7 +89,7 @@ class Eform {
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
         $data->status = null; // dummy
         $data->foto_ktp = null; // dummy
-        $data->foto_selfi = null; // dummy
+        $data->foto_selfie = null; // dummy
         $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
             return [
                 'id_perizinan' => $item->id_perizinan,
@@ -383,7 +383,7 @@ class Eform {
         $ext->no_hp = $data['items']->no_hp;
         $ext->jangka_waktu = $data['items']->jangka_waktu;
         $ext->foto_ktp = null;
-        $ext->foto_selfi = null;
+        $ext->foto_selfie = null;
         if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
         $ext->step = [
             [
