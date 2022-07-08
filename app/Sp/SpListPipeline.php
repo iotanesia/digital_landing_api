@@ -12,8 +12,10 @@ class SpListPipeline {
 
     public static function getDataCurrent($request)
     {
+        // dd($request->current_user->id);
+        $request->current_user->id = 48;
         $data = DB::connection('transaksi')
-        ->select(DB::raw('select sp_list_pipeline(48)')); // dikembangin lagi parameternya
+        ->select(DB::raw('select sp_list_pipeline('.$request->current_user->id.')')); // dikembangin lagi parameternya
         $page = $request->page ?? 1;
         $paginate = $request->limit ?? 15;
         $offSet = ($page * $paginate) - $paginate;

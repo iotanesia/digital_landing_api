@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Api\LeadsController;
+use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BannerController;
@@ -109,6 +110,11 @@ Route::prefix('v1')
             Route::put('/{id}',[UserControler::class,'update']);
             Route::delete('/{id}',[UserControler::class,'delete']);
             Route::get('/detail',[UserControler::class,'detail']);
+        });
+        // users
+        Route::prefix('pipeline')->group(function () {
+            Route::get('/',[ApiPipelineController::class,'index']);
+            Route::get('/detail',[ApiPipelineController::class,'show']);
         });
         // master
         Route::prefix('sts')->group(function () {
