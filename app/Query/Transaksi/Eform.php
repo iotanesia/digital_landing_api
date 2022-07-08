@@ -278,17 +278,26 @@ class Eform {
             if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->profil_usaha) $require_fileds[] = 'profil_usaha';
+            if(!$request->foto_ktp) $require_fileds[] = 'foto_ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'foto_selfie';
             if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
+
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $dataSend['id_client_api'] = $request->client->id;
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
             if($request->profil_usaha) $store->manyProfilUsaha()->createMany(self::setParamsProfilUsaha($dataSend,$store->id));
             if($is_transaction) DB::commit();
-
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
@@ -355,10 +364,10 @@ class Eform {
             $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
             $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
+            if($is_transaction) DB::commit();
             // after commit process
             Storage::put($dataSend['foto_ktp'], base64_decode($image));
             Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
-            if($is_transaction) DB::commit();
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
