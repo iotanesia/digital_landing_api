@@ -44,7 +44,7 @@ class Leads {
         }
     }
 
-    
+
     public static function store($request,$is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
@@ -89,6 +89,31 @@ class Leads {
         }
     }
 
+    // update informasi nasabah dari digi data
+    public static function digiData($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->nama = $store->nama ?? $request['nama'];
+            $store->tempat_lahir = $store->tempat_lahir ?? $request['tempat_lahir'];
+            $store->id_jenis_kelamin = $store->id_jenis_kelamin ?? $request['id_jenis_kelamin'];
+            $store->tgl_lahir = $store->tgl_lahir ?? $request['tgl_lahir'];
+            $store->alamat = $store->alamat ?? $request['alamat'];
+            $store->id_status_perkawinan = $store->id_status_perkawinan ?? $request['id_status_perkawinan'];
+            $store->id_propinsi = $store->id_propinsi ?? $request['id_propinsi'];
+            $store->id_kabupaten = $store->id_kabupaten ?? $request['id_kabupaten'];
+            $store->id_kecamatan = $store->id_kecamatan ?? $request['id_kecamatan'];
+            $store->id_kelurahan = $store->id_kelurahan ?? $request['id_kelurahan'];
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    
     // list data pipeline eform
     public static function getDataPipeline($request)
     {
