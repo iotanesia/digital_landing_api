@@ -442,7 +442,7 @@ class Eform {
 
     public static function tracking($request)
     {
-        $data = self::byNomorAplikasi($request);
+        $data = self::byNomorAplikasiNik($request);
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi;
         $ext->nik = $data['items']->nik;
