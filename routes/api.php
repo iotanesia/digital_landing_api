@@ -97,8 +97,8 @@ Route::prefix('v1')
 
         Route::prefix('leads')->group(function () {
             /* get data  */ Route::get('/',[LeadsController::class,'index']);
-            /* info prescreening  */ Route::get('/info-prescreening',[LeadsController::class,'prescreening']);
-            /* histroy aktifitas  */ Route::get('/history-aktifitas',[LeadsController::class,'history']);
+            /* info prescreening  */ Route::get('/info-prescreening/{id}',[LeadsController::class,'prescreening']);
+            /* histroy aktifitas  */ Route::get('/history-aktifitas/{id}',[LeadsController::class,'history']);
             /* detail data  */ Route::get('/{id}',[LeadsController::class,'show']);
             /* update data rm  */ Route::put('/{id}',[LeadsController::class,'update']);
         });
