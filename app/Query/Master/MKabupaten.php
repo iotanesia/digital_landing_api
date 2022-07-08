@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 class MKabupaten {
 
+    public static function idByNama($nama)
+    {
+        $data = Model::where('nama',$nama)->first();
+        return $data->id_kabupaten ?? null;
+    }
+
     public static function byId($id)
     {
         return ['items' => Model::where('id_kabupaten', $id)->first()];

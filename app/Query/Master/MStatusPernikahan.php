@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class MStatusPernikahan {
 
+    public static function idByNama($nama)
+    {
+        $data = Model::where('nama',$nama)->first();
+        return $data->id ?? null;
+    }
+
     public static function byId($id)
     {
         return ['items' => Model::where('id', $id)->first()];

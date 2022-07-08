@@ -4,6 +4,7 @@ namespace App\Models\Transaksi;
 
 use App\Models\Master\MAgama;
 use App\Models\Master\MCabang;
+use App\Models\Master\MJenisKelamin;
 use App\Models\Master\MKabupaten;
 use App\Models\Master\MKecamatan;
 use App\Models\Master\MKelurahan;
@@ -64,6 +65,11 @@ class Eform extends Model
     public function refCabang()
     {
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
+    }
+
+    public function refJenisKelamin()
+    {
+        return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin','id');
     }
 
     public function refAgama()

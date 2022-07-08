@@ -23,4 +23,8 @@ class Constants
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
     ];
+
+    const MODEL_DIGIDATA = [
+        'eform' => '\App\Query\Transaksi\Eform',
+    ];
 }

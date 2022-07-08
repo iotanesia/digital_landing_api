@@ -13,6 +13,7 @@ use App\Mail\PermohonanKredit;
 use App\Sp\SpListPipeline;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -83,9 +84,9 @@ class Eform {
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
-        $data->nama_agama = $data->refAgama->nama ?? null;
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+        $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
         $data->status = null; // dummy
         $data->foto_ktp = null; // dummy
         $data->foto_selfi = null; // dummy
@@ -107,6 +108,9 @@ class Eform {
             $data->refStatusPerkawinan,
             $data->refCabang,
             $data->refAgama,
+            $data->cif,
+            $data->platform,
+            $data->id_agama,
             $data->refProduk,
             $data->refSubProduk,
             $data->is_pipeline,
@@ -115,7 +119,8 @@ class Eform {
             $data->id_client_api,
             $data->id,
             $data->foto,
-            $data->manyProfilUsaha
+            $data->manyProfilUsaha,
+            $data->refJenisKelamin
         );
         return ['items' => $data];
     }
@@ -129,13 +134,15 @@ class Eform {
     */
     public static function getListClientData($request)
     {
-        //code
+        $filter_tanggal = Helper::filterByDate($request);
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request, $filter_tanggal){
                         $query->where('id_client_api',$request->client->id);
                         if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                         if($request->nik) $query->where('nik',$request->nik);
-                    })->paginate($request->limit);
+                        // if($request->status) $query->where('status',$request->status);
+                        if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
+                    })->orderBy('id','desc')->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [
@@ -219,7 +226,7 @@ class Eform {
             if(!$request->email) $require_fileds[] = 'email';
             if(!$request->npwp) $require_fileds[] = 'npwp';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
-            if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
+            if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->profil_usaha) $require_fileds[] = 'profil_usaha';
             if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
@@ -245,8 +252,8 @@ class Eform {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            // $mail_send = (new MailSender($mail_data));
-            // dispatch($mail_send);
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,
@@ -353,7 +360,7 @@ class Eform {
             // after commit process
             Storage::put($store['foto_ktp'], base64_decode($image));
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
-            
+
             return ['items' => $store];
 
         } catch (\Throwable $th) {
@@ -468,6 +475,30 @@ class Eform {
             'step_verifikasi' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,
          ];
+    }
+
+    // update informasi nasabah dari digi data
+    public static function digiData($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->nama = $store->nama ?? $request['nama'];
+            $store->tempat_lahir = $store->tempat_lahir ?? $request['tempat_lahir'];
+            $store->id_jenis_kelamin = $store->id_jenis_kelamin ?? $request['id_jenis_kelamin'];
+            $store->tgl_lahir = $store->tgl_lahir ?? $request['tgl_lahir'];
+            $store->alamat = $store->alamat ?? $request['alamat'];
+            $store->id_status_perkawinan = $store->id_status_perkawinan ?? $request['id_status_perkawinan'];
+            $store->id_propinsi = $store->id_propinsi ?? $request['id_propinsi'];
+            $store->id_kabupaten = $store->id_kabupaten ?? $request['id_kabupaten'];
+            $store->id_kecamatan = $store->id_kecamatan ?? $request['id_kecamatan'];
+            $store->id_kelurahan = $store->id_kelurahan ?? $request['id_kelurahan'];
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
     }
 
     // list data pipeline eform
