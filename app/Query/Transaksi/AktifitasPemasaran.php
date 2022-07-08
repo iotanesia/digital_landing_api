@@ -34,15 +34,20 @@ class AktifitasPemasaran {
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
-            unset($data->refMJenisKelamin);
-            unset($data->refMAgama);
-            unset($data->refMStatusPernikahan);
-            unset($data->refMProduk);
-            unset($data->refMSubProduk);
-            unset($data->refMCabang);
-            unset($data->refStsPrescreening);
-            unset($data->refStsCutoff);
-            unset($data->refStsPipeline);
+            $data->nama_status = $data->refStatus->nama ?? null;
+            unset(
+                $data->refMJenisKelamin,
+                $data->refStatus,
+                $data->refMAgama,
+                $data->refMStatusPernikahan,
+                $data->refMProduk,
+                $data->refMSubProduk,
+                $data->refMCabang,
+                $data->refStsPrescreening,
+                $data->refStsCutoff,
+                $data->refStsPipeline,
+            );
+            
         }
 
         return ['items' => $data];
@@ -329,7 +334,7 @@ class AktifitasPemasaran {
         }
     }
 
-    
+
     public static function getAll($request)
     {
 

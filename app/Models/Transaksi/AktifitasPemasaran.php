@@ -14,6 +14,7 @@ use App\Models\Master\MStatusPernikahan;
 use App\Models\Master\MProduk;
 use App\Models\Master\MSubProduk;
 use App\Models\Master\MCabang;
+use App\Models\Status\StsAktifitasPemasaran;
 
 class AktifitasPemasaran extends Model
 {
@@ -100,6 +101,11 @@ class AktifitasPemasaran extends Model
     public function refMCabang()
     {
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
+    }
+
+    public function refStatus()
+    {
+        return $this->belongsTo(StsAktifitasPemasaran::class,'status','id');
     }
 
 
