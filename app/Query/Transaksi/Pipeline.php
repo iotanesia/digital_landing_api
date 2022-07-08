@@ -2,6 +2,7 @@
 
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\Pipeline as Model;
+use App\View\Transaksi\VListPipeline as View;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Query\Status\StsTracking;
@@ -28,20 +29,19 @@ class Pipeline {
     public static function getDataCurrent($request)
     {
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = View::where(function ($query) use ($request){
                 $query->where('id_user',$request->current_user->id);
+                // $query->where('id_user',48);
                       if($request->nik) $query->where('nik',$request->nik);
             })->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
                 return [
                     'id' => $item->id,
-                    'nama' => $item->refEfrom()->nama ? $item->refEfrom()->nama : ($item->refAktifitasPemasaran()->nama),
                     'nik' => $item->nik,
-                    'nama_produk' => $item->refProduk->nama ?? null,
-                    'nama_sub_produk' => $item->refSubProduk->nama ?? null,
-                    'created_at' => $item->created_at,
-                    'foto' => $item->foto
+                    'nama' => $item->nama,
+                    'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
+                    'foto_selfie' => $item->foto_selfie
                 ];
             }),
             'attributes' => [
@@ -74,36 +74,4 @@ class Pipeline {
             throw $th;
         }
     }
-
-    // list data pipeline eform
-    public static function getDataPipeline($request)
-    {
-        //code
-    }
-
-    // list informasi prescreening
-    public static function getInfoPrescreening($request)
-    {
-         //code
-    }
-
-    // list history aktifitas
-    public static function getHistoryAktifitas($request)
-    {
-         //code
-    }
-
-    public static function checkNasabah($nik) {
-        try {
-            $data = Model::where('nik', $nik)->first();
-            $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_NOL,'is_prescreening'=>Constants::IS_NOL];
-            if($data && $data->tracking != Constants::DISBURSMENT) $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_ACTIVE,'is_prescreening'=>Constants::CUT_OFF];
-
-            return $result;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
-
-   
 }

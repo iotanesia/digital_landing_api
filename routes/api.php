@@ -118,6 +118,11 @@ Route::prefix('v1')
             Route::delete('/{id}',[UserControler::class,'delete']);
             Route::get('/detail',[UserControler::class,'detail']);
         });
+        // users
+        Route::prefix('pipeline')->group(function () {
+            Route::get('/',[ApiPipelineController::class,'index']);
+            Route::get('/detail',[ApiPipelineController::class,'show']);
+        });
         // master
         Route::prefix('sts')->group(function () {
             Route::prefix('aktifitas-pemasaran')->group(function () {
