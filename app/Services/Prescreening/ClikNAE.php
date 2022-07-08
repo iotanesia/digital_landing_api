@@ -10,6 +10,7 @@ class ClikNAE {
 
     public static function prescreening($params)
     {
+        dd('ss');
         $result = null;
         try {
             $data = $params['data'];
