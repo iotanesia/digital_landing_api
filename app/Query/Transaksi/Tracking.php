@@ -16,6 +16,7 @@ class Tracking {
     {
         $data = ['items' => DB::connection('transaksi')->table('v_list_pipeline')
         ->where('nomor_aplikasi',$request->nomor_aplikasi)
+        ->where('nik',$request->nik)
         ->first()];
         if(!$data) throw new \Exception("Data tidak ditemukan", 400);
 
