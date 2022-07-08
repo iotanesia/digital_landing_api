@@ -14,10 +14,10 @@ use App\Models\Master\MStatusPernikahan;
 use App\Models\Master\MProduk;
 use App\Models\Master\MSubProduk;
 use App\Models\Master\MCabang;
-
+use App\Models\Transaksi\Pipeline;
 class Leads extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $table = 'leads';
     protected $connection = 'transaksi';
 
@@ -99,6 +99,11 @@ class Leads extends Model
     public function refMCabang()
     {
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
+    }
+
+    public function refPipeline()
+    {
+        return $this->belongsTo(Pipeline::class,'id_cabang','id_cabang');
     }
 
 
