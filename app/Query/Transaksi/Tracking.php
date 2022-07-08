@@ -78,7 +78,7 @@ class Tracking {
         ];
 
         return [
-            'items' => [ $ext ]
+            'items' => $ext
         ];
     }
 }

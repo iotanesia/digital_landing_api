@@ -14,7 +14,7 @@ class Kernel {
             if(!$params['path']) throw new \Exception("path fungsi belum dibuat ".$params['path'], 500);
             $jenis = $params['jenis'];
             if($jenis == 'service'){
-                $proses = $params['path']::prescreening($params); // fungsi service \App\Services\Prescreening\DhnBI
+                $proses = $params['path']::prescreening($params); // fungsi service \App\Services\Prescreening\DhnBI::prescreening($param)
                 if($proses['poin']) $keterangan = 'Success';
                 else $keterangan = 'Failed';
                 // save database

@@ -431,7 +431,7 @@ class Eform {
         ];
 
         return [
-            'items' => [ $ext ]
+            'items' => $ext 
         ];
     }
 
