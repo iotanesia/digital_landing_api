@@ -8,6 +8,7 @@ use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Jobs\EformPrescreeningJobs;
 use App\Jobs\MailSender;
+use App\Jobs\PrescreeningJobs;
 use App\Mail\EFormMail;
 use App\Mail\PermohonanKredit;
 use App\Query\Master\MStatusPernikahan;
@@ -170,6 +171,13 @@ class AktifitasPemasaran {
             $params['foto'] = (string) Str::uuid().'.png';
             $store = Model::create($params);
             if($is_transaction) DB::commit();
+            
+            if($request->status == 2) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $store,
+                    'modul' => 'aktifitas_pemasaran'
+                ]));
+            }
             // after commit process
             Storage::put($params['foto'], base64_decode($image));
             $mail_data = [
