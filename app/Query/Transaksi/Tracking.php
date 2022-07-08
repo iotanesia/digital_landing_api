@@ -29,6 +29,11 @@ class Tracking {
         $ext->email = $data['items']->email ?? null;
         $ext->no_hp = $data['items']->no_hp ?? null;
         $ext->jangka_waktu = $data['items']->jangka_waktu ?? null;
+        $ext->nama_produk = $data['items']->refProduk->nama ?? null;
+        $ext->id_produk = $data['items']->id_produk ?? null;
+        $ext->nama_produk = $data['items']->refProduk->nama ?? null;
+        $ext->id_sub_produk = $data['items']->id_sub_produk ?? null;
+        $ext->nama_sub_produk = $data['items']->refSubProduk->nama ?? null;
         $ext->foto_ktp = null; // masih dummy
         $ext->foto_selfie = null; // masih dummy
 
