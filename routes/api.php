@@ -73,7 +73,7 @@ Route::prefix('v1')
            /* get data  */ Route::get('/',[AktifitasPemasaranController::class,'index']);
            /* input data canvasing */ Route::post('/',[AktifitasPemasaranController::class,'store']);
            /* info prescreening  */ Route::get('/info-prescreening',[AktifitasPemasaranController::class,'prescreening']);
-           /* histroy aktifitas  */ Route::get('/history-aktifitas',[AktifitasPemasaranController::class,'history']);
+           /* histroy aktifitas  */ Route::get('/history-aktifitas/{id}',[AktifitasPemasaranController::class,'history']);
            /* detail data  */ Route::get('/{id}',[AktifitasPemasaranController::class,'show']);
            /* update data rm  */ Route::put('/{id}',[AktifitasPemasaranController::class,'update']);
         });
