@@ -4,28 +4,36 @@ namespace App\Services\Prescreening;
 
 use App\Models\Master\MKabupaten;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 class ClikNAE {
 
-    public function prescreening($params)
+    public static function prescreening($params)
     {
+        $request = [
+            'nik' => $params['no_ktp'],
+        ];
         try {
-
-
-            // return [
-            //     'poin' => $point,
-            //     'message' => $result['message'], // diisi response message
-            //     'request_body' => $request,
-            //     'response_data' => $result
-            // ];
+            $data = DB::connection('skema')
+            ->table('clik_mapping')
+            ->where($request)
+            ->first();
+            if($data) $point = true;
+            else $point = false;
+            return [
+                'poin' => $data->status ?? false,
+                'message' => $data->nik ?? null, // diisi response message
+                'request_body' => $request,
+                'response_data' => $data->response ?? null
+            ];
         } catch (\Throwable $th) {
-            // return [
-            //     'poin' => null,
-            //     'message' => $th->getMessage(), // diisi response message
-            //     'request_body' => $request,
-            //     'response_data' => $th
-            // ];
+            return [
+                'poin' => null,
+                'message' => $th->getMessage(), // diisi response message
+                'request_body' => $request,
+                'response_data' => $th
+            ];
         }
     }
 
