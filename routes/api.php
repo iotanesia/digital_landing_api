@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Api\LeadsController;
+use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
+use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BannerController;
@@ -68,6 +70,7 @@ Route::prefix('v1')
     });
 
     Route::group(['middleware' => 'access'],function () {
+
         // reoute canvasing
         Route::prefix('aktifitas-pemasaran')->group(function () {
            /* get data  */ Route::get('/',[AktifitasPemasaranController::class,'index']);
@@ -102,6 +105,11 @@ Route::prefix('v1')
             /* detail data  */ Route::get('/{id}',[LeadsController::class,'show']);
             /* update data rm  */ Route::put('/{id}',[LeadsController::class,'update']);
         });
+
+        Route::prefix('tracking')->group(function () {
+            Route::post('/',[ApiTrackingController::class,'index']);
+        });
+
         // users
         Route::prefix('user')->group(function () {
             Route::get('/',[UserControler::class,'getAll']);

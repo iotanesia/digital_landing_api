@@ -387,6 +387,7 @@ class Eform {
         if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
         $ext->step = [
             [
+                'kode' => '01',
                 'label' => 'Prescreening',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'lolos',
@@ -394,6 +395,7 @@ class Eform {
                 'step' => null
             ],
             [
+                'kode' => '02',
                 'label' => 'Analisa Kredit',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'Sedang Diproses',
@@ -401,6 +403,7 @@ class Eform {
                 'step' => 'Verifikasi Data'
             ],
             [
+                'kode' => '03',
                 'label' => 'Approval',
                 'tanggal' => null,
                 'status' => null,
@@ -408,6 +411,7 @@ class Eform {
                 'step' => null
             ],
             [
+                'kode' => '04',
                 'label' => 'Cetak Dokumen',
                 'tanggal' => null,
                 'status' => null,
@@ -416,6 +420,7 @@ class Eform {
 
             ],
             [
+                'kode' => '04',
                 'label' => 'Disbursement',
                 'tanggal' => null,
                 'status' => null,
