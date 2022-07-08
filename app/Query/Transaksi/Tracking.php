@@ -24,6 +24,7 @@ class Tracking {
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi ?? null;
         $ext->nik = $data['items']->nik;
+        $ext->nama = $data['items']->nama;
         $ext->plafond = $data['items']->plafond ?? null;
         $ext->npwp = $data['items']->npwp ?? null;
         $ext->email = $data['items']->email ?? null;
