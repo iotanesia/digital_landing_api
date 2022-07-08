@@ -51,6 +51,9 @@ class Leads {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
+                $query->where('is_pipeline', Constants::IS_NOL)
+                      ->where('is_cutoff', Constants::IS_NOL)
+                      ->where('is_prescreening', Constants::IS_ACTIVE);
             })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){

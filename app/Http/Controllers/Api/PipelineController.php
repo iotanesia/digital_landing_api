@@ -104,13 +104,7 @@ class PipelineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            return Helper::resultResponse(
-                Pipeline::updateDataRm($request)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
+       
     }
 
     /**
