@@ -169,6 +169,7 @@ class AktifitasPemasaran {
 
             $image = $request->foto;  // your base64 encoded
             $params['foto'] = (string) Str::uuid().'.png';
+            $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
             if($is_transaction) DB::commit();
             
