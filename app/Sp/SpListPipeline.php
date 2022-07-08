@@ -12,14 +12,13 @@ class SpListPipeline {
 
     public static function getDataCurrent($request)
     {
-        $infoList = DB::connection('transaksi')
+        $data = DB::connection('transaksi')
         ->select(DB::raw('select sp_list_pipeline(48)')); // dikembangin lagi parameternya
         $page = $request->page ?? 1;
-        $paginate = 10;
-
+        $paginate = $request->limit ?? 15;
         $offSet = ($page * $paginate) - $paginate;
-        $itemsForCurrentPage = array_slice($infoList, $offSet, $paginate, true);
-        $data = new \Illuminate\Pagination\LengthAwarePaginator($itemsForCurrentPage, count($infoList), $paginate, $page);
+        $itemsForCurrentPage = array_slice($data, $offSet, $paginate, true);
+        $data = new \Illuminate\Pagination\LengthAwarePaginator($itemsForCurrentPage, count($data), $paginate, $page);
         return [
             'items' => $data->getCollection()->transform(function ($item){
                 $pipeline = explode(',',$item->sp_list_pipeline);
