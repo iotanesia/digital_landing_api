@@ -8,7 +8,9 @@ use App\Services\DwhService;
 use Illuminate\Support\Facades\Hash;
 use App\Constants\Constants;
 use App\Jobs\MailSender;
+use App\Jobs\PrescreeningJobs;
 use App\Mail\PermohonanKredit;
+use App\Sp\SpListPipeline;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -87,6 +89,20 @@ class Eform {
         $data->status = null; // dummy
         $data->foto_ktp = null; // dummy
         $data->foto_selfi = null; // dummy
+        $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
+            return [
+                'id_perizinan' => $item->id_perizinan,
+                'npwp' => $item->npwp,
+                'nama_usaha' => $item->nama_usaha,
+                'profil_usaha' => $item->profil_usaha,
+                'alamat_usaha' => $item->alamat_usaha,
+                'mulai_operasi' => $item->mulai_operasi,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        }); // dummy
         unset(
             $data->refStatusPerkawinan,
             $data->refCabang,
@@ -99,6 +115,7 @@ class Eform {
             $data->id_client_api,
             $data->id,
             $data->foto,
+            $data->manyProfilUsaha
         );
         return ['items' => $data];
     }
@@ -193,6 +210,7 @@ class Eform {
     */
     public static function storeClientEform($request, $is_transaction = true)
     {
+
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
@@ -203,6 +221,7 @@ class Eform {
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(!$request->profil_usaha) $require_fileds[] = 'profil_usaha';
             if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
@@ -211,15 +230,23 @@ class Eform {
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $dataSend['id_client_api'] = $request->client->id;
             $store = Model::create($dataSend);
+            if($request->profil_usaha) $store->manyProfilUsaha()->createMany(self::setParamsProfilUsaha($dataSend,$store->id));
             if($is_transaction) DB::commit();
+
+            // prescreening
+            $pscrng = (new PrescreeningJobs([
+                'items' => $store,
+                'modul' => 'eform'
+            ]));
+            dispatch($pscrng);
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            $mail_send = (new MailSender($mail_data));
-            dispatch($mail_send);
+            // $mail_send = (new MailSender($mail_data));
+            // dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,
@@ -229,6 +256,14 @@ class Eform {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamsProfilUsaha($request,$id_eform)
+    {
+         return array_map(function ($item) use ($id_eform){
+            $item['id_eform'] = $id_eform;
+            return $item;
+         },$request['profil_usaha']);
     }
 
     // input data eform web
@@ -452,4 +487,6 @@ class Eform {
     {
          //code
     }
+
+
 }

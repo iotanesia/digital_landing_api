@@ -21,6 +21,7 @@ class Eform extends Model
     protected $table = 'eform';
     protected $connection = 'transaksi';
     public $fillable = [
+        'id',
         'nomor_aplikasi',
         'nik',
         'cif',
@@ -88,5 +89,10 @@ class Eform extends Model
     public function refPipeline()
     {
         return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
+    public function manyProfilUsaha()
+    {
+        return $this->hasMany(EformProfilUsaha::class,'id_eform','id');
     }
 }
