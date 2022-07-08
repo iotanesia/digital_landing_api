@@ -37,8 +37,7 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                SpListPipeline::getDataCurrent($request)
-                // Eform::getListClientData($request)
+                Eform::getListClientData($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
