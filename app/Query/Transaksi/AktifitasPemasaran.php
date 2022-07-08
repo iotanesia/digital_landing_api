@@ -107,7 +107,6 @@ class AktifitasPemasaran {
         try {
 
             $require_fileds = [];
-            if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->cif) $require_fileds[] = 'cif';
             if(!$request->nama) $require_fileds[] = 'nama';
@@ -117,9 +116,9 @@ class AktifitasPemasaran {
             if(!$request->tgl_lahir) $require_fileds[] = 'tgl_lahir';
             if(!$request->npwp) $require_fileds[] = 'npwp';
             if(!$request->alamat) $require_fileds[] = 'alamat';
-            if(!$request->id_jenis_kelamin) $require_fileds[] = 'id_jenis_kelamin';
-            if(!$request->id_agama) $require_fileds[] = 'id_agama';
-            if(!$request->id_status_perkawinan) $require_fileds[] = 'id_status_perkawinan';
+            if(!$request->id_jenis_kelamin) $require_fileds[] = 'jenis_kelamin';
+            if(!$request->id_agama) $require_fileds[] = 'agama';
+            if(!$request->id_status_perkawinan) $require_fileds[] = 'status_perkawinan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->nama_pasangan) $require_fileds[] = 'nama_pasangan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tempat_lahir_pasangan) $require_fileds[] = 'tempat_lahir_pasangan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tgl_lahir_pasangan) $require_fileds[] = 'tgl_lahir_pasangan';
