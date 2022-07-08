@@ -8,6 +8,7 @@ class Constants
     const IS_ACTIVE = 1;
     const IS_INACTIVE = 1;
     const IS_NOL = 0;
+    const CUT_OFF = 3;
     //step verifikasi
     const PROSES_VERIFIKASI = 0;
     const VALIDASI_DATA = 1;

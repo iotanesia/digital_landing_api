@@ -252,9 +252,10 @@ class Eform {
             if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
             if(!$request->foto_selfie) $require_fileds[] = 'Foto  selfie Ktp';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-            $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
-            $dataSend['is_pipeline'] = Constants::IS_NOL;
-            $dataSend['is_cutoff'] = Constants::IS_NOL;
+            $checkipeline = Pipeline::checkNasabah($request->nik);
+            $store['is_prescreening'] = $checkipeline['is_prescreening'];
+            $store['is_pipeline'] = $checkipeline['is_pipeline'];
+            $store['is_cutoff'] = $checkipeline['is_cutoff'];
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
@@ -293,10 +294,11 @@ class Eform {
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $store['id_cabang'] = $request->current_user->id_cabang;
             $store['id_produk'] = $request->current_user->id_produk;
-            $store['is_prescreening'] = Constants::IS_ACTIVE;
             $checkipeline = Pipeline::checkNasabah($request->nik);
+            $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
             $store['is_cutoff'] = $checkipeline['is_cutoff'];
+            $store['id_user'] = $request->current_user->id;
             $store['platform'] = 'MOBILE';
             $store['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
@@ -304,7 +306,7 @@ class Eform {
             $store['foto_ktp'] =(string) Str::uuid().'.png';
             $store['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($store);
-            if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
+            // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             $mail_data = [
                 "fullname" => $store->nama,
