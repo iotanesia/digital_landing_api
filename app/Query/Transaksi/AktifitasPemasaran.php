@@ -67,6 +67,7 @@ class AktifitasPemasaran {
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
+                $query->where('is_pipeline', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
             })->paginate($request->limit);
                 return [

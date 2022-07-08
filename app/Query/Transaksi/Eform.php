@@ -310,6 +310,12 @@ class Eform {
             Storage::put($dataSend['foto_ktp'], base64_decode($image));
             Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             if($is_transaction) DB::commit();
+            // prescreening
+            $pscrng = (new PrescreeningJobs([
+                'items' => $store,
+                'modul' => 'eform'
+            ]));
+            dispatch($pscrng);
             return ['items' => $store];
 
         } catch (\Throwable $th) {
@@ -350,6 +356,12 @@ class Eform {
             $store = Model::create($store);
             // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            // prescreening
+            $pscrng = (new PrescreeningJobs([
+                'items' => $store,
+                'modul' => 'eform'
+            ]));
+            dispatch($pscrng);
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
