@@ -68,8 +68,15 @@ class Pipeline {
         }
     }
 
-    // update data rm
-     /*
-        - notif email
-    */
+    public static function checkNasabah($nik) {
+        try {
+            $data = Model::where('nik', $nik)->first();
+            $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_NOL,'is_prescreening'=>Constants::IS_NOL];
+            if($data && $data->tracking != Constants::DISBURSMENT) $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_ACTIVE,'is_prescreening'=>Constants::CUT_OFF];
+
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
