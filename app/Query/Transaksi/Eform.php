@@ -316,7 +316,7 @@ class Eform {
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
-            $dataSend = $request->all();
+            $store = $request->all();
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->email) $require_fileds[] = 'email';
@@ -326,24 +326,34 @@ class Eform {
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-            $dataSend['id_cabang'] = $request->current_user->id_cabang;
-            $dataSend['id_produk'] = $request->current_user->id_produk;
-            $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
+            $store['id_cabang'] = $request->current_user->id_cabang;
+            $store['id_produk'] = $request->current_user->id_produk;
+            $store['is_prescreening'] = Constants::IS_ACTIVE;
             $checkipeline = Pipeline::checkNasabah($request->nik);
-            $dataSend['is_pipeline'] = $checkipeline['is_pipeline'];
-            $dataSend['is_cutoff'] = $checkipeline['is_cutoff'];
-            $dataSend['platform'] = 'MOBILE';
-            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $store['is_pipeline'] = $checkipeline['is_pipeline'];
+            $store['is_cutoff'] = $checkipeline['is_cutoff'];
+            $store['platform'] = 'MOBILE';
+            $store['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
             $image_selfie = $request->foto_selfie;  // your base64 encoded
-            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
-            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
-            $store = Model::create($dataSend);
+            $store['foto_ktp'] =(string) Str::uuid().'.png';
+            $store['foto_selfie'] =(string) Str::uuid().'.png';
+            $store = Model::create($store);
             if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
+
             // after commit process
-            Storage::put($dataSend['foto_ktp'], base64_decode($image));
-            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
+            Storage::put($store['foto_ktp'], base64_decode($image));
+            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
+            
             return ['items' => $store];
 
         } catch (\Throwable $th) {
