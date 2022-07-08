@@ -50,6 +50,8 @@ class AktifitasPemasaran extends Model
         'is_pipeline',
         'is_cutoff',
         'is_prescreening',
+        'foto_ktp',
+        'foto_selfie',
         'created_at',
         'created_by',
         'updated_at',
