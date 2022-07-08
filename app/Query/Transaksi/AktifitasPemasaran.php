@@ -128,13 +128,13 @@ class AktifitasPemasaran {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
-            if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
             if(!$request->status) $require_fileds[] = 'status';
 
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
             $params['id_user'] = request()->current_user->id;
+            $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
                 $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
