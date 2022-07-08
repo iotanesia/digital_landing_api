@@ -80,7 +80,8 @@ class AktifitasPemasaran {
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'cif' => $item->cif,
                             'nik' => $item->nik,
-                            'foto' => $item->foto,
+                            'foto_ktp' => $item->foto_ktp,
+                            'foto_selfie' => $item->foto_selfie,
                             'created_at' => $item->created_at,
                         ];
                     }),
@@ -165,7 +166,8 @@ class AktifitasPemasaran {
             }
 
             $image = $request->foto;  // your base64 encoded
-            $params['foto'] = (string) Str::uuid().'.png';
+            $params['foto_ktp'] = (string) Str::uuid().'.png';
+            $params['foto_selfie'] = (string) Str::uuid().'.png';
             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
             if($is_transaction) DB::commit();
@@ -177,7 +179,8 @@ class AktifitasPemasaran {
                 ]));
             }
             // after commit process
-            Storage::put($params['foto'], base64_decode($image));
+            Storage::put($params['foto_ktp'], base64_decode($image));
+            Storage::put($params['foto_selfie'], base64_decode($image));
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -193,7 +196,6 @@ class AktifitasPemasaran {
                 $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
                 $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
                 $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
-                $reqRiwayat['foto'] = $store->foto;
                 $reqRiwayat['lokasi'] = $request->lokasi;
                 $store = ModelRiwayat::create($reqRiwayat);
             }

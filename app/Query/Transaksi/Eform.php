@@ -125,6 +125,55 @@ class Eform {
         return ['items' => $data];
     }
 
+    public static function byNomorAplikasiNik($request)
+    {
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)
+        ->where('nik',$request->nik)
+        ->first();
+        if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
+        $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
+        $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
+        $data->nama_produk = $data->refProduk->nama ?? null;
+        $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+        $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+        $data->status = null; // dummy
+        $data->foto_ktp = null; // dummy
+        $data->foto_selfie = null; // dummy
+        $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
+            return [
+                'id_perizinan' => $item->id_perizinan,
+                'npwp' => $item->npwp,
+                'nama_usaha' => $item->nama_usaha,
+                'profil_usaha' => $item->profil_usaha,
+                'alamat_usaha' => $item->alamat_usaha,
+                'mulai_operasi' => $item->mulai_operasi,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        }); // dummy
+        unset(
+            $data->refStatusPerkawinan,
+            $data->refCabang,
+            $data->refAgama,
+            $data->cif,
+            $data->platform,
+            $data->id_agama,
+            $data->refProduk,
+            $data->refSubProduk,
+            $data->is_pipeline,
+            $data->is_cutoff,
+            $data->is_prescreening,
+            $data->id_client_api,
+            $data->id,
+            $data->foto,
+            $data->manyProfilUsaha,
+            $data->refJenisKelamin
+        );
+        return ['items' => $data];
+    }
+
        // list data mobile form
     /*
         - current user id cabang = id_cabang

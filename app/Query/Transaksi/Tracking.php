@@ -19,7 +19,7 @@ class Tracking {
         if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
         if(!$request->nik) $require_fileds[] = 'nik';
         if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-        $data = Eform::byNomorAplikasi($request);
+        $data = Eform::byNomorAplikasiNik($request);
         if(!$data['items']) throw new \Exception("Data tidak ditemukan", 400);
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi ?? null;
