@@ -133,7 +133,7 @@ class AktifitasPemasaran {
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
-            $params['id_user'] = request()->current_user->id;
+            $params['id_user'] = $request->current_user->id;
             $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
