@@ -8,6 +8,7 @@ use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Jobs\EformPrescreeningJobs;
 use App\Jobs\MailSender;
+use App\Jobs\PrescreeningJobs;
 use App\Mail\EFormMail;
 use App\Mail\PermohonanKredit;
 use App\Query\Master\MStatusPernikahan;
@@ -107,7 +108,6 @@ class AktifitasPemasaran {
         try {
 
             $require_fileds = [];
-            if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->cif) $require_fileds[] = 'cif';
             if(!$request->nama) $require_fileds[] = 'nama';
@@ -117,9 +117,9 @@ class AktifitasPemasaran {
             if(!$request->tgl_lahir) $require_fileds[] = 'tgl_lahir';
             if(!$request->npwp) $require_fileds[] = 'npwp';
             if(!$request->alamat) $require_fileds[] = 'alamat';
-            if(!$request->id_jenis_kelamin) $require_fileds[] = 'id_jenis_kelamin';
-            if(!$request->id_agama) $require_fileds[] = 'id_agama';
-            if(!$request->id_status_perkawinan) $require_fileds[] = 'id_status_perkawinan';
+            if(!$request->id_jenis_kelamin) $require_fileds[] = 'jenis_kelamin';
+            if(!$request->id_agama) $require_fileds[] = 'agama';
+            if(!$request->id_status_perkawinan) $require_fileds[] = 'status_perkawinan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->nama_pasangan) $require_fileds[] = 'nama_pasangan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tempat_lahir_pasangan) $require_fileds[] = 'tempat_lahir_pasangan';
             if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tgl_lahir_pasangan) $require_fileds[] = 'tgl_lahir_pasangan';
@@ -128,16 +128,13 @@ class AktifitasPemasaran {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
-            if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
             if(!$request->status) $require_fileds[] = 'status';
-            if(!$request->is_cutoff) $require_fileds[] = 'is_cutoff';
-            if(!$request->is_pipeline) $require_fileds[] = 'is_pipeline';
-            if(!$request->is_prescreening) $require_fileds[] = 'is_prescreening';
 
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
-            $params['id_user'] = request()->current_user->id;
+            $params['id_user'] = $request->current_user->id;
+            $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
                 $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
@@ -169,8 +166,16 @@ class AktifitasPemasaran {
 
             $image = $request->foto;  // your base64 encoded
             $params['foto'] = (string) Str::uuid().'.png';
+            $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
             if($is_transaction) DB::commit();
+            
+            if($request->status == 2) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $store,
+                    'modul' => 'aktifitas_pemasaran'
+                ]));
+            }
             // after commit process
             Storage::put($params['foto'], base64_decode($image));
             $mail_data = [
