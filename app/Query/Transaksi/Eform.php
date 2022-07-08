@@ -292,7 +292,7 @@ class Eform {
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
-            if(!$request->foto_selfie) $require_fileds[] = 'Foto  selfie Ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'Foto selfie';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
@@ -316,8 +316,15 @@ class Eform {
                 'modul' => 'eform'
             ]));
             dispatch($pscrng);
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => $store];
-
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -356,6 +363,10 @@ class Eform {
             $store = Model::create($store);
             // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($store['foto_ktp'], base64_decode($image));
+            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
+
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
@@ -371,9 +382,6 @@ class Eform {
             $mail_send = (new MailSender($mail_data));
             dispatch($mail_send);
 
-            // after commit process
-            Storage::put($store['foto_ktp'], base64_decode($image));
-            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             return ['items' => $store];
 
@@ -443,7 +451,7 @@ class Eform {
         ];
 
         return [
-            'items' => $ext 
+            'items' => $ext
         ];
     }
 
