@@ -50,8 +50,15 @@ class FileController extends Controller
     public function show($filename)
     {
         try {
-            $pathToFile = storage_path().'/app/'.$filename;
+
+            if(in_array($filename,['female.png','male.png'])) {
+                $pathToFile = public_path().'/'.$filename;
+            }else {
+                $pathToFile = storage_path().'/app/'.$filename;
+            }
             $file_exist = File::exists($pathToFile);
+            if(!$file_exist) throw new \Exception("File tidak ditemukan", 400);
+
             if(!$file_exist){
                 Log::debug('file not found '.$pathToFile);
                 $pathToFile = storage_path().'/app/1111.pdf';
