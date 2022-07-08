@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Status\StsPrescreening;
 use App\Models\Status\StsCutoff;
 use App\Models\Status\StsPipeline;
+use App\Models\Master\MJenisKelamin;
+use App\Models\Master\MAgama;
+use App\Models\Master\MStatusPernikahan;
+use App\Models\Master\MProduk;
+use App\Models\Master\MSubProduk;
+use App\Models\Master\MCabang;
+
 
 class AktifitasPemasaran extends Model
 {
@@ -65,6 +72,39 @@ class AktifitasPemasaran extends Model
     {
         return $this->belongsTo(StsPipeline::class,'is_pipeline','id_pipeline');
     }
+
+    public function refMJenisKelamin()
+    {
+        return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin','id');
+    }
+
+    public function refMAgama()
+    {
+        return $this->belongsTo(MAgama::class,'id_agama','id');
+    }
+
+
+    public function refMStatusPernikahan()
+    {
+        return $this->belongsTo(MStatusPernikahan::class,'id_status_perkawinan','id');
+    }
+
+
+    public function refMProduk()
+    {
+        return $this->belongsTo(MProduk::class,'id_produk','id');
+    }
+
+    public function refMSubProduk()
+    {
+        return $this->belongsTo(MSubProduk::class,'id_sub_produk','id');
+    }
+
+    public function refMCabang()
+    {
+        return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
+    }
+
 
     public static function boot()
     {
