@@ -90,4 +90,9 @@ class Eform extends Model
     {
         return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
     }
+
+    public function manyProfilUsaha()
+    {
+        return $this->hasMany(EformProfilUsaha::class,'id_eform','id');
+    }
 }
