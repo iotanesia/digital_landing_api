@@ -19,14 +19,8 @@ class Tracking {
         if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
         if(!$request->nik) $require_fileds[] = 'nik';
         if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-        $data = Eform::byNomorAplikasi($request->nomor_aplikasi);
-
-        // ['items' => DB::connection('transaksi')->table('v_list_pipeline')
-        // ->where('nomor_aplikasi',$request->nomor_aplikasi)
-        // ->where('nik',$request->nik)
-        // ->first()];
-        if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-
+        $data = Eform::byNomorAplikasi($request);
+        if(!$data['items']) throw new \Exception("Data tidak ditemukan", 400);
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi ?? null;
         $ext->nik = $data['items']->nik;
