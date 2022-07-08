@@ -200,7 +200,7 @@ class AktifitasPemasaran {
                 $store = ModelRiwayat::create($reqRiwayat);
             }
 
-            return $store;
+            return ["items" => $store];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -304,7 +304,25 @@ class AktifitasPemasaran {
 
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_aktifitas_pemasaran' => $item->id_aktifitas_pemasaran,
+                            'aktifitas_pemasaran' => $item->refMstAktifitasPemasaran->nama ?? null,
+                            'id_tujuan_pemasaran' => $item->id_tujuan_pemasaran,
+                            'tujuan_pemasaran' => $item->refMstTujuanPemasaran->nama ?? null,
+                            'id_cara_pemasaran' => $item->id_tujuan_pemasaran,
+                            'cara_pemasaran' => $item->refMstCaraPemasaran->nama ?? null,
+                            'informasi_aktifitas' => $item->informasi_aktifitas,
+                            'foto' => $item->foto,
+                            'lokasi' => $item->lokasi,
+                            "waktu_aktifitas"=> $item->waktu_aktifitas,
+                            "tanggal_aktifitas"=> $item->tanggal_aktifitas,
+                            "mulai_aktifitas"=> $item->mulai_aktifitas,
+                            "selesai_aktifitas"=> $item->selesai_aktifitas,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
