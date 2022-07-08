@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Eform {
 
@@ -258,13 +260,23 @@ class Eform {
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
+            if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'Foto  selfie Ktp';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
+            // dd(base64_decode($image_selfie));
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             if($is_transaction) DB::commit();
             return ['items' => $store];
 
@@ -298,9 +310,16 @@ class Eform {
             $dataSend['is_cutoff'] = $checkipeline['is_cutoff'];
             $dataSend['platform'] = 'MOBILE';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
-            if($checkipeline['is_pipeline']) $store->refPipeline->create(self::setParamsRefPipeline($request,$store));
+            if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             return ['items' => $store];
 
         } catch (\Throwable $th) {
@@ -373,6 +392,7 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
+            $require_fileds = [];
             if(!$request->id) $require_fileds[] = 'id';
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
             if(!$request->nik) $require_fileds[] = 'nik';
@@ -396,6 +416,8 @@ class Eform {
             if($checkipeline['is_pipeline']) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
 
+            return ['items' => $update];
+
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -405,8 +427,9 @@ class Eform {
     public static function setParamsRefPipeline($request,$data)
     {
          return [
-            'nomor_aplikasi' => $data->id,
+            'nomor_aplikasi' => $data->nomor_aplikasi,
             'id_user' => $request->current_user->id,
+            'nik' => $data->nik,
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'step_verifikasi' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,

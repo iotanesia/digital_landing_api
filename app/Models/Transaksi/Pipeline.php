@@ -24,6 +24,7 @@ class Pipeline extends Model
         'nomor_aplikasi',
         'id_tipe_calon_nasabah',
         'id_user',
+        'nik',
         'tanggal',
         'foto_ktp',
         'status',
@@ -45,5 +46,15 @@ class Pipeline extends Model
     public function refEform()
     {
         return $this->belongsTo(Eform::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
+    public function refAktifitasPemasaran()
+    {
+        return $this->belongsTo(AktifitasPemasaran::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
+    public function refLeads()
+    {
+        return $this->belongsTo(Leads::class,'nomor_aplikasi','nomor_aplikasi');
     }
 }

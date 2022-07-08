@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Transaksi\AktifitasPemasaran;
-class AktifitasPemasaranController extends Controller
+use Illuminate\Http\Request;
+use App\Query\Transaksi\Pipeline;
+
+class PipelineController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -16,31 +18,9 @@ class AktifitasPemasaranController extends Controller
     public function index(Request $request)
     {
         try {
-            return Helper::resultResponse(AktifitasPemasaran::getDataCurrent($request));
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
-    }
-
-     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function pipeline(Request $request,$id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function history(Request $request,$id)
-    {
-        try {
-            return Helper::resultResponse(AktifitasPemasaran::getHistoryAktifitas($request, $id));
+            return Helper::resultResponse(
+                Pipeline::getDataCurrent($request)
+            );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
@@ -64,13 +44,7 @@ class AktifitasPemasaranController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            return Helper::resultResponse(
-                AktifitasPemasaran::store($request)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
+        
     }
 
     /**
@@ -83,11 +57,31 @@ class AktifitasPemasaranController extends Controller
     {
         try {
             return Helper::resultResponse(
-                AktifitasPemasaran::byId($id)
+                Pipeline::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
         }
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function pipeline(Request $request,$id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function history(Request $request,$id)
+    {
+        //
     }
 
     /**
@@ -112,7 +106,7 @@ class AktifitasPemasaranController extends Controller
     {
         try {
             return Helper::resultResponse(
-                AktifitasPemasaran::updated($request, $id)
+                Pipeline::updateDataRm($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

@@ -9,7 +9,7 @@ class MKecamatan {
 
     public static function byId($id)
     {
-        return ['items' => Model::find($id)];
+        return ['items' => Model::where('id_kecamatan', $id)->first()];
     }
 
     public static function getAll($request)

@@ -26,7 +26,33 @@ class Pipeline {
     */
     public static function getDataCurrent($request)
     {
-        //code
+        try {
+            $data = Model::where(function ($query) use ($request){
+                $query->where('id_user',$request->current_user->id);
+                      if($request->nik) $query->where('nik',$request->nik);
+            })->paginate($request->limit);
+        return [
+            'items' => $data->getCollection()->transform(function ($item){
+                return [
+                    'id' => $item->id,
+                    'nama' => $item->refEfrom()->nama ? $item->refEfrom()->nama : ($item->refAktifitasPemasaran()->nama),
+                    'nik' => $item->nik,
+                    'nama_produk' => $item->refProduk->nama ?? null,
+                    'nama_sub_produk' => $item->refSubProduk->nama ?? null,
+                    'created_at' => $item->created_at,
+                    'foto' => $item->foto
+                ];
+            }),
+            'attributes' => [
+                'total' => $data->total(),
+                'current_page' => $data->currentPage(),
+                'from' => $data->currentPage(),
+                'per_page' => (int) $data->perPage(),
+            ]
+        ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
 
@@ -70,8 +96,7 @@ class Pipeline {
         try {
             $data = Model::where('nik', $nik)->first();
             $result = ['is_pipeline'=>Constants::IS_ACTIVE,'is_cutoff'=>Constants::IS_NOL];
-
-            if($data && $data->tracking != StsTracking::getIdDisbursment(true)) $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_ACTIVE];
+            if($data && $data->tracking != Constants::DISBURSMENT) $result = ['is_pipeline'=>Constants::IS_NOL,'is_cutoff'=>Constants::IS_ACTIVE];
 
             return $result;
         } catch (\Throwable $th) {

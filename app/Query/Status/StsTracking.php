@@ -82,13 +82,4 @@ class StsTracking {
             throw $th;
         }
     }
-
-    public static function getIdDisbursment($id) {
-        try {
-            $result = Model::where('name', 'Disbursment')->first();
-            return $id ? $result->id : $result;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 }
