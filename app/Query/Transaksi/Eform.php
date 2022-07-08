@@ -194,7 +194,7 @@ class Eform {
                             'nama_produk' => $item->refProduk->nama ?? null,
                             'nama_sub_produk' => $item->refSubProduk->nama ?? null,
                             'created_at' => $item->created_at,
-                            'foto' => $item->foto
+                            'foto' => $item->id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
                         ];
                     }),
                     'attributes' => [
