@@ -330,4 +330,25 @@ class ApiHelper {
         return mt_rand(10000,99999).'-'.$id_cabang.''.Carbon::now()->format('dmY');
     }
 
+    public static function filterByDate($request)
+    {
+        $tanggal_mulai = $request->filter_tgl_mulai ?? null;
+        $tanggal_akhir = $request->filter_tgl_akhir ?? null;
+        if($tanggal_akhir && !$tanggal_mulai) $tanggal_mulai = Carbon::now()->format('Y-m-d');
+        if($tanggal_mulai && !$tanggal_akhir) $tanggal_akhir = Carbon::now()->format('Y-m-d');
+        if(!$tanggal_akhir && !$tanggal_akhir) {
+            $tanggal_mulai = null;
+            $tanggal_akhir = null;
+        }
+
+        return [
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_akhir' => $tanggal_akhir,
+            'filter' => [
+                $tanggal_mulai,
+                $tanggal_akhir,
+            ]
+        ];
+    }
+
 }
