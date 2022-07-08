@@ -29,6 +29,8 @@ class Tracking {
         $ext->npwp = $data['items']->npwp ?? null;
         $ext->email = $data['items']->email ?? null;
         $ext->no_hp = $data['items']->no_hp ?? null;
+        $ext->id_cabang = $data['items']->id_cabang ?? null;
+        $ext->nama_cabang = $data['items']->refCabang->nama_cabang ?? null;
         $ext->jangka_waktu = $data['items']->jangka_waktu ?? null;
         $ext->nama_produk = $data['items']->refProduk->nama ?? null;
         $ext->id_produk = $data['items']->id_produk ?? null;
