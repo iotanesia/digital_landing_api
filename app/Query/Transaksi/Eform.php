@@ -10,6 +10,7 @@ use App\Constants\Constants;
 use App\Jobs\MailSender;
 use App\Jobs\PrescreeningJobs;
 use App\Mail\PermohonanKredit;
+use App\Sp\SpListPipeline;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -192,6 +193,7 @@ class Eform {
     */
     public static function storeClientEform($request, $is_transaction = true)
     {
+
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\Transaksi\Eform;
+use App\Sp\SpListPipeline;
 use Illuminate\Support\Facades\Hash;
 
 class EformController extends Controller
@@ -36,7 +37,8 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::getListClientData($request)
+                SpListPipeline::getDataCurrent($request)
+                // Eform::getListClientData($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
