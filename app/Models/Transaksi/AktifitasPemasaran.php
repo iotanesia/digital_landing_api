@@ -15,7 +15,6 @@ use App\Models\Master\MProduk;
 use App\Models\Master\MSubProduk;
 use App\Models\Master\MCabang;
 
-
 class AktifitasPemasaran extends Model
 {
     use HasFactory, SoftDeletes;
@@ -83,12 +82,10 @@ class AktifitasPemasaran extends Model
         return $this->belongsTo(MAgama::class,'id_agama','id');
     }
 
-
     public function refMStatusPernikahan()
     {
         return $this->belongsTo(MStatusPernikahan::class,'id_status_perkawinan','id');
     }
-
 
     public function refMProduk()
     {

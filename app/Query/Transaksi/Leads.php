@@ -13,7 +13,30 @@ class Leads {
     // detail data aktifitas pemasaran
     public static function byId($id)
     {
-        return ['items' => Model::where('id', $id)->first()];
+        $data = Model::where('id', $id)->first();
+
+        if ($data) {
+            $data->jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
+            $data->agama = $data->refMAgama->nama ?? null;
+            $data->status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
+            $data->produk = $data->refMProduk->nama ?? null;
+            $data->sub_produk = $data->refMSubProduk->nama ?? null;
+            $data->cabang = $data->refMCabang->nama ?? null;
+            $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
+            $data->status_cutoff = $data->refStsCutoff->nama ?? null;
+            $data->status_pipeline = $data->refStsPipeline->nama ?? null;
+            unset($data->refMJenisKelamin); 
+            unset($data->refMAgama);  
+            unset($data->refMStatusPernikahan);
+            unset($data->refMProduk); 
+            unset($data->refMSubProduk);
+            unset($data->refMCabang);  
+            unset($data->refStsPrescreening); 
+            unset($data->refStsCutoff);  
+            unset($data->refStsPipeline); 
+        }
+         
+        return ['items' => $data];
     }
 
     // list data
@@ -28,10 +51,19 @@ class Leads {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'nama' => $item->nama,
+                            'nik' => $item->no_hp,
+                            'cif' => $item->cif,
+                            'nik' => $item->nik,
+                            'foto' => $item->foto,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
