@@ -114,7 +114,7 @@ Route::prefix('v1')
         // users
         Route::prefix('pipeline')->group(function () {
             Route::get('/',[ApiPipelineController::class,'index']);
-            Route::get('/detail',[ApiPipelineController::class,'show']);
+            Route::get('/{id}',[ApiPipelineController::class,'show']);
         });
         // master
         Route::prefix('sts')->group(function () {
