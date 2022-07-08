@@ -2,7 +2,6 @@
 
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\LeadsPrescreening as Model;
-use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\DB;
 
 class LeadsPrescreening {
