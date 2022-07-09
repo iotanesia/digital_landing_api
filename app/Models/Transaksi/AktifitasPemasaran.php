@@ -110,5 +110,9 @@ class AktifitasPemasaran extends Model
         return $this->belongsTo(StsAktifitasPemasaran::class,'status','id');
     }
 
+    public function refPipeline()
+    {
+        return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
+    }
 
 }
