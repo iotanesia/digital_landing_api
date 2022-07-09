@@ -33,7 +33,7 @@ class DigiData {
             if(in_array($result['status'],['200'])) {
                 $point = true;
                 $item = $result['data'];
-                Constants::MODEL_DIGIDATA[$params['modul']]::digiData([
+                Constants::MODEL_MAIN[$params['modul']]::digiData([
                     'id' => $params['id'],
                     'nama' => $item['nama_lengkap'],
                     'tempat_lahir' => $item['tempat_lahir'],

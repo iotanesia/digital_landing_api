@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Constants\Constants;
 use App\Query\Eform;
 use App\Query\MSkemaEkternal;
 use App\SkemaEksternal;
@@ -12,8 +13,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Query\Prescreening;
+use App\Query\Skema\RulesPrescreening;
 use App\Query\Skema\SkemaPrescreening;
 use App\Services\Prescreening\Kernel;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 class PrescreeningJobs implements ShouldQueue
 {
@@ -40,8 +43,13 @@ class PrescreeningJobs implements ShouldQueue
         $data = $this->data['items'];
         $modul = $this->data['modul'];
         try {
+
             $skema = SkemaPrescreening::skema($data);
+            if(!$skema) throw new \Exception("Skema Belum dibuat", 400);
+            $data['id_prescreening_skema'] = $skema->id;
             if(isset($skema->manyRules)){
+                Log::info('start prescreening '.$data['id'].'-'.$modul.'-'.Carbon::now());
+                $total_rules = count($skema->manyRules) - 1;
                 foreach ($skema->manyRules->map(function ($item){
                     $item->fungsi = $item->refMetode->fungsi ?? null;
                     $item->jenis = $item->refMetode->jenis ?? null;
@@ -58,12 +66,21 @@ class PrescreeningJobs implements ShouldQueue
                         'modul' => $modul, // eform, aktifitas_pemasaran, leads
                         'id_prescreening_rules' => $rule['id'],
                     ];
+
                     // kondisi jika cut of
                     $process = Kernel::rules($params);
                     if($rule['is_cutoff']) {
+                        Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($data);
                         if(!$process) break; // stop
                     }
+
+                    if($key == $total_rules) {
+                        $pipeline = (new AfterPrescreeningJobs($this->data));
+                        dispatch($pipeline);
+                    }
                 }
+
+
             }
         } catch (\Throwable $th) {
             throw $th;

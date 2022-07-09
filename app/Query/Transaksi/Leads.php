@@ -118,7 +118,7 @@ class Leads {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
             'tracking' => 2,
-            'id_tipe_calon_nasabah' => 2,
+            'id_tipe_calon_nasabah' => 3,
             'id_user' =>  $request->current_user->id,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
@@ -185,4 +185,36 @@ class Leads {
     {
          //code
     }
+
+    // fungsi prescreening
+    public static function isPrescreeningSuccess($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = $request['status']; // lolos
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    // fungsi prescreening
+    public static function isPrescreeningFailed($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = 3; // gagal
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+
 }

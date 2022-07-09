@@ -20,4 +20,21 @@ class EformPrescreening {
               throw $th;
           }
       }
+
+      public static function byRules($request)
+      {
+            return Model::where(function ($query) use ($request)
+            {
+                 $query->where('id_prescreening_rules',$request['id_prescreening_rules']);
+                 $query->where('id_eform',$request['id_prescreening_modul']);
+            })->first();
+      }
+
+      public static function getRulesCutoff($request)
+      {
+          return Model::whereHas('refRulesPrescreening',function ($query) use ($request){
+              $query->where('is_cutoff',1);
+              $query->where('id_eform',$request['id_prescreening_modul']);
+          })->get();
+      }
 }

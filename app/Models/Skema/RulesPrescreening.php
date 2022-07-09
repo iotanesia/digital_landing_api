@@ -16,4 +16,6 @@ class RulesPrescreening extends Model
     {
         return $this->belongsTo(MetodePrescreening::class,'id_metode','id');
     }
+
+    
 }
