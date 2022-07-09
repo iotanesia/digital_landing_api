@@ -584,7 +584,7 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            $store = Model::find($request['id']);
+            $store = Model::find($request['id_prescreening_modul']);
             $store->is_prescreening = $request['status']; // lolos
             if(in_array($store->platform,['MOBILE']))  $store->is_pipeline = 1;
             $store->save();
@@ -601,7 +601,7 @@ class Eform {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            $store = Model::find($request['id']);
+            $store = Model::find($request['id_prescreening_modul']);
             $store->is_prescreening = 3; // gagal
             $store->save();
             if($is_transaction) DB::commit();

@@ -16,7 +16,7 @@ class DhnBI {
             $response = Http::contentType("application/json")
             ->post(config('services.dwh.host').'/middleware/dwh/dhn_bi',$request);
             Log::info(json_encode($response->json()));
-            if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            if($response->getStatusCode() != 200) $point = false;
             $result = $response->json();
             if(in_array($result['status'],['00'])) $point = true;
             else $point = false;

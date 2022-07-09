@@ -111,18 +111,4 @@ class AktifitasPemasaran extends Model
     }
 
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model){
-            $model->created_by = request()->current_user->id;
-        });
-        static::updating(function ($model){
-            $model->updated_by = request()->current_user->id;
-        });
-        static::deleting(function ($model){
-            $model->deleted_by = request()->current_user->id;
-        });
-    }
 }

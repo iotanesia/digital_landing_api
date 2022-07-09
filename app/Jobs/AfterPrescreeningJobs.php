@@ -40,19 +40,21 @@ class AfterPrescreeningJobs implements ShouldQueue
         Log::info('start after prescreening '.$data['id'].'-'.$modul.'-'.Carbon::now());
         try {
 
-            $data['id_metode'] = 6; // click
-            $data['id_prescreening_modul'] = $data['id'];
+            $params['id_metode'] = 6; // click
+            $params['id_prescreening_modul'] = $data['id'];
+            $params['id_prescreening_skema'] = $data['id_prescreening_skema'];
+
             // jika terdapat metode prescreening clik
-            $rules = RulesPrescreening::getRules($data);
+            $rules = RulesPrescreening::getRules($params);
             if($rules){
-                $data['id_prescreening_rules'] = $rules->id ?? null;
-                $result = Constants::MODEL_PRESCREENING[$modul]::byRules($data);
+                $params['id_prescreening_rules'] = $rules->id ?? null;
+                $result = Constants::MODEL_PRESCREENING[$modul]::byRules($params);
                 if($result){
                     // jika 1 lolos, 2 lolos dengan approval
                     if(in_array($result->status,[1,2])) {
-                        $data['status'] = $result->status;
-                        Constants::MODEL_MAIN[$modul]::isPrescreeningSuccess($data);
-                    }else Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($data);
+                        $params['status'] = $result->status;
+                        Constants::MODEL_MAIN[$modul]::isPrescreeningSuccess($params);
+                    }else Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($params);
                 }
             }
         Log::info('end after prescreening '.$data['id'].'-'.$modul.'-'.Carbon::now());

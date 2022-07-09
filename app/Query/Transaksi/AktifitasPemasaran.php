@@ -413,7 +413,7 @@ class AktifitasPemasaran {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            $store = Model::find($request['id']);
+            $store = Model::find($request['id_prescreening_modul']);
             $store->is_prescreening = $request['status']; // lolos
             $store->save();
             $store->refPipeline()->create(self::setParamsPipeline($store)); // langsung pipeline
@@ -429,7 +429,7 @@ class AktifitasPemasaran {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            $store = Model::find($request['id']);
+            $store = Model::find($request['id_prescreening_modul']);
             $store->is_prescreening = 3; // gagal
             $store->save();
             if($is_transaction) DB::commit();
