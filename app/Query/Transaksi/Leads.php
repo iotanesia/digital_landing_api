@@ -155,10 +155,6 @@ class Leads {
             $store->tgl_lahir = $store->tgl_lahir ?? $request['tgl_lahir'];
             $store->alamat = $store->alamat ?? $request['alamat'];
             $store->id_status_perkawinan = $store->id_status_perkawinan ?? $request['id_status_perkawinan'];
-            $store->id_propinsi = $store->id_propinsi ?? $request['id_propinsi'];
-            $store->id_kabupaten = $store->id_kabupaten ?? $request['id_kabupaten'];
-            $store->id_kecamatan = $store->id_kecamatan ?? $request['id_kecamatan'];
-            $store->id_kelurahan = $store->id_kelurahan ?? $request['id_kelurahan'];
             $store->save();
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
