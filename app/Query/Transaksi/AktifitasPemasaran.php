@@ -76,7 +76,8 @@ class AktifitasPemasaran {
                         return [
                             'id' => $item->id,
                             'nama' => $item->nama,
-                            'nik' => $item->no_hp,
+                            'nik' => $item->nik,
+                            'no_hp'=> $item->no_hp,
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'cif' => $item->cif,
                             'nik' => $item->nik,
@@ -110,7 +111,6 @@ class AktifitasPemasaran {
 
             $require_fileds = [];
             if(!$request->nik) $require_fileds[] = 'nik';
-            if(!$request->cif) $require_fileds[] = 'cif';
             if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->email) $require_fileds[] = 'email';
@@ -165,7 +165,8 @@ class AktifitasPemasaran {
                 $params['is_cutoff'] = 0;
             }
 
-            $image = $request->foto;  // your base64 encoded
+            $imageKtp = $request->foto_ktp;
+            $imageSelfie = $request->foto_selfie;  // your base64 encoded
             $params['foto_ktp'] = (string) Str::uuid().'.png';
             $params['foto_selfie'] = (string) Str::uuid().'.png';
             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
@@ -179,8 +180,8 @@ class AktifitasPemasaran {
                 ]));
             }
             // after commit process
-            Storage::put($params['foto_ktp'], base64_decode($image));
-            Storage::put($params['foto_selfie'], base64_decode($image));
+            Storage::put($params['foto_ktp'], base64_decode($imageKtp));
+            Storage::put($params['foto_selfie'], base64_decode($imageSelfie));
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -200,7 +201,7 @@ class AktifitasPemasaran {
                 $store = ModelRiwayat::create($reqRiwayat);
             }
 
-            return $store;
+            return ["items" => $store];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -217,7 +218,8 @@ class AktifitasPemasaran {
             $update = Model::find($id);
             if(!$update) throw new \Exception("Data not found.", 400);
             $params = $request->all();
-            $params['id_user'] = request()->current_user->id;
+            $params['id_user'] = $request->current_user->id;
+            $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
                 $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
@@ -247,12 +249,23 @@ class AktifitasPemasaran {
                 $params['is_cutoff'] = 0;
             }
 
-            $image = $request->foto;  // your base64 encoded
-            $params['foto'] = (string) Str::uuid().'.png';
+            if ($request->foto_ktp) {
+                $imageKtp = $request->foto_ktp;  // your base64 encoded
+                $params['foto_ktp'] = (string) Str::uuid().'.png';
+                Storage::put($params['foto_ktp'], base64_decode($imageKtp));
+                $params['foto_ktp'] = (string) Str::uuid().'.png';
+            }
+
+            if ($request->foto_selfie) {
+                $imageselfie = $request->foto_selfie;  // your base64 encoded
+                $params['foto_selfie'] = (string) Str::uuid().'.png';
+                Storage::put($params['foto_selfie'], base64_decode($imageselfie));
+                $params['foto_selfie'] = (string) Str::uuid().'.png';
+            }
             $update->update($params);
             if($is_transaction) DB::commit();
             // after commit process
-            Storage::put($params['foto'], base64_decode($image));
+            
             $mail_data = [
                 "fullname" => $update->nama,
                 "nik" => $update->nik,
@@ -269,7 +282,6 @@ class AktifitasPemasaran {
                 $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
                 $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
                 $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
-                $reqRiwayat['foto'] = $params['foto'];
                 $reqRiwayat['lokasi'] = $request->lokasi;
                 $store = ModelRiwayat::create($reqRiwayat);
             }
@@ -304,7 +316,25 @@ class AktifitasPemasaran {
 
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_aktifitas_pemasaran' => $item->id_aktifitas_pemasaran,
+                            'aktifitas_pemasaran' => $item->refMstAktifitasPemasaran->nama ?? null,
+                            'id_tujuan_pemasaran' => $item->id_tujuan_pemasaran,
+                            'tujuan_pemasaran' => $item->refMstTujuanPemasaran->nama ?? null,
+                            'id_cara_pemasaran' => $item->id_tujuan_pemasaran,
+                            'cara_pemasaran' => $item->refMstCaraPemasaran->nama ?? null,
+                            'informasi_aktifitas' => $item->informasi_aktifitas,
+                            'foto' => $item->foto,
+                            'lokasi' => $item->lokasi,
+                            "waktu_aktifitas"=> $item->waktu_aktifitas,
+                            "tanggal_aktifitas"=> $item->tanggal_aktifitas,
+                            "mulai_aktifitas"=> $item->mulai_aktifitas,
+                            "selesai_aktifitas"=> $item->selesai_aktifitas,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

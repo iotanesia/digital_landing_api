@@ -69,9 +69,15 @@ class PipelineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function pipeline(Request $request,$id)
+    public function prescreening(Request $request,$id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Pipeline::getInfoPrescreening($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
