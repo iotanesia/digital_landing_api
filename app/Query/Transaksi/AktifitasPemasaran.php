@@ -76,7 +76,8 @@ class AktifitasPemasaran {
                         return [
                             'id' => $item->id,
                             'nama' => $item->nama,
-                            'nik' => $item->no_hp,
+                            'nik' => $item->nik,
+                            'no_hp'=> $item->no_hp,
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'cif' => $item->cif,
                             'nik' => $item->nik,
