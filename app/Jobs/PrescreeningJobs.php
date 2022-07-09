@@ -69,9 +69,10 @@ class PrescreeningJobs implements ShouldQueue
 
                     // kondisi jika cut of
                     $process = Kernel::rules($params);
+                    // dd($process);
                     if(in_array($process,[0]) && $rule['is_cutoff']) {
                         Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($data);
-                        if(!$process) break; // stop
+                        break; // stop
                     }
 
                     if($key == $total_rules) {
