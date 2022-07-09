@@ -79,4 +79,32 @@ class Pipeline {
             throw $th;
         }
     }
+
+    public function getInfoPrescreening($request, $id) {
+        try {
+            $data = View::where('id', $id);
+            if(!$data) throw new \Exception("Data not found.", 400);
+
+            $dataPrescreening = DB::table($data->tipe_calon_nasabah.'_prescreening')->where('id',$data->ref_id)->paginate($request->limit);
+        return [
+            'items' => $data->getCollection()->transform(function ($item){
+                return [
+                    'id' => $item->id,
+                    'nik' => $item->nik,
+                    'nama' => $item->nama,
+                    'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
+                    'foto_selfie' => $item->foto_selfie
+                ];
+            }),
+            'attributes' => [
+                'total' => $data->total(),
+                'current_page' => $data->currentPage(),
+                'from' => $data->currentPage(),
+                'per_page' => (int) $data->perPage(),
+            ]
+        ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

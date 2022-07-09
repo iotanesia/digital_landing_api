@@ -109,7 +109,6 @@ class AktifitasPemasaran {
 
             $require_fileds = [];
             if(!$request->nik) $require_fileds[] = 'nik';
-            if(!$request->cif) $require_fileds[] = 'cif';
             if(!$request->nama) $require_fileds[] = 'nama';
             if(!$request->no_hp) $require_fileds[] = 'no_hp';
             if(!$request->email) $require_fileds[] = 'email';
