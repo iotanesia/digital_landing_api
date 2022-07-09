@@ -119,6 +119,7 @@ class AktifitasPemasaran {
                             'foto_ktp' => $item->foto_ktp,
                             'foto_selfie' => $item->foto_selfie,
                             'created_at' => $item->created_at,
+                            'updated_at' => $item->updated_at,
                         ];
                     }),
                     'attributes' => [
