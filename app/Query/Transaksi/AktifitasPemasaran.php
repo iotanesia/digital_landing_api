@@ -54,6 +54,40 @@ class AktifitasPemasaran {
         return ['items' => $data];
     }
 
+     // detail data aktifitas pemasaran for piperline
+     public static function byIdForPiperline($id_aktifitas_pemasaran)
+     {
+         $data = Model::where('id', $id_aktifitas_pemasaran)->first();
+ 
+         if ($data) {
+             $data->nama_jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
+             $data->nama_agama = $data->refMAgama->nama ?? null;
+             $data->nama_status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
+             $data->nama_produk = $data->refMProduk->nama ?? null;
+             $data->nama_sub_produk = $data->refMSubProduk->nama ?? null;
+             $data->nama_cabang = $data->refMCabang->nama ?? null;
+             $data->nama_status_prescreening = $data->refStsPrescreening->nama ?? null;
+             $data->nama_status_cutoff = $data->refStsCutoff->nama ?? null;
+             $data->nama_status_pipeline = $data->refStsPipeline->nama ?? null;
+             $data->nama_status = $data->refStatus->nama ?? null;
+             unset(
+                 $data->refMJenisKelamin,
+                 $data->refStatus,
+                 $data->refMAgama,
+                 $data->refMStatusPernikahan,
+                 $data->refMProduk,
+                 $data->refMSubProduk,
+                 $data->refMCabang,
+                 $data->refStsPrescreening,
+                 $data->refStsCutoff,
+                 $data->refStsPipeline,
+             );
+ 
+         }
+ 
+         return ['items' => $data];
+     }
+
     // list data
     /*
         - current id user = id_user
