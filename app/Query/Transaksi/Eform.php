@@ -426,8 +426,8 @@ class Eform {
             // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             // after commit process
-            Storage::put($store['foto_ktp'], base64_decode($image));
-            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
+            // Storage::put($store['foto_ktp'], base64_decode($image));
+            // Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             // prescreening
             // if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
