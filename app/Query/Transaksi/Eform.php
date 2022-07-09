@@ -225,7 +225,7 @@ class Eform {
         try {
             $data = Model::where(function ($query) use ($request){
                         $query->where('is_pipeline',Constants::IS_NOL)
-                              ->whereIn('is_prescreening',[1,2])
+                              ->where('is_prescreening',1)
                               ->where('is_cutoff',Constants::IS_NOL)
                               ->where('id_cabang',$request->current_user->id_cabang);
                               if($request->nama) $query->where('nama','ilike',"%$request->nama%");

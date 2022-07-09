@@ -17,5 +17,9 @@ class RulesPrescreening extends Model
         return $this->belongsTo(MetodePrescreening::class,'id_metode','id');
     }
 
-    
+    public function refSkema()
+    {
+        return $this->belongsTo(SkemaPrescreening::class,'id_skema','id');
+    }
+
 }

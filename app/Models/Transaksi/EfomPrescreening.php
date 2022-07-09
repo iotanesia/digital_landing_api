@@ -29,8 +29,15 @@ class EfomPrescreening extends Model
         'deleted_by',
     ];
 
+
     public function refRulesPrescreening()
     {
         return $this->belongsTo(RulesPrescreening::class,'id','id_prescreening_rules');
+    }
+    
+    public function refRules()
+    {
+        return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');
+
     }
 }
