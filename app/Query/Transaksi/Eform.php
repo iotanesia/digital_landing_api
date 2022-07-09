@@ -66,6 +66,8 @@ class Eform {
                     'plafon' => $data->plafon,
                     'jangka_waktu' => $data->jangka_waktu,
                     'npwp' => $data->npwp,
+                    'foto_ktp' => $data->foto_ktp,
+                    'foto_selfie' => $data->foto_selfie,
                     'nama_produk' => $data->refProduk->nama ?? null,
                     'nama_status_perkawinan' => $data->refStatusPerkawinan->nama ?? null,
                     'nama_cabang' => $data->refCabang->nama_cabang ?? null,
