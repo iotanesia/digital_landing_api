@@ -66,6 +66,8 @@ class Eform {
                     'plafon' => $data->plafon,
                     'jangka_waktu' => $data->jangka_waktu,
                     'npwp' => $data->npwp,
+                    'foto_ktp' => $data->foto_ktp,
+                    'foto_selfie' => $data->foto_selfie,
                     'nama_produk' => $data->refProduk->nama ?? null,
                     'nama_status_perkawinan' => $data->refStatusPerkawinan->nama ?? null,
                     'nama_cabang' => $data->refCabang->nama_cabang ?? null,
@@ -367,11 +369,13 @@ class Eform {
             Storage::put($store['foto_ktp'], base64_decode($image));
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
             // prescreening
-            $pscrng = (new PrescreeningJobs([
-                'items' => $store,
-                'modul' => 'eform'
-            ]));
-            dispatch($pscrng);
+            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $store,
+                    'modul' => 'eform'
+                ]));
+                dispatch($pscrng);
+            }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -404,7 +408,8 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $store['id_cabang'] = $request->current_user->id_cabang;
-            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk) ?? 1;
+            // $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
+            $store['id_produk'] = 1;
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
@@ -424,11 +429,13 @@ class Eform {
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             // prescreening
-            $pscrng = (new PrescreeningJobs([
-                'items' => $store,
-                'modul' => 'eform'
-            ]));
-            dispatch($pscrng);
+            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $store,
+                    'modul' => 'eform'
+                ]));
+                dispatch($pscrng);
+            }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
