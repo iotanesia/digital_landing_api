@@ -87,7 +87,7 @@ class Pipeline {
     public static function getInfoPrescreening($request, $id) {
         try {
             $dataPipeline = View::where('id', $id)->first();
-            $dataPipeline->ref_id = 109; //hard code sementara
+            // $dataPipeline->ref_id = 109; //hard code sementara
 
             if(!$dataPipeline) throw new \Exception("Data not found.", 400);
             if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EfomPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
