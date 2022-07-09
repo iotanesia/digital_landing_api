@@ -339,7 +339,7 @@ class Eform {
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
-            $dataSend = $request->all();
+            $store = $request->all();
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->email) $require_fileds[] = 'email';
             if(!$request->npwp) $require_fileds[] = 'npwp';
@@ -353,18 +353,18 @@ class Eform {
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
             $store['is_cutoff'] = $checkipeline['is_cutoff'];
-            $dataSend['platform'] = 'WEB';
-            $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
+            $store['platform'] = 'WEB';
+            $store['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $image = $request->foto_ktp;  // your base64 encoded
             $image_selfie = $request->foto_selfie;  // your base64 encoded
             // dd(base64_decode($image_selfie));
-            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
-            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
-            $store = Model::create($dataSend);
+            $store['foto_ktp'] =(string) Str::uuid().'.png';
+            $store['foto_selfie'] =(string) Str::uuid().'.png';
+            $store = Model::create($store);
             if($is_transaction) DB::commit();
             // after commit process
-            Storage::put($dataSend['foto_ktp'], base64_decode($image));
-            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
+            Storage::put($store['foto_ktp'], base64_decode($image));
+            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
