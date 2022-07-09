@@ -369,13 +369,13 @@ class Eform {
             Storage::put($store['foto_ktp'], base64_decode($image));
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
             // prescreening
-            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+            // if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $store,
                     'modul' => 'eform'
                 ]));
                 dispatch($pscrng);
-            }
+            // }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -429,13 +429,13 @@ class Eform {
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             // prescreening
-            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+            // if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $store,
                     'modul' => 'eform'
                 ]));
                 dispatch($pscrng);
-            }
+            // }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
