@@ -59,7 +59,7 @@ class AktifitasPemasaran {
      public static function byIdForPiperline($id_aktifitas_pemasaran)
      {
          $data = Model::where('id', $id_aktifitas_pemasaran)->first();
- 
+
          if ($data) {
              $data->nama_jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
              $data->nama_agama = $data->refMAgama->nama ?? null;
@@ -83,9 +83,9 @@ class AktifitasPemasaran {
                  $data->refStsCutoff,
                  $data->refStsPipeline,
              );
- 
+
          }
- 
+
          return ['items' => $data];
      }
 
@@ -156,16 +156,15 @@ class AktifitasPemasaran {
             if(!$request->id_jenis_kelamin) $require_fileds[] = 'jenis_kelamin';
             if(!$request->id_agama) $require_fileds[] = 'agama';
             if(!$request->id_status_perkawinan) $require_fileds[] = 'status_perkawinan';
-            if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->nama_pasangan) $require_fileds[] = 'nama_pasangan';
-            if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tempat_lahir_pasangan) $require_fileds[] = 'tempat_lahir_pasangan';
-            if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tgl_lahir_pasangan) $require_fileds[] = 'tgl_lahir_pasangan';
-            if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->alamat_pasangan) $require_fileds[] = 'alamat_pasangan';
+            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->nama_pasangan) $require_fileds[] = 'nama_pasangan';
+            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tempat_lahir_pasangan) $require_fileds[] = 'tempat_lahir_pasangan';
+            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tgl_lahir_pasangan) $require_fileds[] = 'tgl_lahir_pasangan';
+            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->alamat_pasangan) $require_fileds[] = 'alamat_pasangan';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->status) $require_fileds[] = 'status';
-
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
@@ -213,6 +212,7 @@ class AktifitasPemasaran {
                     'items' => $store,
                     'modul' => 'aktifitas_pemasaran'
                 ]));
+                dispatch($pscrng);
             }
             // after commit process
             Storage::put($params['foto_ktp'], base64_decode($imageKtp));
@@ -223,8 +223,8 @@ class AktifitasPemasaran {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            $mail_send = (new MailSender($mail_data));
-            dispatch($mail_send);
+            // $mail_send = (new MailSender($mail_data));
+            // dispatch($mail_send);
 
             if ($store && ((int) $request->status === 1 || (int) $request->status === 2)) {
                 $reqRiwayat = $request->all();
