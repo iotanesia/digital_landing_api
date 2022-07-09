@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Skema\RulesPrescreening;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,4 +28,9 @@ class EfomPrescreening extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public function refRules()
+    {
+        return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');
+    }
 }

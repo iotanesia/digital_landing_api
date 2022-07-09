@@ -27,4 +27,9 @@ class AktifitasPemasaranPrescreening extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public function refRules()
+    {
+        return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');
+    }
 }

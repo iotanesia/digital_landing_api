@@ -5,6 +5,9 @@ use App\Models\Transaksi\Pipeline as Model;
 use App\View\Transaksi\VListPipeline as View;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
+use App\Models\Transaksi\AktifitasPemasaranPrescreening;
+use App\Models\Transaksi\EfomPrescreening;
+use App\Models\Transaksi\LeadsPrescreening;
 use App\Query\Status\StsTracking;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -53,7 +56,8 @@ class Pipeline {
                         'nik' => $item->nik,
                         'nama' => $item->nama,
                         'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
-                        'foto_selfie' => $item->foto_selfie
+                        'foto_selfie' => $item->foto_selfie,
+                        'status_prescreening'=> 'Lolos'
                     ];
                 }),
                 'attributes' => [
@@ -80,20 +84,23 @@ class Pipeline {
         }
     }
 
-    public function getInfoPrescreening($request, $id) {
+    public static function getInfoPrescreening($request, $id) {
         try {
-            $data = View::where('id', $id);
-            if(!$data) throw new \Exception("Data not found.", 400);
+            $dataPipeline = View::where('id', $id)->first();
+            $dataPipeline->ref_id = 109; //hard code sementara
 
-            $dataPrescreening = DB::table($data->tipe_calon_nasabah.'_prescreening')->where('id',$data->ref_id)->paginate($request->limit);
+            if(!$dataPipeline) throw new \Exception("Data not found.", 400);
+            if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EfomPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
+            if($dataPipeline->tipe_calon_nasabah == 'Leads') $data = LeadsPrescreening::where('id_leads',$dataPipeline->ref_id)->paginate($request->limit);
+            if($dataPipeline->tipe_calon_nasabah == 'Aktifitas Pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$dataPipeline->ref_id)->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
                 return [
                     'id' => $item->id,
-                    'nik' => $item->nik,
-                    'nama' => $item->nama,
-                    'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
-                    'foto_selfie' => $item->foto_selfie
+                    'metode' => $item->refRules->refMetode->metode ?? null,
+                    'skema' => $item->refRules->refSkema->skema ?? null,
+                    'status' =>  $item->keterangan,
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null) 
                 ];
             }),
             'attributes' => [
