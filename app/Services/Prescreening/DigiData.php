@@ -28,7 +28,7 @@ class DigiData {
             ])->contentType("application/json")
             ->post(config('services.dukcapil.host'),$request);
             Log::info(json_encode($response->json()));
-            if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            // if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();
             if(in_array($result['status'],['200'])) {
                 $point = true;
