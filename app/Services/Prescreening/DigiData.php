@@ -41,10 +41,10 @@ class DigiData {
                     'tgl_lahir' => self::formatDate($item['tanggal_lahir']),
                     'alamat' => $item['alamat'],
                     'id_status_perkawinan' => MStatusPernikahan::idByNama($item['status_perkawinan']),
-                    'id_propinsi' => MPropinsi::idByNama($item['propinsi']),
-                    'id_kabupaten' => MKabupaten::idByNama($item['kabupaten']),
-                    'id_kecamatan' => MKecamatan::idByNama($item['kecamatan']),
-                    'id_kelurahan' => MKelurahan::idByNama($item['kelurahan']),
+                    // 'id_propinsi' => MPropinsi::idByNama($item['propinsi']),
+                    // 'id_kabupaten' => MKabupaten::idByNama($item['kabupaten']),
+                    // 'id_kecamatan' => MKecamatan::idByNama($item['kecamatan']),
+                    // 'id_kelurahan' => MKelurahan::idByNama($item['kelurahan']),
                 ]);
                 //proses mengupdate informasi nasabah
             }
