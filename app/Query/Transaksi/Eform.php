@@ -369,13 +369,13 @@ class Eform {
             Storage::put($store['foto_ktp'], base64_decode($image));
             Storage::put($store['foto_selfie'], base64_decode($image_selfie));
             // prescreening
-            // if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $store,
                     'modul' => 'eform'
                 ]));
                 dispatch($pscrng);
-            // }
+            }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -408,9 +408,9 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $store['id_cabang'] = $request->current_user->id_cabang;
-            // $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
-            $store['id_sub_produk'] = 3;
-            $store['id_produk'] = 1;
+            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
+            // $store['id_sub_produk'] = 3;
+            // $store['id_produk'] = 1;
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
@@ -426,17 +426,17 @@ class Eform {
             // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
             // after commit process
-            // Storage::put($store['foto_ktp'], base64_decode($image));
-            // Storage::put($store['foto_selfie'], base64_decode($image_selfie));
+            Storage::put($store['foto_ktp'], base64_decode($image));
+            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             // prescreening
-            // if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
+            if($checkipeline['is_prescreening'] == constants::IS_NOL && $checkipeline['is_pipeline'] == constants::IS_NOL && $checkipeline['is_cutoff'] == constants::IS_NOL) {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $store,
                     'modul' => 'eform'
                 ]));
                 dispatch($pscrng);
-            // }
+            }
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
