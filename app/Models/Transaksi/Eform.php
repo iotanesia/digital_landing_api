@@ -15,6 +15,7 @@ use App\Models\Master\MProduk;
 use App\Models\Master\MPropinsi;
 use App\Models\Master\MStatusPernikahan;
 use App\Models\Master\MSubProduk;
+use App\Models\Status\StsPrescreening;
 
 class Eform extends Model
 {
@@ -95,6 +96,11 @@ class Eform extends Model
     public function refPipeline()
     {
         return $this->belongsTo(Pipeline::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
+    public function refStsPrescreening()
+    {
+        return $this->belongsTo(StsPrescreening::class,'is_prescreening','id_prescreening');
     }
 
     public function manyProfilUsaha()

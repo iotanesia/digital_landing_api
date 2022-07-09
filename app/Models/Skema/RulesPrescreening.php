@@ -21,4 +21,5 @@ class RulesPrescreening extends Model
     {
         return $this->belongsTo(SkemaPrescreening::class,'id_skema','id');
     }
+
 }

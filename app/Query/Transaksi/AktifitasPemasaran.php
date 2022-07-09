@@ -12,6 +12,7 @@ use App\Jobs\PrescreeningJobs;
 use App\Mail\EFormMail;
 use App\Mail\PermohonanKredit;
 use App\Query\Master\MStatusPernikahan;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -26,24 +27,24 @@ class AktifitasPemasaran {
         $data = Model::where('id', $id_aktifitas_pemasaran)->first();
 
         if ($data) {
-            $data->jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
-            $data->agama = $data->refMAgama->nama ?? null;
-            $data->status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
-            $data->produk = $data->refMProduk->nama ?? null;
-            $data->sub_produk = $data->refMSubProduk->nama ?? null;
-            $data->cabang = $data->refMCabang->nama ?? null;
+            $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+            $data->agama = $data->refAgama->nama ?? null;
+            $data->status_perkawinan = $data->refStatusPernikahan->nama ?? null;
+            $data->produk = $data->refProduk->nama ?? null;
+            $data->sub_produk = $data->refSubProduk->nama ?? null;
+            $data->cabang = $data->refCabang->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
             $data->nama_status = $data->refStatus->nama ?? null;
             unset(
-                $data->refMJenisKelamin,
+                $data->refJenisKelamin,
                 $data->refStatus,
-                $data->refMAgama,
-                $data->refMStatusPernikahan,
-                $data->refMProduk,
-                $data->refMSubProduk,
-                $data->refMCabang,
+                $data->refAgama,
+                $data->refStatusPernikahan,
+                $data->refProduk,
+                $data->refSubProduk,
+                $data->refCabang,
                 $data->refStsPrescreening,
                 $data->refStsCutoff,
                 $data->refStsPipeline,
@@ -206,7 +207,7 @@ class AktifitasPemasaran {
             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
             if($is_transaction) DB::commit();
-            
+
             if($request->status == 2) {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $store,
@@ -299,7 +300,7 @@ class AktifitasPemasaran {
             $update->update($params);
             if($is_transaction) DB::commit();
             // after commit process
-            
+
             $mail_data = [
                 "fullname" => $update->nama,
                 "nik" => $update->nik,
@@ -409,5 +410,51 @@ class AktifitasPemasaran {
     public static function getAll($request)
     {
 
+    }
+
+    // fungsi prescreening
+    public static function isPrescreeningSuccess($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = $request['status']; // lolos
+            $store->save();
+            $store->refPipeline()->create(self::setParamsPipeline($store)); // langsung pipeline
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    // fungsi prescreening
+    public static function isPrescreeningFailed($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = 3; // gagal
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    // fungsi prescreening
+    // start pipeline
+    public static function setParamsPipeline($data)
+    {
+        return [
+            'nomor_aplikasi' => $data->nomor_aplikasi,
+            'tracking' => 2,
+            'id_tipe_calon_nasabah' => 2,
+            'id_user' =>  $data->id_user,
+            'nik' =>  $data->nik,
+            'tanggal' =>  Carbon::now()->format('Y-m-d'),
+            'step_verifikasi' =>  0,
+        ];
     }
 }

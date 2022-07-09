@@ -27,9 +27,10 @@ class Constants
         'leads' => '\App\Query\Transaksi\LeadsPrescreening',
     ];
 
-    const MODEL_DIGIDATA = [
+    const MODEL_MAIN = [
         'eform' => '\App\Query\Transaksi\Eform',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaran',
         'leads' => '\App\Query\Transaksi\Leads',
     ];
+
 }

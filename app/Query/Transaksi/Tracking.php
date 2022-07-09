@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Query\Transaksi;
-use App\Models\Transaksi\Pipeline as Model;
+use App\Models\Transaksi\Eform as Model;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Query\Status\StsTracking;
@@ -19,35 +19,23 @@ class Tracking {
         if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
         if(!$request->nik) $require_fileds[] = 'nik';
         if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-        $data = Eform::byNomorAplikasiNik($request);
-        if(!$data['items']) throw new \Exception("NIK atau Nomor Aplikasi Salah", 400);
-        $ext = new \stdClass;
-        $ext->nomor_aplikasi = $data['items']->nomor_aplikasi ?? null;
-        $ext->nik = $data['items']->nik;
-        $ext->nama = $data['items']->nama;
-        $ext->plafond = $data['items']->plafond ?? null;
-        $ext->npwp = $data['items']->npwp ?? null;
-        $ext->email = $data['items']->email ?? null;
-        $ext->no_hp = $data['items']->no_hp ?? null;
-        $ext->id_cabang = $data['items']->id_cabang ?? null;
-        $ext->nama_cabang = $data['items']->refCabang->nama_cabang ?? null;
-        $ext->jangka_waktu = $data['items']->jangka_waktu ?? null;
-        $ext->nama_produk = $data['items']->refProduk->nama ?? null;
-        $ext->id_produk = $data['items']->id_produk ?? null;
-        $ext->nama_produk = $data['items']->refProduk->nama ?? null;
-        $ext->id_sub_produk = $data['items']->id_sub_produk ?? null;
-        $ext->nama_sub_produk = $data['items']->refSubProduk->nama ?? null;
-        $ext->foto_ktp = null; // masih dummy
-        $ext->foto_selfie = null; // masih dummy
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)
+        ->where('nik',$request->nik)
+        ->first();
+        if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
+        $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
+        $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
+        $data->nama_produk = $data->refProduk->nama ?? null;
+        $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+        $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
 
-        if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
-        $ext->step = [
+        $data->step = [
             [
                 'kode' => '01',
                 'label' => 'Prescreening',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
-                'status' => 'lolos',
-                'id_status' => 1,
+                'status' => $data->refStsPrescreening->nama ?? null,
+                'id_status' => $data->is_prescreening ?? null,
                 'keterangan' => null,
                 'step' => null
             ],
@@ -90,8 +78,23 @@ class Tracking {
             ]
         ];
 
-        return [
-            'items' => $ext
-        ];
+        unset(
+            $data->refStsPrescreening,
+            $data->refStatusPerkawinan,
+            $data->refCabang,
+            $data->refAgama,
+            $data->cif,
+            $data->platform,
+            $data->id_agama,
+            $data->refProduk,
+            $data->refSubProduk,
+            $data->is_pipeline,
+            $data->is_cutoff,
+            $data->id_client_api,
+            $data->manyProfilUsaha,
+            $data->refJenisKelamin,
+        );
+        
+        return ['items' => $data];
     }
 }

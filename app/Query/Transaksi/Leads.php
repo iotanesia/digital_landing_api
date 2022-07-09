@@ -17,21 +17,21 @@ class Leads {
         $data = Model::where('id', $id)->first();
 
         if ($data) {
-            $data->jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
-            $data->agama = $data->refMAgama->nama ?? null;
-            $data->status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
-            $data->produk = $data->refMProduk->nama ?? null;
-            $data->sub_produk = $data->refMSubProduk->nama ?? null;
-            $data->cabang = $data->refMCabang->nama ?? null;
+            $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+            $data->agama = $data->refAgama->nama ?? null;
+            $data->status_perkawinan = $data->refStatusPernikahan->nama ?? null;
+            $data->produk = $data->refProduk->nama ?? null;
+            $data->sub_produk = $data->refSubProduk->nama ?? null;
+            $data->cabang = $data->refCabang->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
-            unset($data->refMJenisKelamin);
-            unset($data->refMAgama);
-            unset($data->refMStatusPernikahan);
-            unset($data->refMProduk);
-            unset($data->refMSubProduk);
-            unset($data->refMCabang);
+            unset($data->refJenisKelamin);
+            unset($data->refAgama);
+            unset($data->refStatusPernikahan);
+            unset($data->refProduk);
+            unset($data->refSubProduk);
+            unset($data->refCabang);
             unset($data->refStsPrescreening);
             unset($data->refStsCutoff);
             unset($data->refStsPipeline);
@@ -65,8 +65,8 @@ class Leads {
                             'cif' => $item->cif,
                             'nik' => $item->nik,
                             'foto' => $item->foto,
-                            'produk' => $item->refMProduk->nama ?? null,
-                            'sub_produk' => $item->refMSubProduk->nama ?? null,
+                            'produk' => $item->refProduk->nama ?? null,
+                            'sub_produk' => $item->refSubProduk->nama ?? null,
                             'created_at' => $item->created_at,
                         ];
                     }),
@@ -118,7 +118,7 @@ class Leads {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
             'tracking' => 2,
-            'id_tipe_calon_nasabah' => 2,
+            'id_tipe_calon_nasabah' => 3,
             'id_user' =>  $request->current_user->id,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
@@ -185,4 +185,36 @@ class Leads {
     {
          //code
     }
+
+    // fungsi prescreening
+    public static function isPrescreeningSuccess($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = $request['status']; // lolos
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    // fungsi prescreening
+    public static function isPrescreeningFailed($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $store = Model::find($request['id']);
+            $store->is_prescreening = 3; // gagal
+            $store->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+
 }
