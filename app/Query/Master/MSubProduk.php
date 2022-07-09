@@ -103,4 +103,12 @@ class MSubProduk {
             throw $th;
         }
     }
+
+    public static function getIdProduk($id) {
+        try {
+            return Model::find($id)->id_produk;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

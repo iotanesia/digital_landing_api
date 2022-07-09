@@ -10,6 +10,7 @@ use App\Constants\Constants;
 use App\Jobs\MailSender;
 use App\Jobs\PrescreeningJobs;
 use App\Mail\PermohonanKredit;
+use App\Query\Master\MSubProduk;
 use App\Sp\SpListPipeline;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -350,6 +351,7 @@ class Eform {
             if(!$request->foto_selfie) $require_fileds[] = 'Foto selfie';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $checkipeline = Pipeline::checkNasabah($request->nik);
+            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
             $store['is_cutoff'] = $checkipeline['is_cutoff'];
