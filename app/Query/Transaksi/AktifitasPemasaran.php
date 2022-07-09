@@ -27,24 +27,24 @@ class AktifitasPemasaran {
         $data = Model::where('id', $id_aktifitas_pemasaran)->first();
 
         if ($data) {
-            $data->jenis_kelamin = $data->refMJenisKelamin->nama ?? null;
-            $data->agama = $data->refMAgama->nama ?? null;
-            $data->status_perkawinan = $data->refMStatusPernikahan->nama ?? null;
-            $data->produk = $data->refMProduk->nama ?? null;
-            $data->sub_produk = $data->refMSubProduk->nama ?? null;
-            $data->cabang = $data->refMCabang->nama ?? null;
+            $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+            $data->agama = $data->refAgama->nama ?? null;
+            $data->status_perkawinan = $data->refStatusPernikahan->nama ?? null;
+            $data->produk = $data->refProduk->nama ?? null;
+            $data->sub_produk = $data->refSubProduk->nama ?? null;
+            $data->cabang = $data->refCabang->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
             $data->nama_status = $data->refStatus->nama ?? null;
             unset(
-                $data->refMJenisKelamin,
+                $data->refJenisKelamin,
                 $data->refStatus,
-                $data->refMAgama,
-                $data->refMStatusPernikahan,
-                $data->refMProduk,
-                $data->refMSubProduk,
-                $data->refMCabang,
+                $data->refAgama,
+                $data->refStatusPernikahan,
+                $data->refProduk,
+                $data->refSubProduk,
+                $data->refCabang,
                 $data->refStsPrescreening,
                 $data->refStsCutoff,
                 $data->refStsPipeline,

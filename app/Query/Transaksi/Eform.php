@@ -136,9 +136,6 @@ class Eform {
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
-        $data->status = null; // dummy
-        $data->foto_ktp = null; // dummy
-        $data->foto_selfie = null; // dummy
         $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
             return [
                 'id_perizinan' => $item->id_perizinan,
@@ -154,6 +151,7 @@ class Eform {
             ];
         }); // dummy
         unset(
+            $data->refStsPrescreening,
             $data->refStatusPerkawinan,
             $data->refCabang,
             $data->refAgama,
@@ -164,12 +162,11 @@ class Eform {
             $data->refSubProduk,
             $data->is_pipeline,
             $data->is_cutoff,
-            $data->is_prescreening,
             $data->id_client_api,
             $data->id,
             $data->foto,
             $data->manyProfilUsaha,
-            $data->refJenisKelamin
+            $data->refJenisKelamin,
         );
         return ['items' => $data];
     }
@@ -310,8 +307,8 @@ class Eform {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            // $mail_send = (new MailSender($mail_data));
-            // dispatch($mail_send);
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,

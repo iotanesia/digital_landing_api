@@ -75,32 +75,32 @@ class AktifitasPemasaran extends Model
         return $this->belongsTo(StsPipeline::class,'is_pipeline','id_pipeline');
     }
 
-    public function refMJenisKelamin()
+    public function refJenisKelamin()
     {
         return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin','id');
     }
 
-    public function refMAgama()
+    public function refAgama()
     {
         return $this->belongsTo(MAgama::class,'id_agama','id');
     }
 
-    public function refMStatusPernikahan()
+    public function refStatusPernikahan()
     {
         return $this->belongsTo(MStatusPernikahan::class,'id_status_perkawinan','id');
     }
 
-    public function refMProduk()
+    public function refProduk()
     {
         return $this->belongsTo(MProduk::class,'id_produk','id');
     }
 
-    public function refMSubProduk()
+    public function refSubProduk()
     {
         return $this->belongsTo(MSubProduk::class,'id_sub_produk','id');
     }
 
-    public function refMCabang()
+    public function refCabang()
     {
         return $this->belongsTo(MCabang::class,'id_cabang','id_cabang');
     }
