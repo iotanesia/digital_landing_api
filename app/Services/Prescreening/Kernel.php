@@ -27,6 +27,8 @@ class Kernel {
                     'request' => json_encode($proses['request_body']),
                     'response' => json_encode( $proses['response_data']),
                 ]);
+
+                return $proses['poin'];
             }
         } catch (\Throwable $th) {
             throw $th;

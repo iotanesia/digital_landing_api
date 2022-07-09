@@ -19,7 +19,7 @@ class DigiData {
     {
 
         $request = [
-            'trx_id' => 1,
+            'trx_id' => '01',
             'nik' => $params['no_ktp']
         ];
         try {
@@ -38,7 +38,7 @@ class DigiData {
                     'nama' => $item['nama_lengkap'],
                     'tempat_lahir' => $item['tempat_lahir'],
                     'id_jenis_kelamin' => MJenisKelamin::idByNama($item['jenis_kelamin']),
-                    'tgl_lahir' => Carbon::parse($item['tanggal_lahir'])->format('Y-m-d'),
+                    'tgl_lahir' => self::formatDate($item['tanggal_lahir']),
                     'alamat' => $item['alamat'],
                     'id_status_perkawinan' => MStatusPernikahan::idByNama($item['status_perkawinan']),
                     'id_propinsi' => MPropinsi::idByNama($item['propinsi']),
@@ -63,5 +63,11 @@ class DigiData {
                 'response_data' => $th
             ];
         }
+    }
+
+    public static function formatDate($date)
+    {
+        $data = explode('/',$date);
+        return $data[2].'-'.$data[1].'-'.$data[0];
     }
 }

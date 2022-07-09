@@ -307,8 +307,8 @@ class Eform {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            $mail_send = (new MailSender($mail_data));
-            dispatch($mail_send);
+            // $mail_send = (new MailSender($mail_data));
+            // dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,
@@ -590,6 +590,7 @@ class Eform {
         try {
             $store = Model::find($request['id']);
             $store->is_prescreening = $request['status']; // lolos
+            if(in_array($store->platform,['MOBILE']))  $store->is_pipeline = 1;
             $store->save();
             if(in_array($store->platform,['MOBILE'])) $store->refPipeline()->create(self::setParamsPipeline($store));
             if($is_transaction) DB::commit();
