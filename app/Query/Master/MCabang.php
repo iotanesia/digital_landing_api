@@ -21,7 +21,7 @@ class MCabang {
                 if($request->nama_cabang) $query->where('nama_cabang','ilike',"%$request->nama_cabang%");
                 $query->whereNotNull('lat');
                 $query->whereNotNull('lng');
-                $query->where('id_cabang_koor',701);
+                $query->where('id_cabang_koor','!=',701);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
