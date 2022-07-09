@@ -351,7 +351,6 @@ class Eform {
             if(!$request->foto_selfie) $require_fileds[] = 'Foto selfie';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $checkipeline = Pipeline::checkNasabah($request->nik);
-            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
             $store['is_cutoff'] = $checkipeline['is_cutoff'];
@@ -405,7 +404,7 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $store['id_cabang'] = $request->current_user->id_cabang;
-            $store['id_produk'] = $request->current_user->id_produk;
+            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];
