@@ -13,6 +13,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Query\Transaksi\AktifitasPemasaran;
+use App\Query\Transaksi\Leads;
+use App\Query\Transaksi\Eform;
 
 class Pipeline {
 
@@ -21,6 +24,22 @@ class Pipeline {
         try {
             $data = View::find($id_pipeline);
             if(!$data) throw new \Exception("Data not found.", 400);
+
+            $tipeNasabah = $data->tipe_calon_nasabah;
+            $refId =  $data->ref_id;
+            $dataNasabah = [];
+
+            if($tipeNasabah == 'Eform') {
+                $dataNasabah = Eform::byId($refId);
+            }
+
+            if($tipeNasabah  == 'Leads') {
+                $dataNasabah = Leads::byId($refId);
+            }
+
+            if($tipeNasabah == 'Aktifitas Pemasaran') {
+                $dataNasabah = AktifitasPemasaran::byIdForPiperline($refId);
+            }
 
             return [
                 'items' => [
@@ -31,8 +50,10 @@ class Pipeline {
                     'email' => $data->email,
                     'plafond' => $data->plafond,
                     'no_hp' => $data->no_hp,
+                    'ref_id' => $data->ref_id,
                     'tipe_calon_nasabah' => $data->tipe_calon_nasabah,
                     'foto_selfie' => $data->foto_selfie,
+                    'data_nasabah' => $dataNasabah['items'],
                 ],
                 'attributes' => null,
             ];
