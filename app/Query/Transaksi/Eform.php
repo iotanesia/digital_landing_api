@@ -307,8 +307,8 @@ class Eform {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            // $mail_send = (new MailSender($mail_data));
-            // dispatch($mail_send);
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => [
                 'nik' => $store->nik,
                 'nomor_aplikasi' => $store->nomor_aplikasi,
