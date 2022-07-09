@@ -46,8 +46,8 @@ class SIKPCalonSingle {
                 'Authorization' => 'Bearer '.$auth['accessToken'],
             ])->contentType("application/json")
             ->get(config('services.skip.host').'/middleware/sikpkur/calon_single',$request);
-            // Log::info(json_encode($response->json()));
-            if($response->getStatusCode() != 200) throw new \Exception(json_decode($response->json()), $response->getStatusCode());
+            Log::info(json_encode($response->json()));
+            if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();
             if(in_array($result['code'],['07'])) $point = true;
             else $point = false;
@@ -62,7 +62,7 @@ class SIKPCalonSingle {
                 'poin' => null,
                 'message' => $th->getMessage(), // diisi response message
                 'request_body' => $request,
-                'response_data' => $th
+                'response_data' => 'tsssss'
             ];
         }
     }
