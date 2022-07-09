@@ -17,8 +17,15 @@ class Kernel {
                 $proses = $params['path']::prescreening($params); // fungsi service \App\Services\Prescreening\DhnBI::prescreening($param)
                 if($proses['poin']) $keterangan = 'Success';
                 else $keterangan = 'Failed';
-
-                dd($proses);
+                dd([
+                    'metode' => 'service',
+                    'keterangan' => $keterangan,
+                    'id_prescreening_modul' => $params['id'],
+                    'status' => $proses['poin'],
+                    'id_prescreening_rules' => $params['id_prescreening_rules'],
+                    'request' => json_encode($proses['request_body']),
+                    'response' => json_encode( $proses['response_data']),
+                ]);
                 // save database
                Constants::MODEL_PRESCREENING[$params['modul']]::prescreening([
                     'metode' => 'service',
