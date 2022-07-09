@@ -19,6 +19,8 @@ class MCabang {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_cabang) $query->where('nama_cabang','ilike',"%$request->nama_cabang%");
+                $query->whereNotNull('lat');
+                $query->whereNotNull('lng');
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
