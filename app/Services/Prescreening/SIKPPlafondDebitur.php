@@ -47,7 +47,7 @@ class SIKPPlafondDebitur {
             ])->contentType("application/json")
             ->get(config('services.skip.host').'/middleware/sikpkur/plafond_debitur',$request);
             Log::info(json_encode($response->json()));
-            if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
+            // if($response->getStatusCode() != 200) throw new \Exception(json_encode($response->json()), $response->getStatusCode());
             $result = $response->json();
             return [
                 'poin' => true,  // always true
