@@ -101,6 +101,7 @@ class Leads {
         try {
             $update = Model::find($id);
             if(!$update) throw new \Exception("Data not found.", 400);
+            $update->fill($request->all());
             $update->id_user = $request->current_user->id;
             $update->save();
             $update->refPipeline()->create(self::setParamsPipeline($request,$update));
