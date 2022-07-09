@@ -125,6 +125,55 @@ class Eform {
         return ['items' => $data];
     }
 
+    public static function byNomorAplikasiNik($request)
+    {
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)
+        ->where('nik',$request->nik)
+        ->first();
+        if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
+        $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
+        $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
+        $data->nama_produk = $data->refProduk->nama ?? null;
+        $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+        $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+        $data->status = null; // dummy
+        $data->foto_ktp = null; // dummy
+        $data->foto_selfie = null; // dummy
+        $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
+            return [
+                'id_perizinan' => $item->id_perizinan,
+                'npwp' => $item->npwp,
+                'nama_usaha' => $item->nama_usaha,
+                'profil_usaha' => $item->profil_usaha,
+                'alamat_usaha' => $item->alamat_usaha,
+                'mulai_operasi' => $item->mulai_operasi,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        }); // dummy
+        unset(
+            $data->refStatusPerkawinan,
+            $data->refCabang,
+            $data->refAgama,
+            $data->cif,
+            $data->platform,
+            $data->id_agama,
+            $data->refProduk,
+            $data->refSubProduk,
+            $data->is_pipeline,
+            $data->is_cutoff,
+            $data->is_prescreening,
+            $data->id_client_api,
+            $data->id,
+            $data->foto,
+            $data->manyProfilUsaha,
+            $data->refJenisKelamin
+        );
+        return ['items' => $data];
+    }
+
        // list data mobile form
     /*
         - current user id cabang = id_cabang
@@ -194,7 +243,7 @@ class Eform {
                             'nama_produk' => $item->refProduk->nama ?? null,
                             'nama_sub_produk' => $item->refSubProduk->nama ?? null,
                             'created_at' => $item->created_at,
-                            'foto' => $item->foto
+                            'foto' => $item->id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
                         ];
                     }),
                     'attributes' => [
@@ -229,17 +278,26 @@ class Eform {
             if(!$request->alamat) $require_fileds[] = 'alamat';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->profil_usaha) $require_fileds[] = 'profil_usaha';
+            if(!$request->foto_ktp) $require_fileds[] = 'foto_ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'foto_selfie';
             if(count($require_fileds) > 0) throw new \Exception('Parameter berikut harus diisi '.implode(',',$require_fileds),400);
+            $image = $request->foto_ktp;  // your base64 encoded
+            $image_selfie = $request->foto_selfie;  // your base64 encoded
+
             $dataSend['is_prescreening'] = Constants::IS_ACTIVE;
             $dataSend['is_pipeline'] = Constants::IS_NOL;
             $dataSend['is_cutoff'] = Constants::IS_NOL;
             $dataSend['platform'] = 'WEB';
             $dataSend['nomor_aplikasi'] = Helper::generateNoApliksi($request->id_cabang);
             $dataSend['id_client_api'] = $request->client->id;
+            $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
+            $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
             if($request->profil_usaha) $store->manyProfilUsaha()->createMany(self::setParamsProfilUsaha($dataSend,$store->id));
             if($is_transaction) DB::commit();
-
+            // after commit process
+            Storage::put($dataSend['foto_ktp'], base64_decode($image));
+            Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
@@ -292,7 +350,7 @@ class Eform {
             if(!$request->alamat_usaha) $require_fileds[] = 'alamat_usaha';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->foto_ktp) $require_fileds[] = 'Foto Ktp';
-            if(!$request->foto_selfie) $require_fileds[] = 'Foto  selfie Ktp';
+            if(!$request->foto_selfie) $require_fileds[] = 'Foto selfie';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
@@ -306,18 +364,25 @@ class Eform {
             $dataSend['foto_ktp'] =(string) Str::uuid().'.png';
             $dataSend['foto_selfie'] =(string) Str::uuid().'.png';
             $store = Model::create($dataSend);
+            if($is_transaction) DB::commit();
             // after commit process
             Storage::put($dataSend['foto_ktp'], base64_decode($image));
             Storage::put($dataSend['foto_selfie'], base64_decode($image_selfie));
-            if($is_transaction) DB::commit();
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
                 'modul' => 'eform'
             ]));
             dispatch($pscrng);
+            $mail_data = [
+                "fullname" => $store->nama,
+                "nik" => $store->nik,
+                "nomor_aplikasi" => $store->nomor_aplikasi,
+                "reciver" =>  $store->email
+            ];
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
             return ['items' => $store];
-
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -356,6 +421,10 @@ class Eform {
             $store = Model::create($store);
             // if($checkipeline['is_pipeline']) $store->refPipeline()->create(self::setParamsRefPipeline($request,$store));
             if($is_transaction) DB::commit();
+            // after commit process
+            Storage::put($store['foto_ktp'], base64_decode($image));
+            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
+
             // prescreening
             $pscrng = (new PrescreeningJobs([
                 'items' => $store,
@@ -371,9 +440,6 @@ class Eform {
             $mail_send = (new MailSender($mail_data));
             dispatch($mail_send);
 
-            // after commit process
-            Storage::put($store['foto_ktp'], base64_decode($image));
-            Storage::put($store['foto_selfie'], base64_decode($image_selfie));
 
             return ['items' => $store];
 
@@ -385,7 +451,7 @@ class Eform {
 
     public static function tracking($request)
     {
-        $data = self::byNomorAplikasi($request);
+        $data = self::byNomorAplikasiNik($request);
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi;
         $ext->nik = $data['items']->nik;
@@ -443,7 +509,7 @@ class Eform {
         ];
 
         return [
-            'items' => $ext 
+            'items' => $ext
         ];
     }
 

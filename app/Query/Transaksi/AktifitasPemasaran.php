@@ -80,7 +80,8 @@ class AktifitasPemasaran {
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'cif' => $item->cif,
                             'nik' => $item->nik,
-                            'foto' => $item->foto,
+                            'foto_ktp' => $item->foto_ktp,
+                            'foto_selfie' => $item->foto_selfie,
                             'created_at' => $item->created_at,
                         ];
                     }),
@@ -127,16 +128,13 @@ class AktifitasPemasaran {
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
-            if(!$request->id_cabang) $require_fileds[] = 'id_cabang';
             if(!$request->status) $require_fileds[] = 'status';
-            if(!$request->is_cutoff) $require_fileds[] = 'is_cutoff';
-            if(!$request->is_pipeline) $require_fileds[] = 'is_pipeline';
-            if(!$request->is_prescreening) $require_fileds[] = 'is_prescreening';
 
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
-            $params['id_user'] = request()->current_user->id;
+            $params['id_user'] = $request->current_user->id;
+            $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
                 $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
@@ -167,7 +165,8 @@ class AktifitasPemasaran {
             }
 
             $image = $request->foto;  // your base64 encoded
-            $params['foto'] = (string) Str::uuid().'.png';
+            $params['foto_ktp'] = (string) Str::uuid().'.png';
+            $params['foto_selfie'] = (string) Str::uuid().'.png';
             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
             if($is_transaction) DB::commit();
@@ -179,7 +178,8 @@ class AktifitasPemasaran {
                 ]));
             }
             // after commit process
-            Storage::put($params['foto'], base64_decode($image));
+            Storage::put($params['foto_ktp'], base64_decode($image));
+            Storage::put($params['foto_selfie'], base64_decode($image));
             $mail_data = [
                 "fullname" => $store->nama,
                 "nik" => $store->nik,
@@ -195,12 +195,11 @@ class AktifitasPemasaran {
                 $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
                 $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
                 $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
-                $reqRiwayat['foto'] = $store->foto;
                 $reqRiwayat['lokasi'] = $request->lokasi;
                 $store = ModelRiwayat::create($reqRiwayat);
             }
 
-            return $store;
+            return ["items" => $store];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
@@ -304,7 +303,25 @@ class AktifitasPemasaran {
 
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_aktifitas_pemasaran' => $item->id_aktifitas_pemasaran,
+                            'aktifitas_pemasaran' => $item->refMstAktifitasPemasaran->nama ?? null,
+                            'id_tujuan_pemasaran' => $item->id_tujuan_pemasaran,
+                            'tujuan_pemasaran' => $item->refMstTujuanPemasaran->nama ?? null,
+                            'id_cara_pemasaran' => $item->id_tujuan_pemasaran,
+                            'cara_pemasaran' => $item->refMstCaraPemasaran->nama ?? null,
+                            'informasi_aktifitas' => $item->informasi_aktifitas,
+                            'foto' => $item->foto,
+                            'lokasi' => $item->lokasi,
+                            "waktu_aktifitas"=> $item->waktu_aktifitas,
+                            "tanggal_aktifitas"=> $item->tanggal_aktifitas,
+                            "mulai_aktifitas"=> $item->mulai_aktifitas,
+                            "selesai_aktifitas"=> $item->selesai_aktifitas,
+                            'created_at' => $item->created_at,
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

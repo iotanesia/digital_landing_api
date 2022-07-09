@@ -327,10 +327,10 @@
                                 <td width="120">NIK</td>
                                 <td><b>{{$nik}}</b></td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>Nama</td>
                                 <td><b>{{$fullname}}</b></td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td>Nomor Aplikasi</td>
                                 <td><b>{{$nomor_aplikasi}}</b></td>

@@ -5,6 +5,8 @@ namespace App\Models\Transaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Master\MTujuanPemasaran;
+use App\Models\Master\MCaraPemasaran;
 
 class AktifitaPemasaranRiwayat extends Model
 {
@@ -29,4 +31,34 @@ class AktifitaPemasaranRiwayat extends Model
         "updated_by",
         "deleted_at",
     ];
+
+    public function refMstTujuanPemasaran()
+    {
+        return $this->belongsTo(MTujuanPemasaran::class,'id_tujuan_pemasaran','id');
+    }
+
+    public function refMstCaraPemasaran()
+    {
+        return $this->belongsTo(MCaraPemasaran::class,'id_cara_pemasaran','id');
+    }
+
+    public function refMstAktifitasPemasaran()
+    {
+        return $this->belongsTo(AktifitasPemasaran::class,'id_aktifitas_pemasaran','id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model){
+            $model->created_by = request()->current_user->id;
+        });
+        static::updating(function ($model){
+            $model->updated_by = request()->current_user->id;
+        });
+        static::deleting(function ($model){
+            $model->deleted_by = request()->current_user->id;
+        });
+    }
 }

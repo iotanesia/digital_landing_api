@@ -19,8 +19,8 @@ class Tracking {
         if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
         if(!$request->nik) $require_fileds[] = 'nik';
         if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-        $data = Eform::byNomorAplikasi($request);
-        if(!$data['items']) throw new \Exception("Data tidak ditemukan", 400);
+        $data = Eform::byNomorAplikasiNik($request);
+        if(!$data['items']) throw new \Exception("NIK atau Nomor Aplikasi Salah", 400);
         $ext = new \stdClass;
         $ext->nomor_aplikasi = $data['items']->nomor_aplikasi ?? null;
         $ext->nik = $data['items']->nik;
@@ -47,6 +47,7 @@ class Tracking {
                 'label' => 'Prescreening',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'lolos',
+                'id_status' => 1,
                 'keterangan' => null,
                 'step' => null
             ],
@@ -55,6 +56,7 @@ class Tracking {
                 'label' => 'Analisa Kredit',
                 'tanggal' => Carbon::now()->format('Y-m-d'),
                 'status' => 'Sedang Diproses',
+                'id_status' => 0,
                 'keterangan' => null,
                 'step' => 'Verifikasi Data'
             ],
@@ -63,6 +65,7 @@ class Tracking {
                 'label' => 'Approval',
                 'tanggal' => null,
                 'status' => null,
+                'id_status' => 0,
                 'keterangan' => null,
                 'step' => null
             ],
@@ -71,6 +74,7 @@ class Tracking {
                 'label' => 'Cetak Dokumen',
                 'tanggal' => null,
                 'status' => null,
+                'id_status' => 0,
                 'keterangan' => null,
                 'step' => null
 
@@ -80,6 +84,7 @@ class Tracking {
                 'label' => 'Disbursement',
                 'tanggal' => null,
                 'status' => null,
+                'id_status' => 0,
                 'keterangan' => null,
                 'step' => null
             ]
