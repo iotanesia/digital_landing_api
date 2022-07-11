@@ -101,14 +101,16 @@ class AktifitasPemasaran {
     */
     public static function getDataCurrent($request)
     {
+        $filter_tanggal = Helper::filterByDate($request);
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request, $filter_tanggal){
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
+                if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
             })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
