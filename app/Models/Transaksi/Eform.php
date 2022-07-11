@@ -34,6 +34,7 @@ class Eform extends Model
         'tgl_lahir',
         'npwp',
         'alamat',
+        'alamat_usaha',
         'id_jenis_kelamin',
         'id_agama',
         'id_status_perkawinan',
