@@ -524,12 +524,11 @@ class Eform {
     }
 
     // update data rm
-    public static function updateDataRm($request, $is_transaction = true)
+    public static function updateDataRm($request, $id, $is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
-            if(!$request->id) $require_fileds[] = 'id';
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->email) $require_fileds[] = 'email';
@@ -540,14 +539,14 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend = $request->all();
-            $update = Model::find($request->id);
+            $update = Model::find($id);
             unset($dataSend['id']);
             foreach($dataSend as $key => $val) {
                 $update->{$key} = $val;
             }
             $update->save();
-            if($update->is_pipeline) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
+            if($update->is_prescreening) $update->refPipeline()->create(self::setParamsRefPipeline($request,$update));
 
             return ['items' => $update];
 
