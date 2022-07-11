@@ -351,4 +351,37 @@ class ApiHelper {
         ];
     }
 
+    public static function filterByDateAndMount($request)
+    {
+        $tanggal_mulai = $request->filter_tgl_mulai ?? null;
+        $tanggal_akhir = $request->filter_tgl_akhir ?? null;
+        if($tanggal_akhir && !$tanggal_mulai) $tanggal_mulai = Carbon::now()->format('Y-m-d');
+        if($tanggal_mulai && !$tanggal_akhir) $tanggal_akhir = Carbon::now()->format('Y-m-d');
+        if(!$tanggal_akhir && !$tanggal_akhir) {
+            $tanggal_mulai = null;
+            $tanggal_akhir = null;
+        }
+
+        $today = date('Y-m-d');
+        if($request->filter_bulan_ini == 1) {
+            $tanggal_mulai = date("Y-m-01", strtotime($today));
+            $tanggal_akhir = date("Y-m-t", strtotime($today));
+        } 
+
+        if ($request->filter_bulan_kemarin == 1) {
+            $yesterday = date('Y-m-d', strtotime('-1 months', strtotime($today)));
+            $tanggal_mulai = date("Y-m-01", strtotime($yesterday));
+            $tanggal_akhir = date("Y-m-t", strtotime($yesterday));
+        }
+
+        return [
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_akhir' => $tanggal_akhir,
+            'filter' => [
+                $tanggal_mulai,
+                $tanggal_akhir,
+            ]
+        ];
+    }
+
 }

@@ -91,7 +91,29 @@ class AktifitasPemasaran {
 
      public static function getDataCurrentByDate($request)
      {
+        try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $data = Model::where(function ($query) use ($request){
+                if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
+                $query->where('id_user', request()->current_user->id);
+                $query->where('is_cutoff', Constants::IS_NOL);
+                $query->where('is_pipeline', Constants::IS_NOL);
+                $query->whereNull('is_prescreening');
+                $query->whereBetween('created_at', [date("Y-m-01"), date("Y-m-t")]);
+            })->get()
+            ->groupBy(function($item){
+                return $item->created_at->format('Y-m-d');
+            });
+            $itemsArr = [];
+            foreach($data as $key => $val) {
+                $itemsArr[] = ["date" => $key, "data" => $val];
+            }
 
+            return ['items' => $itemsArr];
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
      }
     // list data
     /*
@@ -101,7 +123,7 @@ class AktifitasPemasaran {
     */
     public static function getDataCurrent($request)
     {
-        $filter_tanggal = Helper::filterByDate($request);
+        $filter_tanggal = Helper::filterByDateAndMount($request);
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request, $filter_tanggal){
@@ -110,7 +132,9 @@ class AktifitasPemasaran {
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
-                if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
+                if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) {
+                    $query->whereBetween('created_at',$filter_tanggal['filter']);
+                }
             })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
