@@ -61,7 +61,8 @@ class Eform extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
-        'id_client_api'
+        'id_client_api',
+        'id_user'
     ];
 
     public function refCabang()
