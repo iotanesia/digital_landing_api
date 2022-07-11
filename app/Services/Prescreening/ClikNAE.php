@@ -20,9 +20,9 @@ class ClikNAE {
             ->where($request)
             ->first();
             if($data) $point = true;
-            else $point = false;
+            else $point = true;
             return [
-                'poin' => $data->status ?? false,
+                'poin' => $data->status ?? 2,
                 'message' => $data->nik ?? null, // diisi response message
                 'request_body' => $request,
                 'response_data' => $data->response ?? null
