@@ -62,7 +62,11 @@ class Eform extends Model
         'deleted_at',
         'deleted_by',
         'id_client_api',
-        'id_user'
+        'id_user',
+        'id_propinsi',
+        'id_kabupaten',
+        'id_kecamatan',
+        'id_kelurahan',
     ];
 
     public function refCabang()
