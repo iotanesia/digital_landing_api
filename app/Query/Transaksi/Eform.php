@@ -36,10 +36,10 @@ class Eform {
     }
 
     // detail data aktifitas pemasaran
-    public static function byId($id_aktifitas_pemasaran)
+    public static function byId($id)
     {
         try {
-            $data = Model::find($id_aktifitas_pemasaran);
+            $data = Model::find($id);
             if(!$data) throw new \Exception("Data not found.", 400);
 
             return [
@@ -63,6 +63,8 @@ class Eform {
                     'id_produk' => $data->id_produk,
                     'id_sub_produk' => $data->id_sub_produk,
                     'id_cabang' => $data->id_cabang,
+                    'id_agama' => $data->id_agama,
+                    'id_jenis_kelamin' => $data->id_jenis_kelamin,
                     'plafon' => $data->plafon,
                     'jangka_waktu' => $data->jangka_waktu,
                     'npwp' => $data->npwp,
@@ -71,7 +73,9 @@ class Eform {
                     'nama_produk' => $data->refProduk->nama ?? null,
                     'nama_status_perkawinan' => $data->refStatusPerkawinan->nama ?? null,
                     'nama_cabang' => $data->refCabang->nama_cabang ?? null,
-                    'nama_sub_produk' => $data->refSubProduk->nama ?? null
+                    'nama_sub_produk' => $data->refSubProduk->nama ?? null,
+                    'nama_jenis_kelamin' => $data->refJenisKelamin->nama ?? null,
+                    'nama_agama' => $data->refAgama->nama ?? null,
                 ],
                 'attributes' => null,
             ];
