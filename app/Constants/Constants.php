@@ -21,6 +21,11 @@ class Constants
     const CETAK_DOKUMEN = 4;
     const DISBURSMENT = 5;
 
+    //tipe calon nasabah
+    const TCN_EFORM = 2;
+    const TCN_AKTIFITAS_PEMASARAN = 2;
+    const TCN_LEAD = 2;
+
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',

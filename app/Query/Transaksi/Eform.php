@@ -572,6 +572,7 @@ class Eform {
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'step_verifikasi' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,
+            'tipe_calon_nasabah'=>Constants::TCN_EFORM,
          ];
     }
 
