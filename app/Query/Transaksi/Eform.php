@@ -541,11 +541,8 @@ class Eform {
             foreach($dataSend as $key => $val) {
                 $update->{$key} = $val;
             }
-            $checkipeline = Pipeline::checkNasabah($request->nik);
-            $update->is_pipeline = $checkipeline['is_pipeline'];
-            $update->is_cutoff = $checkipeline['is_cutoff'];
             $update->save();
-            if($checkipeline['is_pipeline']) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
+            if($update->is_pipeline) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
 
             return ['items' => $update];
