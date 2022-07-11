@@ -63,6 +63,8 @@ class Eform {
                     'id_produk' => $data->id_produk,
                     'id_sub_produk' => $data->id_sub_produk,
                     'id_cabang' => $data->id_cabang,
+                    'id_agama' => $data->id_agama,
+                    'id_jenis_kelamin' => $data->id_jenis_kelamin,
                     'plafon' => $data->plafon,
                     'jangka_waktu' => $data->jangka_waktu,
                     'npwp' => $data->npwp,
