@@ -228,15 +228,22 @@ class Eform {
     */
     public static function getDataCurrent($request)
     {
-        //code
+        $filter_tanggal = Helper::filterByDate($request);
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request,$filter_tanggal){
                         $query->where('is_pipeline',Constants::IS_NOL)
                               ->where('is_prescreening',1)
                               ->where('is_cutoff',Constants::IS_NOL)
                               ->where('id_cabang',$request->current_user->id_cabang);
                               if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                               if($request->nik) $query->where('nik',$request->nik);
+                              if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
+                        if($request->kueri) $query->where(function ($query) use ($request){
+                             $query->where('nama','ilike',"%$request->kueri%");
+                             $query->orWhere('nomor_aplikasi','ilike',"%$request->kueri%");
+                             $query->orWhere('nik','ilike',"%$request->kueri%");
+                             $query->orWhere('no_hp','ilike',"%$request->kueri%");
+                        });
                     })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
@@ -524,12 +531,11 @@ class Eform {
     }
 
     // update data rm
-    public static function updateDataRm($request, $is_transaction = true)
+    public static function updateDataRm($request, $id, $is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
         try {
             $require_fileds = [];
-            if(!$request->id) $require_fileds[] = 'id';
             if(!$request->nama) $require_fileds[] = 'Nama nasabah';
             if(!$request->nik) $require_fileds[] = 'nik';
             if(!$request->email) $require_fileds[] = 'email';
@@ -540,14 +546,14 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $dataSend = $request->all();
-            $update = Model::find($request->id);
+            $update = Model::find($id);
             unset($dataSend['id']);
             foreach($dataSend as $key => $val) {
                 $update->{$key} = $val;
             }
             $update->save();
-            if($update->is_pipeline) $update->refPipeline->create(self::setParamsRefPipeline($request,$update));
             if($is_transaction) DB::commit();
+            if($update->is_prescreening) $update->refPipeline()->create(self::setParamsRefPipeline($request,$update));
 
             return ['items' => $update];
 
@@ -566,6 +572,7 @@ class Eform {
             'tanggal' => Carbon::now()->format('Y-m-d'),
             'step_verifikasi' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,
+            'id_tipe_calon_nasabah'=>Constants::TCN_EFORM,
          ];
     }
 

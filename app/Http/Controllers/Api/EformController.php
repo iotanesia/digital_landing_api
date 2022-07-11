@@ -145,7 +145,7 @@ class EformController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Eform::updateDataRm($request)
+                Eform::updateDataRm($request, $id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
