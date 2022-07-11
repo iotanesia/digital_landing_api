@@ -19,19 +19,20 @@ class MCabang {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama_cabang) $query->where('nama_cabang','ilike',"%$request->nama_cabang%");
+                if($request->id_propinsi) $query->where('id_propinsi',$request->id_propinsi);
                 $query->whereNotNull('lat');
                 $query->whereNotNull('lng');
                 $query->where('id_cabang_koor','!=',701);
             })->paginate($request->limit);
-                return [
-                    'items' => $data->items(),
-                    'attributes' => [
-                        'total' => $data->total(),
-                        'current_page' => $data->currentPage(),
-                        'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
-                    ]
-                ];
+            return [
+                'items' => $data->items(),
+                'attributes' => [
+                    'total' => $data->total(),
+                    'current_page' => $data->currentPage(),
+                    'from' => $data->currentPage(),
+                    'per_page' => $data->perPage(),
+                ]
+            ];
         } catch (\Throwable $th) {
             throw $th;
         }
