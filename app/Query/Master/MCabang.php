@@ -22,7 +22,7 @@ class MCabang {
                 if($request->id_propinsi) $query->where('id_propinsi',$request->id_propinsi);
                 $query->whereNotNull('lat');
                 $query->whereNotNull('lng');
-                $query->where('id_cabang_koor','!=',701);
+                $query->where('id_cabang_koor','<>',701);
             })->paginate($request->limit);
             return [
                 'items' => $data->items(),
