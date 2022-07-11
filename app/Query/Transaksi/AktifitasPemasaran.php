@@ -185,10 +185,6 @@ class AktifitasPemasaran {
             if(!$request->id_jenis_kelamin) $require_fileds[] = 'jenis_kelamin';
             if(!$request->id_agama) $require_fileds[] = 'agama';
             if(!$request->id_status_perkawinan) $require_fileds[] = 'status_perkawinan';
-            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->nama_pasangan) $require_fileds[] = 'nama_pasangan';
-            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tempat_lahir_pasangan) $require_fileds[] = 'tempat_lahir_pasangan';
-            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->tgl_lahir_pasangan) $require_fileds[] = 'tgl_lahir_pasangan';
-            // if($request->id_status_perkawinan == MStatusPernikahan::getStatusMenikah(true) && !$request->alamat_pasangan) $require_fileds[] = 'alamat_pasangan';
             if(!$request->id_produk) $require_fileds[] = 'id_produk';
             if(!$request->id_sub_produk) $require_fileds[] = 'id_sub_produk';
             if(!$request->plafond) $require_fileds[] = 'plafond';
@@ -201,25 +197,10 @@ class AktifitasPemasaran {
             $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
-                $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
-                $is_prescreening = null;
-                $is_pipeline = 0;
-                $is_cutoff = 0;
-
-                if ($cekPipeline) {
-                    $is_prescreening = 0;
-                    if ((int) $cekPipeline->tracking !== 5) {
-                        $is_prescreening = 3;
-                        $is_pipeline = 0;
-                        $is_cutoff = 0;
-                    }
-                } else {
-                    $is_prescreening = 0;
-                }
-
-                $params['is_prescreening'] = $is_prescreening;
-                $params['is_pipeline'] = $is_pipeline;
-                $params['is_cutoff'] = $is_cutoff;
+                $cekPipeline = ModelPipeline::where('nik', $request->nik)->where('tracking', '<>', 5)->first();
+                $params['is_prescreening'] = $cekPipeline ? 3 : 0;
+                $params['is_pipeline'] = 0;
+                $params['is_cutoff'] = $cekPipeline ? 1 : 0;
             }
 
             if ((int) $request->status === 1) {
@@ -234,6 +215,15 @@ class AktifitasPemasaran {
             $params['foto_selfie'] = (string) Str::uuid().'.png';
             $params['nomor_aplikasi'] = Helper::generateNoApliksi($request->current_user->id_cabang);
             $store = Model::create($params);
+
+            $reqRiwayat = $request->all();
+            $reqRiwayat['id_aktifitas_pemasaran'] = $store->id;
+            $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
+            $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
+            $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
+            $reqRiwayat['lokasi'] = $request->lokasi;
+            $store = ModelRiwayat::create($reqRiwayat);
+
             if($is_transaction) DB::commit();
 
             if($request->status == 2) {
@@ -252,18 +242,8 @@ class AktifitasPemasaran {
                 "nomor_aplikasi" => $store->nomor_aplikasi,
                 "reciver" =>  $store->email
             ];
-            // $mail_send = (new MailSender($mail_data));
-            // dispatch($mail_send);
-
-            if ($store && ((int) $request->status === 1 || (int) $request->status === 2)) {
-                $reqRiwayat = $request->all();
-                $reqRiwayat['id_aktifitas_pemasaran'] = $store->id;
-                $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
-                $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
-                $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
-                $reqRiwayat['lokasi'] = $request->lokasi;
-                $store = ModelRiwayat::create($reqRiwayat);
-            }
+            $mail_send = (new MailSender($mail_data));
+            dispatch($mail_send);
 
             return ["items" => $store];
         } catch (\Throwable $th) {
@@ -286,25 +266,10 @@ class AktifitasPemasaran {
             $params['id_cabang'] = $request->current_user->id_cabang;
 
             if ((int) $request->status === 2) {
-                $cekPipeline = ModelPipeline::where('nik', $request->nik)->first();
-                $is_prescreening = null;
-                $is_pipeline = 0;
-                $is_cutoff = 0;
-
-                if ($cekPipeline) {
-                    $is_prescreening = 0;
-                    if ((int) $cekPipeline->tracking !== 5) {
-                        $is_prescreening = 3;
-                        $is_pipeline = 0;
-                        $is_cutoff = 0;
-                    }
-                } else {
-                    $is_prescreening = 0;
-                }
-
-                $params['is_prescreening'] = $is_prescreening;
-                $params['is_pipeline'] = $is_pipeline;
-                $params['is_cutoff'] = $is_cutoff;
+                $cekPipeline = ModelPipeline::where('nik', $request->nik)->where('tracking', '<>', 5)->first();
+                $params['is_prescreening'] = $cekPipeline ? 3 : 0;
+                $params['is_pipeline'] = 0;
+                $params['is_cutoff'] = $cekPipeline ? 1 : 0;
             }
 
             if ((int) $request->status === 1) {
@@ -316,19 +281,36 @@ class AktifitasPemasaran {
             if ($request->foto_ktp) {
                 $imageKtp = $request->foto_ktp;  // your base64 encoded
                 $params['foto_ktp'] = (string) Str::uuid().'.png';
-                Storage::put($params['foto_ktp'], base64_decode($imageKtp));
-                $params['foto_ktp'] = (string) Str::uuid().'.png';
             }
 
             if ($request->foto_selfie) {
                 $imageselfie = $request->foto_selfie;  // your base64 encoded
                 $params['foto_selfie'] = (string) Str::uuid().'.png';
-                Storage::put($params['foto_selfie'], base64_decode($imageselfie));
-                $params['foto_selfie'] = (string) Str::uuid().'.png';
             }
+
             $update->update($params);
+
+            $reqRiwayat = $request->all();
+            $reqRiwayat['id_aktifitas_pemasaran'] = $id;
+            $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
+            $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
+            $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
+            $reqRiwayat['lokasi'] = $request->lokasi;
+            $store = ModelRiwayat::create($reqRiwayat);
+
             if($is_transaction) DB::commit();
             // after commit process
+
+            if ($request->foto_ktp) Storage::put($params['foto_ktp'], base64_decode($imageKtp));
+            if ($request->foto_selfie) Storage::put($params['foto_selfie'], base64_decode($imageselfie));
+
+            if($request->status == 2) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $store,
+                    'modul' => 'aktifitas_pemasaran'
+                ]));
+                dispatch($pscrng);
+            }
 
             $mail_data = [
                 "fullname" => $update->nama,
@@ -340,17 +322,6 @@ class AktifitasPemasaran {
             $mail_send = (new MailSender($mail_data));
             dispatch($mail_send);
 
-            if ($update && ((int) $request->status === 1 || (int) $request->status === 2)) {
-                $reqRiwayat = $request->all();
-                $reqRiwayat['id_aktifitas_pemasaran'] = $id;
-                $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
-                $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
-                $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
-                $reqRiwayat['lokasi'] = $request->lokasi;
-                $store = ModelRiwayat::create($reqRiwayat);
-            }
-
-            if($is_transaction) DB::commit();
             return $update;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
