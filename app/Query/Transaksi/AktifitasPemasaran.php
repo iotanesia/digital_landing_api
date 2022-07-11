@@ -103,8 +103,32 @@ class AktifitasPemasaran {
     {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $start_date = "";
+            $end_date = "";
+            $today = date('Y-m-d');
+            $yesterday = date('Y-m-d', strtotime('-1 months', strtotime($today)));
+
+            if ($request->tanggal_mulai && $request->tanggal_selesai) {
+                $start_date = $request->tanggal_mulai;
+                $end_date = $request->tanggal_selesai;
+            }
+
+            if($request->bulan_ini) {
+                $start_date = date("Y-m-01", strtotime($today));
+                $end_date = date("Y-m-t", strtotime($today));
+            } 
+
+            if ($request->bulan_kemaren) {
+                $start_date = date("Y-m-01", strtotime($yesterday));
+                $end_date = date("Y-m-t", strtotime($yesterday));
+            }
+            
             $data = Model::where(function ($query) use ($request){
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
+                if ($start_date !== "" && $end_date !== "") {
+                    $query->orWhereDate('start_date', '<=', $date)
+                          ->WhereDate('end_date', '>=', $date);
+                }
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
