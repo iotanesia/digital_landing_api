@@ -228,15 +228,22 @@ class Eform {
     */
     public static function getDataCurrent($request)
     {
-        //code
+        $filter_tanggal = Helper::filterByDate($request);
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request,$filter_tanggal){
                         $query->where('is_pipeline',Constants::IS_NOL)
                               ->where('is_prescreening',1)
                               ->where('is_cutoff',Constants::IS_NOL)
                               ->where('id_cabang',$request->current_user->id_cabang);
                               if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                               if($request->nik) $query->where('nik',$request->nik);
+                              if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
+                        if($request->kueri) $query->where(function ($query) use ($request){
+                             $query->where('nama','ilike',"%$request->kueri%");
+                             $query->orWhere('nomor_aplikasi','ilike',"%$request->kueri%");
+                             $query->orWhere('nik','ilike',"%$request->kueri%");
+                             $query->orWhere('no_hp','ilike',"%$request->kueri%");
+                        });
                     })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
