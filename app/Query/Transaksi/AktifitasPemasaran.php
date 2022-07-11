@@ -266,7 +266,8 @@ class AktifitasPemasaran {
                 $params['foto_selfie'] = (string) Str::uuid().'.png';
             }
 
-            $update = $update->update($params);
+            $update->fill($params);
+            $update = $update->save();
 
             $reqRiwayat = $request->all();
             $reqRiwayat['id_aktifitas_pemasaran'] = $id;
