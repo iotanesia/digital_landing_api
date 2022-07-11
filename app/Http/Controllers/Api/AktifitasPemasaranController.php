@@ -22,6 +22,20 @@ class AktifitasPemasaranController extends Controller
         }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function byDate(Request $request)
+    {
+        try {
+            return Helper::resultResponse(AktifitasPemasaran::getDataCurrentByDate($request));
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
      /**
      * Show the form for creating a new resource.
      *

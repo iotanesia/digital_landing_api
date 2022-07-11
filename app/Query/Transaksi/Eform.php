@@ -408,8 +408,9 @@ class Eform {
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $store['id_cabang'] = $request->current_user->id_cabang;
-            // $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
-            $store['id_produk'] = 1;
+            $store['id_produk'] = MSubProduk::getIdProduk($request->id_sub_produk);
+            // $store['id_sub_produk'] = 3;
+            // $store['id_produk'] = 1;
             $checkipeline = Pipeline::checkNasabah($request->nik);
             $store['is_prescreening'] = $checkipeline['is_prescreening'];
             $store['is_pipeline'] = $checkipeline['is_pipeline'];

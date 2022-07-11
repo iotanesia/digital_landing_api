@@ -89,6 +89,10 @@ class AktifitasPemasaran {
          return ['items' => $data];
      }
 
+     public static function getDataCurrentByDate($request)
+     {
+
+     }
     // list data
     /*
         - current id user = id_user
