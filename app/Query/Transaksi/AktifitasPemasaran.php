@@ -267,7 +267,7 @@ class AktifitasPemasaran {
             }
 
             $update->fill($params);
-            $update = $update->save();
+            $update->save();
 
             $reqRiwayat = $request->all();
             $reqRiwayat['id_aktifitas_pemasaran'] = $id;
