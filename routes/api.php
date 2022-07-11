@@ -75,6 +75,7 @@ Route::prefix('v1')
         Route::prefix('aktifitas-pemasaran')->group(function () {
            /* get data  */ Route::get('/',[AktifitasPemasaranController::class,'index']);
            /* input data canvasing */ Route::post('/',[AktifitasPemasaranController::class,'store']);
+           /* pencarian by date  */ Route::get('/by-date',[AktifitasPemasaranController::class,'byDate']);
            /* info prescreening  */ Route::get('/info-prescreening',[AktifitasPemasaranController::class,'prescreening']);
            /* histroy aktifitas  */ Route::get('/history-aktifitas/{id}',[AktifitasPemasaranController::class,'history']);
            /* detail data  */ Route::get('/{id}',[AktifitasPemasaranController::class,'show']);
