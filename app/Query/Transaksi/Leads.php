@@ -49,12 +49,14 @@ class Leads {
     */
     public static function getDataCurrent($request)
     {
+        $filter_tanggal = Helper::filterByDate($request);
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request,$filter_tanggal){
                 $query->where('is_pipeline', Constants::IS_NOL)
                       ->where('is_cutoff', Constants::IS_NOL)
                       ->where('is_prescreening', Constants::IS_ACTIVE);
+                      if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) $query->whereBetween('created_at',$filter_tanggal['filter']);
             })->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
