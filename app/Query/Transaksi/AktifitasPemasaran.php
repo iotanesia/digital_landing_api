@@ -266,7 +266,7 @@ class AktifitasPemasaran {
                 $params['foto_selfie'] = (string) Str::uuid().'.png';
             }
 
-            $update->update($params);
+            $update = $update->update($params);
 
             $reqRiwayat = $request->all();
             $reqRiwayat['id_aktifitas_pemasaran'] = $id;
@@ -284,7 +284,7 @@ class AktifitasPemasaran {
 
             if($request->status == 2) {
                 $pscrng = (new PrescreeningJobs([
-                    'items' => $store,
+                    'items' => $update,
                     'modul' => 'aktifitas_pemasaran'
                 ]));
                 dispatch($pscrng);
@@ -300,7 +300,7 @@ class AktifitasPemasaran {
             $mail_send = (new MailSender($mail_data));
             dispatch($mail_send);
 
-            return $update;
+            return ["items" => $update];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
