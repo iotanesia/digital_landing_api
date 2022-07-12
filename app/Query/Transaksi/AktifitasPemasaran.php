@@ -454,7 +454,7 @@ class AktifitasPemasaran {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
             'tracking' => 2,
-            'id_tipe_calon_nasabah' => 1,
+            'id_tipe_calon_nasabah' => Constants::TCN_AKTIFITAS_PEMASARAN,
             'id_user' =>  $data->id_user,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
