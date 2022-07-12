@@ -56,16 +56,17 @@ class Eform {
                     'tgl_lahir_pasangan' => $data->tgl_lahir_pasangan,
                     'alamat_detail' => $data->alamat_detail,
                     'lokasi' => $data->lokasi,
-                    'lokasi_usaha' => $data->lokasi_usaha,
                     'status' => $data->status,
                     'id_jenis_produk' => $data->id_jenis_produk,
                     'id_status_perkawinan' => $data->id_status_perkawinan,
+                    'id_produk' => $data->id_produk,
                     'id_produk' => $data->id_produk,
                     'id_sub_produk' => $data->id_sub_produk,
                     'id_cabang' => $data->id_cabang,
                     'id_agama' => $data->id_agama,
                     'id_jenis_kelamin' => $data->id_jenis_kelamin,
-                    'plafon' => $data->plafon,
+                    'plafond' => $data->plafond,
+                    'alamat_usaha' => $data->alamat_usaha,
                     'jangka_waktu' => $data->jangka_waktu,
                     'npwp' => $data->npwp,
                     'foto_ktp' => $data->foto_ktp,
@@ -563,6 +564,7 @@ class Eform {
 
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
+
             throw $th;
         }
     }
