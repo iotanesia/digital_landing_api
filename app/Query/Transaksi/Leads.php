@@ -41,6 +41,32 @@ class Leads {
         return ['items' => $data];
     }
 
+    public static function getDataCurrentByDate($request)
+    {
+       try {
+           if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+           $data = Model::where(function ($query) use ($request){
+               $query->where('is_pipeline', Constants::IS_NOL)
+               ->where('is_cutoff', Constants::IS_NOL)
+               ->where('is_prescreening', Constants::IS_ACTIVE);
+           })
+           ->select('id','nama','nik','no_hp', 'cif', 'foto', DB::raw('DATE(created_at) as date'))
+           ->orderBy('date','desc')
+           ->get()
+           ->groupBy('date');
+
+           $itemsArr = [];
+           foreach($data as $key => $group) {
+               $itemsArr[] = ["date" => $key, "data" => $group];
+           }
+
+           return ['items' => $itemsArr];
+
+       } catch (\Throwable $th) {
+           throw $th;
+       }
+    }
+
     // list data
     /*
         - current user id cabang = id_cabang
