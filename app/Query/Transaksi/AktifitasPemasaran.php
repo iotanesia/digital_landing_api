@@ -352,7 +352,9 @@ class AktifitasPemasaran {
             $data = ModelRiwayat::where(function ($query) use ($id){
                 $query->where('id_aktifitas_pemasaran', $id);
 
-            })->paginate($request->limit);
+            })
+            ->orderBy('id','desc')
+            ->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [
