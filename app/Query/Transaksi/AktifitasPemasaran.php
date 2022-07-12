@@ -101,6 +101,7 @@ class AktifitasPemasaran {
                 $query->whereNull('is_prescreening');
             })
             ->select('id','nama','nik','no_hp','nomor_aplikasi', 'cif', 'foto_selfie', DB::raw('DATE(created_at) as date'))
+            ->orderBy('date','desc')
             ->get()
             ->groupBy('date');
 
