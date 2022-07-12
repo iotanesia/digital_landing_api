@@ -557,9 +557,8 @@ class Eform {
             $update->save();
             if($is_transaction) DB::commit();
             if($update->is_prescreening) $update->refPipeline()->create(self::setParamsRefPipeline($request,$update));
-            if($request->foto_ktp) Storage::put($dataSend['foto_ktp'], base64_decode($request->foto_ktp));
-            if($request->foto_selfie) Storage::put($dataSend['foto_selfie'], base64_decode($request->foto_selfie));
-
+            if($request->foto_ktp) Storage::put($update->foto_ktp, base64_decode($request->foto_ktp));
+            if($request->foto_selfie) Storage::put($update->foto_selfie, base64_decode($request->foto_selfie));
             return ['items' => $update];
 
         } catch (\Throwable $th) {
