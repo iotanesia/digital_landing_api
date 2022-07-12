@@ -43,7 +43,7 @@ class LeadsController extends Controller
     {
         //
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -52,6 +52,23 @@ class LeadsController extends Controller
     public function create(Request $request)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function byDate(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Leads::getDataCurrentByDate($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
