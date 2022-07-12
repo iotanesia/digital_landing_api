@@ -27,16 +27,16 @@ class AktifitasPemasaran {
         $data = Model::where('id', $id_aktifitas_pemasaran)->first();
 
         if ($data) {
-            $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
-            $data->agama = $data->refAgama->nama ?? null;
-            $data->status_perkawinan = $data->refStatusPernikahan->nama ?? null;
-            $data->produk = $data->refProduk->nama ?? null;
-            $data->sub_produk = $data->refSubProduk->nama ?? null;
-            $data->cabang = $data->refCabang->nama ?? null;
+            $data->nama_status_perkawinan = $data->refStatusPernikahan->nama ?? null;
+            $data->nama_jenis_kelamin = $data->refJenisKelamin->nama ?? null;
+            $data->nama_agama = $data->refAgama->nama ?? null;
+            $data->nama_produk = $data->refProduk->nama ?? null;
+            $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
+            $data->nama_cabang = $data->refCabang->nama ?? null;
+            $data->nama_status = $data->refStatus->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
-            $data->nama_status = $data->refStatus->nama ?? null;
             unset(
                 $data->refJenisKelamin,
                 $data->refStatus,
