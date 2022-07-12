@@ -552,7 +552,7 @@ class Eform {
             foreach($dataSend as $key => $val) {
                 $update->{$key} = $val;
             }
-
+            $update->is_pipeline = Constants::IS_ACTIVE;
             if($request->foto_ktp) $update->foto_ktp = (string) Str::uuid().'.png';
             if($request->foto_selfie) $update->foto_selfie = (string) Str::uuid().'.png';
             $update->save();
