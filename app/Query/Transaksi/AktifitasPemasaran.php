@@ -2,7 +2,7 @@
 
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\AktifitasPemasaran as Model;
-use App\Models\Transaksi\AktifitaPemasaranRiwayat as ModelRiwayat;
+use App\Models\Transaksi\AktifitasPemasaranRiwayat as ModelRiwayat;
 use App\Models\Transaksi\Pipeline as ModelPipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;

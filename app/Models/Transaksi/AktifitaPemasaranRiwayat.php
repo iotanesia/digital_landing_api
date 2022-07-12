@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Master\MTujuanPemasaran;
 use App\Models\Master\MCaraPemasaran;
 
-class AktifitaPemasaranRiwayat extends Model
+class AktifitasPemasaranRiwayat extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'aktifitas_pemasaran_riwayat';
