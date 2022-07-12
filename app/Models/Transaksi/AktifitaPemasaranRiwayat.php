@@ -19,7 +19,7 @@ class AktifitaPemasaranRiwayat extends Model
         "id_tujuan_pemasaran",
         "id_cara_pemasaran",
         "informasi_aktifitas",
-        "foto",
+        "foto_selfie",
         "lokasi",
         "waktu_aktifitas",
         "tanggal_aktifitas",

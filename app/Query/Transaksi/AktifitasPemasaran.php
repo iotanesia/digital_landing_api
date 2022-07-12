@@ -99,14 +99,14 @@ class AktifitasPemasaran {
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
-                $query->whereBetween('created_at', [date("Y-m-01"), date("Y-m-t")]);
-            })->get()
-            ->groupBy(function($item){
-                return $item->created_at->format('Y-m-d');
-            });
+            })
+            ->select('id','nama','nik','no_hp','nomor_aplikasi', 'cif', 'foto_selfie', DB::raw('DATE(created_at) as date'))
+            ->get()
+            ->groupBy('date');
+
             $itemsArr = [];
-            foreach($data as $key => $val) {
-                $itemsArr[] = ["date" => $key, "data" => $val];
+            foreach($data as $key => $group) {
+                $itemsArr[] = ["date" => $key, "data" => $group];
             }
 
             return ['items' => $itemsArr];
@@ -145,7 +145,6 @@ class AktifitasPemasaran {
                             'no_hp'=> $item->no_hp,
                             'nomor_aplikasi' => $item->nomor_aplikasi,
                             'cif' => $item->cif,
-                            'nik' => $item->nik,
                             'foto_ktp' => $item->foto_ktp,
                             'foto_selfie' => $item->foto_selfie,
                             'created_at' => $item->created_at,
@@ -220,6 +219,7 @@ class AktifitasPemasaran {
 
             $reqRiwayat = $request->all();
             $reqRiwayat['id_aktifitas_pemasaran'] = $store->id;
+            $reqRiwayat['foto_selfie'] = $store->foto_selfie;
             $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
             $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
             $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
@@ -294,6 +294,9 @@ class AktifitasPemasaran {
             $update->save();
 
             $reqRiwayat = $request->all();
+            if ($request->foto_selfie) {
+                $reqRiwayat['foto_selfie'] = $update->foto_selfie;
+            }
             $reqRiwayat['id_aktifitas_pemasaran'] = $id;
             $reqRiwayat['id_tujuan_pemasaran'] = $request->id_tujuan_pemasaran;
             $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
@@ -366,7 +369,7 @@ class AktifitasPemasaran {
                             'id_cara_pemasaran' => $item->id_tujuan_pemasaran,
                             'cara_pemasaran' => $item->refMstCaraPemasaran->nama ?? null,
                             'informasi_aktifitas' => $item->informasi_aktifitas,
-                            'foto' => $item->foto,
+                            'foto_selfie' => $item->foto_selfie,
                             'lokasi' => $item->lokasi,
                             "waktu_aktifitas"=> $item->waktu_aktifitas,
                             "tanggal_aktifitas"=> $item->tanggal_aktifitas,
