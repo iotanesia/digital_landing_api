@@ -68,7 +68,8 @@ class Pipeline {
             $data = View::where(function ($query) use ($request){
                 $query->where('id_user',$request->current_user->id);
                 // $query->where('id_user',48);
-                      if($request->nik) $query->where('nik',$request->nik);
+                if($request->nik) $query->where('nik',$request->nik);
+                if($request->tipe_calon_nasabah) $query->where('tipe_calon_nasabah',$request->tipe_calon_nasabah);
             })->paginate($request->limit);
             return [
                 'items' => $data->getCollection()->transform(function ($item){
