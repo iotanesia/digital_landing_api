@@ -459,7 +459,7 @@ class AktifitasPemasaran {
             'id_user' =>  $data->id_user,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
-            'step_verifikasi' =>  0,
+            'step_verifikasi' =>  Constants::IS_INACTIVE,
         ];
     }
 }

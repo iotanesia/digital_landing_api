@@ -149,11 +149,11 @@ class Leads {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
             'tracking' => 2,
-            'id_tipe_calon_nasabah' => 3,
+            'id_tipe_calon_nasabah' => Constants::TCN_LEAD,
             'id_user' =>  $request->current_user->id,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
-            'step_verifikasi' =>  0,
+            'step_verifikasi' => Constants::IS_INACTIVE,
         ];
     }
     // update data rm
