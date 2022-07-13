@@ -112,10 +112,6 @@ class Leads {
     }
 
 
-    public static function getDataCurrentByDate($request)
-    {
-        
-    }
 
     public static function store($request,$is_transaction = true)
     {
