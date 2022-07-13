@@ -221,9 +221,9 @@ class ApiHelper {
             $decoded_data = JWT::decode($token,new Key(env('JWT_SECRET'), 'HS256'));
             return $decoded_data->sub;
         } catch(ExpiredException $e) {
-            throw new \Exception("expired");
+            throw new \Exception("expired",401);
         } catch(\Throwable $e) {
-            throw new \Exception("failed");
+            throw new \Exception("failed",400);
         }
 
     }
@@ -366,7 +366,7 @@ class ApiHelper {
         if($request->filter_bulan_ini == 1) {
             $tanggal_mulai = date("Y-m-01", strtotime($today));
             $tanggal_akhir = date("Y-m-t", strtotime($today));
-        } 
+        }
 
         if ($request->filter_bulan_kemarin == 1) {
             $yesterday = date('Y-m-d', strtotime('-1 months', strtotime($today)));

@@ -74,17 +74,7 @@ class LeadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function byDate(Request $request)
-    {
-        try {
-            return Helper::resultResponse(
-                Leads::getDataCurrentByDate($request)
-            );
-        } catch (\Throwable $th) {
-            return Helper::setErrorResponse($th);
-        }
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      *

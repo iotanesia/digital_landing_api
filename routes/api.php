@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Api\LeadsController;
+use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
 use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
 use App\Http\Controllers\JenisProdukController;
@@ -68,6 +69,14 @@ Route::prefix('v1')
     Route::prefix('file')->group(function () {
         Route::get('/{filename}',[FileController::class,'show']);
     });
+
+    Route::prefix('reset-password')->group(function () {
+        Route::post('/', [PasswordController::class,'store']);
+        Route::get('/', [PasswordController::class,'verify']);
+        Route::put('/', [PasswordController::class,'update']);
+    });;
+
+
 
     Route::group(['middleware' => 'access'],function () {
 

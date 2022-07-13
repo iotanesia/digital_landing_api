@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Group;
+use App\Mail\ResetPasswordMail;
 use App\Models\Auth\UserRole;
+use Illuminate\Support\Facades\Mail;
 
 class User {
 
@@ -213,5 +215,65 @@ class User {
     public static function getSuperadmin($username)
     {
         return Model::where('username',$username)->whereNull('nirk')->first();
+    }
+
+    public static function byEmail($email)
+    {
+        return Model::where('email',$email)->first();
+    }
+
+    public static function resetPassword($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->email) $require_fileds[] = 'email';
+            if(count($require_fileds) > 0) throw new \Exception('Paramter ini harus diisi '.implode(',',$require_fileds),400);
+
+            list($token, $expired_at) = Helper::createVerificationToken([
+                "email" => $request->email,
+                "action" => 'reset-password'
+            ]);
+
+            $user = self::byEmail($request->email);
+            if(!$user) throw new \Exception("email belum terdaftar", 401);
+            $store = $user;
+            $store->remember_token = $token;
+            $store->save();
+            if($is_transaction) DB::commit();
+            /**
+             * Send verification mail
+             */
+            $mail_to = $request->email;
+            $mail_data = [
+                "reset_password_token" => $token,
+                "username" => $request->username
+            ];
+            Mail::to($mail_to)->send(new ResetPasswordMail($mail_data));
+            return ['token' => $token,'exp' => $expired_at];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public static function verifyResetPassword($request)
+    {
+        try {
+
+            $require_fileds = [];
+            if(!$request->reset_password_token) $require_fileds[] = 'reset_password_token';
+            if(count($require_fileds) > 0) throw new \Exception('Paramter ini harus diisi '.implode(',',$require_fileds),400);
+            $data = Helper::getJwtData($request->reset_password_token);
+            return [
+                'items' => [
+                    'status' => $data ? true : false,
+                    'token' => $request->reset_password_token
+                ]
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
