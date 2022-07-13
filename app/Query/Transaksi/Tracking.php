@@ -12,6 +12,153 @@ use Illuminate\Support\Facades\Validator;
 
 class Tracking {
 
+//     tracking
+// - cek pipeline berdasarkan nomor aplikasi
+//   jika ada
+//      tracking 2 berpasaangan dengan step verifikasi
+//      liat tracking jika tracking = 2 dan step verifikasi 0
+//   	Gambar 1
+//         - prescreening
+// 	       - lolos
+//      Gambar 2
+// 	        - analisa kredit
+//          - verifikasi data
+// 	        - sedang di proses
+//     liat tracking jika tracking = 2 dan step verifikas 1
+//         Gambar 1
+// 	        - prescreening
+// 	        - lolos
+//         Gambar 2
+// 	        - analisa kredit
+//          - verifikasi data
+//          - sedang di proses
+//     liat tracking jika tracking = 2 dan step verifikas 2
+//         Gambar 1
+// 	        - prescreening
+// 	        - lolos
+//         Gambar 2
+// 	       - analisa kredit
+//         - verifikasi data
+//         - sedang diproses
+//    liat tracking jika tracking = 2 dan step verifikas 3
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - verifikasi data
+//         - selesai
+// 	gambar 3
+// 	- aprroval
+// 	- sedang di proses
+//   tracking 3 berpasaangan dengan step approval
+//   jika tracking 3 dan step approval = 0
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- sedang proses
+//    tracking 3 dan step approval 1
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- selesai
+// 	 Gambar 4
+//  	- cetak dokumen
+// 	- sedang diproses
+//    tracking 3 berpasaangan dengan step approval 2
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- ditolak
+//    tracking 4 berpasangan dengan step cekat dokumen
+// 	jika tracking 4 dan step cetak dokumen = 0
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- sedang proses
+//    	tracking 4 berpasaangan dengan step approval 1
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- selesai
+//     	Gambar 4
+//  	- cetak dokumen
+// 	- selesai
+// 	Gambar 5
+//  	- Disbursment
+// 	- sedang diproses
+//     tracking 5 berpasangan dengan step_disbursment
+// 	 jika traking = 5 dan step_disbursement = 1
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- selesai
+//     	Gambar 4
+//  	- cetak dokumen
+// 	- selesai
+// 	Gambar 5
+//  	- Disbursment
+// 	- selesai
+// 	jika traking = 5 dan step_disbursement = 2
+// 	Gambar 1
+// 	- prescreening
+// 	- lolos
+//         Gambar 2
+// 	- analisa kredit
+//         - selesai
+//         Gambar 3
+//  	- approval
+// 	- selesai
+//     	Gambar 4
+//  	- cetak dokumen
+// 	- selesai
+// 	Gambar 5
+//  	- Disbursment
+// 	- ditolak
+
+//   jika tidak ada
+//   cek nomor_apilkasi di tabel eform ambil is presecrening
+//   jika 0
+//      return
+// 	sedang di proses
+//   jika 2
+//     return
+// 	-lolos dengan catatan
+//   jika 3
+//     return
+//        -tidak lolos
+
+
     public static function data($request)
     {
 
@@ -33,7 +180,7 @@ class Tracking {
             [
                 'kode' => '01',
                 'label' => 'Prescreening',
-                'tanggal' => Carbon::now()->format('Y-m-d'),
+                'tanggal' => Carbon::parse($data->created_at)->format('Y-m-d'),
                 'status' => $data->refStsPrescreening->nama ?? null,
                 'id_status' => $data->is_prescreening ?? null,
                 'keterangan' => null,
@@ -42,11 +189,11 @@ class Tracking {
             [
                 'kode' => '02',
                 'label' => 'Analisa Kredit',
-                'tanggal' => Carbon::now()->format('Y-m-d'),
-                'status' => 'Sedang Diproses',
+                'tanggal' => $data->is_prescreening == Constants::CUT_OFF ? null : Carbon::now()->format('Y-m-d'),
+                'status' =>  $data->is_prescreening == Constants::CUT_OFF ? null : 'Sedang Diproses',
                 'id_status' => 0,
                 'keterangan' => null,
-                'step' => 'Verifikasi Data'
+                'step' => $data->is_prescreening == Constants::CUT_OFF ? null : 'Verifikasi Data'
             ],
             [
                 'kode' => '03',
@@ -94,7 +241,7 @@ class Tracking {
             $data->manyProfilUsaha,
             $data->refJenisKelamin,
         );
-        
+
         return ['items' => $data];
     }
 }
