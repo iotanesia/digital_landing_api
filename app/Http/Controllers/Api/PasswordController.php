@@ -45,7 +45,7 @@ class PasswordController extends Controller
     {
         try {
             return Helper::resultResponse(
-                User::resetPassword($request)
+                User::requestResetPassword($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -81,9 +81,15 @@ class PasswordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                User::resetPassword($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**

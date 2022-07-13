@@ -222,7 +222,7 @@ class User {
         return Model::where('email',$email)->first();
     }
 
-    public static function resetPassword($request,$is_transaction = true)
+    public static function requestResetPassword($request,$is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
         try {
@@ -272,6 +272,23 @@ class User {
                     'token' => $request->reset_password_token
                 ]
             ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function resetPassword($request)
+    {
+        try {
+
+            $require_fileds = [];
+            if(!$request->reset_password_token) $require_fileds[] = 'reset_password_token';
+            if(!$request->new_password) $require_fileds[] = 'new_password';
+            if(count($require_fileds) > 0) throw new \Exception('Paramter ini harus diisi '.implode(',',$require_fileds),400);
+            $data = Helper::getJwtData($request->reset_password_token);
+            $user = self::byEmail($data->email);
+            $user->password = Hash::make($request->new_password);
+            $user->save();
         } catch (\Throwable $th) {
             throw $th;
         }
