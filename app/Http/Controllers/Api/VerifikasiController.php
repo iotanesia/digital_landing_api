@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
+use App\Query\Transaksi\Pipeline;
+use App\Query\Transaksi\VerifOnsiteVisit;
 
 class VerifikasiController extends Controller
 {
@@ -17,7 +19,7 @@ class VerifikasiController extends Controller
     {
         try {
             return Helper::responseData(
-                'code here'
+                Pipeline::getDataVerifies($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -79,7 +81,7 @@ class VerifikasiController extends Controller
     {
         try {
             return Helper::responseData(
-                'code here'
+                VerifOnsiteVisit::storeOnsiteVisit($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

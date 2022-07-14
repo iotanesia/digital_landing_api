@@ -24,6 +24,7 @@ class Pipeline extends Model
         'nomor_aplikasi',
         'id_tipe_calon_nasabah',
         'step_verifikasi',
+        'step_analisa_kredit',
         'id_user',
         'nik',
         'tanggal',
