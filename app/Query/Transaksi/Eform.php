@@ -469,34 +469,39 @@ class Eform {
 
     public static function tracking($request)
     {
-        $data = self::byNomorAplikasiNik($request);
+        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)
+        ->where('nik',$request->nik)
+        ->first();
+        if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
         $ext = new \stdClass;
-        $ext->nomor_aplikasi = $data['items']->nomor_aplikasi;
-        $ext->nik = $data['items']->nik;
-        $ext->plafond = $data['items']->plafond;
-        $ext->npwp = $data['items']->npwp;
-        $ext->email = $data['items']->email;
-        $ext->no_hp = $data['items']->no_hp;
-        $ext->jangka_waktu = $data['items']->jangka_waktu;
-        $ext->foto_ktp = $data['items']->foto_ktp;
-        $ext->foto_selfie = $data['items']->foto_selfie;
-        if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
+        $ext->nomor_aplikasi = $data->nomor_aplikasi;
+        $ext->nik = $data->nik;
+        $ext->plafond = $data->plafond;
+        $ext->npwp = $data->npwp;
+        $ext->email = $data->email;
+        $ext->no_hp = $data->no_hp;
+        $ext->jangka_waktu = $data->jangka_waktu;
+        $ext->foto_ktp = $data->foto_ktp;
+        $ext->foto_selfie = $data->foto_selfie;
+        if(!$data) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
         $ext->step = [
             [
                 'kode' => '01',
                 'label' => 'Prescreening',
-                'tanggal' => Carbon::now()->format('Y-m-d'),
-                'status' => 'lolos',
+                'tanggal' => Carbon::parse($data->created_at)->format('Y-m-d'),
+                'status' => $data->refStsPrescreening->nama ?? null,
+                'id_status' => $data->is_prescreening ?? null,
                 'keterangan' => null,
                 'step' => null
             ],
             [
                 'kode' => '02',
                 'label' => 'Analisa Kredit',
-                'tanggal' => Carbon::now()->format('Y-m-d'),
-                'status' => 'Sedang Diproses',
+                'tanggal' => $data->is_prescreening == Constants::CUT_OFF ? null : Carbon::now()->format('Y-m-d'),
+                'status' =>  $data->is_prescreening == Constants::CUT_OFF ? null : 'Sedang Diproses',
+                'id_status' => 0,
                 'keterangan' => null,
-                'step' => 'Verifikasi Data'
+                'step' => $data->is_prescreening == Constants::CUT_OFF ? null : 'Verifikasi Data'
             ],
             [
                 'kode' => '03',
