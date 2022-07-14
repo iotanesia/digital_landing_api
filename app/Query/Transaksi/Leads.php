@@ -43,14 +43,17 @@ class Leads {
 
     public static function getDataCurrentByDate($request)
     {
+       $filter_tanggal = Helper::filterByDateDefaultWeek($request);
        try {
            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-           $data = Model::where(function ($query) use ($request){
+           $data = Model::where(function ($query) use ($request, $filter_tanggal){
                $query->where('is_pipeline', Constants::IS_NOL)
                ->where('is_cutoff', Constants::IS_NOL)
-               ->where('is_prescreening', Constants::IS_ACTIVE);
+               ->where('is_prescreening', Constants::IS_ACTIVE)
+               ->whereBetween('leads.created_at',$filter_tanggal['filter']);
            })
-           ->select('id','nama','nik','no_hp', 'cif', 'foto', DB::raw('DATE(created_at) as date'))
+           ->leftJoin('master.produk as produk', 'produk.id', 'id_produk')
+           ->select('leads.id','leads.nama','nik','no_hp', 'cif','produk.nama as nama_produk', 'leads.foto', DB::raw('DATE(leads.created_at) as date'))
            ->orderBy('date','desc')
            ->get()
            ->groupBy('date');
