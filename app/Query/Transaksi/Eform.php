@@ -96,8 +96,8 @@ class Eform {
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
         $data->status = null; // dummy
-        $data->foto_ktp = $data->foto_ktp; 
-        $data->foto_selfie = $data->foto_selfie; 
+        $data->foto_ktp = $data->foto_ktp;
+        $data->foto_selfie = $data->foto_selfie;
         $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
             return [
                 'id_perizinan' => $item->id_perizinan,
@@ -609,6 +609,7 @@ class Eform {
         if($is_transaction) DB::beginTransaction();
         try {
             $store = Model::find($request['id_prescreening_modul']);
+            if(!$store) return false;
             $store->is_prescreening = $request['status']; // lolos
             if(in_array($store->platform,['MOBILE']))  $store->is_pipeline = 1;
             $store->save();
@@ -626,6 +627,7 @@ class Eform {
         if($is_transaction) DB::beginTransaction();
         try {
             $store = Model::find($request['id_prescreening_modul']);
+            if(!$store) return false;
             $store->is_prescreening = 3; // gagal
             $store->save();
             if($is_transaction) DB::commit();
