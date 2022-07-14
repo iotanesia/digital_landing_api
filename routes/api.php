@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AktifitasPemasaranController;
+use App\Http\Controllers\Api\ApprovalPrescreeningController;
 use App\Http\Controllers\Api\AuthControler;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\EformController;
@@ -132,7 +133,12 @@ Route::prefix('v1')
             /* dokumen */ Route::get('/dokumen',[VerifikasiController::class,'dokumen']);
             /* dokumen */ Route::post('/dokumen',[VerifikasiController::class,'storeDokumen']);
             /* submit */ Route::post('/submit',[VerifikasiController::class,'submit']);
+        });
 
+        Route::prefix('approval-prescreening')->group(function () {
+            /* get list */ Route::get('/',[ApprovalPrescreeningController::class,'index']);
+            /* submit */ Route::post('/',[ApprovalPrescreeningController::class,'store']);
+            /* detail */ Route::get('/{id}',[ApprovalPrescreeningController::class,'show']);
         });
 
         // users
