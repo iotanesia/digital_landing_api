@@ -91,16 +91,19 @@ class AktifitasPemasaran {
 
      public static function getDataCurrentByDate($request)
      {
+        $filter_tanggal = Helper::filterByDateDefaultWeek($request);
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-            $data = Model::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request, $filter_tanggal){
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
                 $query->whereNull('is_prescreening');
+                $query->whereBetween('aktifitas_pemasaran.created_at',$filter_tanggal['filter']);
             })
-            ->select('id','nama','nik','no_hp','nomor_aplikasi', 'cif', 'foto_selfie', DB::raw('DATE(created_at) as date'))
+            ->leftJoin('master.produk as produk', 'produk.id', 'id_produk')
+            ->select('aktifitas_pemasaran.id','aktifitas_pemasaran.nama','nik','no_hp','nomor_aplikasi','produk.nama as nama_produk','cif','foto_selfie', DB::raw('DATE(aktifitas_pemasaran.created_at) as date'))
             ->orderBy('date','desc')
             ->get()
             ->groupBy('date');
