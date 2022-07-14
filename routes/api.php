@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\LeadsController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
 use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
+use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BannerController;
@@ -134,6 +135,12 @@ Route::prefix('v1')
             Route::get('/',[ApiPipelineController::class,'index']);
             Route::get('/info-prescreening/{id}',[ApiPipelineController::class,'prescreening']);
             Route::get('/{id}',[ApiPipelineController::class,'show']);
+        });
+        // users
+        Route::prefix('prescreening')->group(function () {
+            Route::get('/',[ApiPrescreeningController::class,'index']);
+            Route::get('/info-prescreening/{id}',[ApiPrescreeningController::class,'prescreening']);
+            Route::get('/{id}',[ApiPrescreeningController::class,'show']);
         });
         // master
         Route::prefix('sts')->group(function () {
