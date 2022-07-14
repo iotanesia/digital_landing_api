@@ -96,8 +96,8 @@ class Eform {
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
         $data->status = null; // dummy
-        $data->foto_ktp = null; // dummy
-        $data->foto_selfie = null; // dummy
+        $data->foto_ktp = $data->foto_ktp; 
+        $data->foto_selfie = $data->foto_selfie; 
         $data->profil_usaha = $data->manyProfilUsaha->map(function ($item){
             return [
                 'id_perizinan' => $item->id_perizinan,
