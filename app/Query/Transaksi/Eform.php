@@ -478,8 +478,8 @@ class Eform {
         $ext->email = $data['items']->email;
         $ext->no_hp = $data['items']->no_hp;
         $ext->jangka_waktu = $data['items']->jangka_waktu;
-        $ext->foto_ktp = null;
-        $ext->foto_selfie = null;
+        $ext->foto_ktp = $data['items']->foto_ktp;
+        $ext->foto_selfie = $data['items']->foto_selfie;
         if(!$data['items']) throw new \Exception('No Aplikasi dan NIK tidak sesuai');
         $ext->step = [
             [
