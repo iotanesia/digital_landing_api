@@ -136,4 +136,26 @@ class Pipeline {
             throw $th;
         }
     }
+
+    public static function getDataVerifies($request) {
+        try {
+            $data = Model::where(function ($query) use ($request){
+                $query->where('id_user',$request->current_user->id);
+                $query->where('tracking',Constants::DISBURSMENT);
+            })->paginate($request->limit);
+            return [
+                'items' => $data->getCollection()->transform(function ($item){
+                    return $item;
+                }),
+                'attributes' => [
+                    'total' => $data->total(),
+                    'current_page' => $data->currentPage(),
+                    'from' => $data->currentPage(),
+                    'per_page' => (int) $data->perPage(),
+                ]
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
