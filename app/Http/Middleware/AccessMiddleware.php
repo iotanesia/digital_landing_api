@@ -21,8 +21,8 @@ class AccessMiddleware
     {
        try {
 
-            $username = isset($_SERVER['PHP_AUTH_USER']) ?trim(Str::lower($_SERVER['PHP_AUTH_USER'])) : null;
-            $password = isset($_SERVER['PHP_AUTH_PW']) ?? null;
+            $username = $request->getUser();
+            $password = $request->getPassword();
 
             $data = User::getSuperadmin($username);
             if(!$data) {
