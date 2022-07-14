@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\LeadsController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
 use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
+use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController;
+use App\Http\Controllers\Api\VerifikasiController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BannerController;
@@ -121,6 +123,18 @@ Route::prefix('v1')
             Route::post('/',[ApiTrackingController::class,'index']);
         });
 
+        Route::prefix('verifikasi')->group(function () {
+            /* get list */ Route::get('/',[VerifikasiController::class,'index']);
+            /* proses validasi data */ Route::post('/',[VerifikasiController::class,'store']);
+            /* list menu */ Route::get('/menu/{id}',[VerifikasiController::class,'menu']);
+            /* onsite visit */ Route::get('/onsite-visit/{id}',[VerifikasiController::class,'onsiteVisit']);
+            /* onsite visit */ Route::post('/onsite-visit',[VerifikasiController::class,'storeOnsiteVisit']);
+            /* dokumen */ Route::get('/dokumen',[VerifikasiController::class,'dokumen']);
+            /* dokumen */ Route::post('/dokumen',[VerifikasiController::class,'storeDokumen']);
+            /* submit */ Route::post('/submit',[VerifikasiController::class,'submit']);
+
+        });
+
         // users
         Route::prefix('user')->group(function () {
             Route::get('/',[UserControler::class,'getAll']);
@@ -134,6 +148,12 @@ Route::prefix('v1')
             Route::get('/',[ApiPipelineController::class,'index']);
             Route::get('/info-prescreening/{id}',[ApiPipelineController::class,'prescreening']);
             Route::get('/{id}',[ApiPipelineController::class,'show']);
+        });
+        // users
+        Route::prefix('prescreening')->group(function () {
+            Route::get('/',[ApiPrescreeningController::class,'index']);
+            Route::get('/info-prescreening/{id}',[ApiPrescreeningController::class,'prescreening']);
+            Route::get('/{id}',[ApiPrescreeningController::class,'show']);
         });
         // master
         Route::prefix('sts')->group(function () {

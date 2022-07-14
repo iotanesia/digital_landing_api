@@ -5,6 +5,7 @@ namespace App\Models\Transaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Skema\RulesPrescreening;
 
 class LeadsPrescreening extends Model
 {
