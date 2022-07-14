@@ -384,4 +384,21 @@ class ApiHelper {
         ];
     }
 
+    public static function filterByDateDefaultWeek($request)
+    {
+        $now = Carbon::now();
+        $weekStartDate = $now->startOfWeek()->format('Y-m-d');
+        $weekEndDate = $now->endOfWeek()->format('Y-m-d');
+        $tanggal_mulai = $request->filter_tgl_mulai ?? $weekStartDate;
+        $tanggal_akhir = $request->filter_tgl_akhir ?? $weekEndDate;
+
+        return [
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_akhir' => $tanggal_akhir,
+            'filter' => [
+                $tanggal_mulai,
+                $tanggal_akhir,
+            ]
+        ];
+    }
 }
