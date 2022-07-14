@@ -135,6 +135,7 @@ class AktifitasPemasaran {
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
+                $query->where('is_pipeline', Constants::IS_ACTIVE);
                 $query->whereNull('is_prescreening');
                 if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) {
                     $query->whereBetween('created_at',$filter_tanggal['filter']);
