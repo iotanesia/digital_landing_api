@@ -35,23 +35,13 @@ class VerifikasiController extends Controller
      */
     public function menu(Request $request,$id)
     {
-        $menu = [
-            [
-                'code' => '01',
-                'name' => 'verifikasi data',
-                'is_checked' => true
-            ],
-            [
-                'code' => '01',
-                'name' => 'onsite visit',
-                'is_checked' => true
-            ],
-            [
-                'code' => '01',
-                'name' => 'kelengkapan data',
-                'is_checked' => true
-            ]
-        ];
+        try {
+            return Helper::responseData(
+                Pipeline::getDataVerifiesMenu($request, $id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
       /**
@@ -63,8 +53,8 @@ class VerifikasiController extends Controller
     public function onsiteVisit(Request $request,$id)
     {
         try {
-            return Helper::responseData(
-                'code here'
+            return Helper::resultResponse(
+                VerifOnsiteVisit::byIdPiperine($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

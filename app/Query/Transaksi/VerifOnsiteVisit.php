@@ -6,8 +6,18 @@ use App\Models\Transaksi\Pipeline as ModelPipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class VerifOnsiteVisit {
+    public static function byIdPiperine($id_pipeline)
+    {
+        $data = Model::where('id_pipeline', $id_pipeline)->first();
+
+        return ['items' => $data];
+    }
+
     public static function storeOnsiteVisit($request, $is_transaction = true)
     {
         if($is_transaction) DB::beginTransaction();
@@ -19,7 +29,7 @@ class VerifOnsiteVisit {
             $params = $request->all();
             $params['foto'] =(string) Str::uuid().'.png';
             $store = Model::create($params);
-            
+
             $pipeline = ModelPipeline::find($store->id_pipeline);
             if(!$pipeline) throw new \Exception("Data not found.", 400);
             $pipeline->step_analisa_kredit = Constants::ON_SITE_VISIT;

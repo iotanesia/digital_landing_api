@@ -44,7 +44,7 @@ class Pipeline {
             return [
                 'items' => [
                     'id' => $data->id,
-                    'nik' => $data->nomor_aplikasi,
+                    'nomor_aplikasi' => $data->nomor_aplikasi,
                     'nama' => $data->nama,
                     'nik' => $data->nik,
                     'email' => $data->email,
@@ -139,13 +139,18 @@ class Pipeline {
 
     public static function getDataVerifies($request) {
         try {
-            $data = Model::where(function ($query) use ($request){
+            $data = View::where(function ($query) use ($request){
                 $query->where('id_user',$request->current_user->id);
-                $query->where('tracking',Constants::DISBURSMENT);
+                // $query->where('tracking',Constants::DISBURSMENT);
             })->paginate($request->limit);
             return [
                 'items' => $data->getCollection()->transform(function ($item){
-                    return $item;
+                    return [
+                        'id' => $item->id,
+                        'nik' => $item->nik,
+                        'nama' => $item->nama,
+                        'nama_produk'=> 'Mikro'
+                    ];
                 }),
                 'attributes' => [
                     'total' => $data->total(),
@@ -154,6 +159,38 @@ class Pipeline {
                     'per_page' => (int) $data->perPage(),
                 ]
             ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function getDataVerifiesMenu($request, $id_pipeline) {
+        try {
+            $data = Model::find($id_pipeline);
+            $statusPiperline = $data && $data->tracking === Constants::ANALISA_KREDIT;
+            $menuArr = [
+                [
+                    'code' => $id_pipeline,
+                    'name' => 'verifikasi data',
+                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::VALIDASI_DATA
+                ],
+                [
+                    'code' => $id_pipeline,
+                    'name' => 'onsite visit',
+                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::ON_SITE_VISIT
+                ],
+                [
+                    'code' => $id_pipeline,
+                    'name' => 'kelengkapan data',
+                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::APPROVAL
+                ]];
+          
+
+            return [
+                'items' => $menuArr,
+                'attributes' => null,
+            ];
+            
         } catch (\Throwable $th) {
             throw $th;
         }
