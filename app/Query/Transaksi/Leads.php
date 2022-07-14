@@ -53,7 +53,9 @@ class Leads {
                ->whereBetween('leads.created_at',$filter_tanggal['filter']);
            })
            ->leftJoin('master.produk as produk', 'produk.id', 'id_produk')
-           ->select('leads.id','leads.nama','nik','no_hp', 'cif','produk.nama as nama_produk', 'leads.foto', DB::raw('DATE(leads.created_at) as date'))
+           ->leftJoin('master.sub_produk as sub_produk', 'sub_produk.id', 'id_sub_produk')
+           ->select('leads.id','leads.nama','nik','no_hp', 'cif','produk.nama as nama_produk','sub_produk.nama as nama_sub_produk',
+                    'leads.foto', DB::raw('DATE(leads.created_at) as date'))
            ->orderBy('date','desc')
            ->get()
            ->groupBy('date');

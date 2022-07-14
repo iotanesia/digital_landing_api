@@ -103,7 +103,9 @@ class AktifitasPemasaran {
                 $query->whereBetween('aktifitas_pemasaran.created_at',$filter_tanggal['filter']);
             })
             ->leftJoin('master.produk as produk', 'produk.id', 'id_produk')
-            ->select('aktifitas_pemasaran.id','aktifitas_pemasaran.nama','nik','no_hp','nomor_aplikasi','produk.nama as nama_produk','cif','foto_selfie', DB::raw('DATE(aktifitas_pemasaran.created_at) as date'))
+            ->leftJoin('master.sub_produk as sub_produk', 'sub_produk.id', 'id_sub_produk')
+            ->select('aktifitas_pemasaran.id','aktifitas_pemasaran.nama','nik','no_hp','nomor_aplikasi','sub_produk.nama as nama_sub_produk',
+                     'produk.nama as nama_produk','cif','foto_selfie', DB::raw('DATE(aktifitas_pemasaran.created_at) as date'))
             ->orderBy('date','desc')
             ->get()
             ->groupBy('date');
