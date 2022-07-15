@@ -17,13 +17,14 @@ class VerifKelengkapanDokumen {
                 $query->where('id_pipeline',$id_pipeline);
             }
         ])->get()->map(function ($item){
-            $item->id = $item->refVerifKelengkapanDokumen->id ?? null;
+            $item->id_dokumen = $item->id;
             $item->path = $item->refVerifKelengkapanDokumen->path ?? null;
             $item->created_at = $item->refVerifKelengkapanDokumen->created_at ?? null;
             $item->created_by = $item->refVerifKelengkapanDokumen->created_by ?? null;
             $item->updated_at = $item->refVerifKelengkapanDokumen->updated_at ?? null;
             $item->updated_by = $item->refVerifKelengkapanDokumen->updated_by ?? null;
-            $item->id_dokumen = $item->id;
+            $item->id = $item->refVerifKelengkapanDokumen->id ?? null;
+
             unset(
                 $item->refVerifKelengkapanDokumen,
                 $item->deleted_at,
