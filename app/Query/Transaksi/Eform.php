@@ -252,6 +252,7 @@ class Eform {
                             'id' => $item->id,
                             'nama' => $item->nama,
                             'nik' => $item->nik,
+                            'no_hp' => $item->no_hp,
                             'nama_produk' => $item->refProduk->nama ?? null,
                             'nama_sub_produk' => $item->refSubProduk->nama ?? null,
                             'created_at' => $item->created_at,
