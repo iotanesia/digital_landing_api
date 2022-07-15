@@ -21,6 +21,9 @@ class Constants
     const CETAK_DOKUMEN = 4;
     const DISBURSMENT = 5;
 
+    const AP_STS_TIDAK_BERMINAT = 1;
+    const AP_STS_BERMINAT = 2;
+
     //tipe calon nasabah
     const TCN_AKTIFITAS_PEMASARAN = 1;
     const TCN_EFORM = 2;
