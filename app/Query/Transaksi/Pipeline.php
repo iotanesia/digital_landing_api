@@ -130,17 +130,26 @@ class Pipeline {
 
     public static function getDataVerifies($request) {
         try {
-            $data = View::where(function ($query) use ($request){
+            $data = Model::where(function ($query) use ($request){
+                $query->where('tracking',Constants::ANALISA_KREDIT);
                 $query->where('id_user',$request->current_user->id);
-                // $query->where('tracking',Constants::DISBURSMENT);
             })->paginate($request->limit);
             return [
                 'items' => $data->getCollection()->transform(function ($item){
+
+                    if($item->id_tipe_calon_nasabah == Constants::TCN_EFORM) $data = $item->refEform;
+                    elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN)   $data = $item->refAktifitasPemasaran;
+                    else $data = $item->refLeads;
+
                     return [
                         'id' => $item->id,
                         'nik' => $item->nik,
-                        'nama' => $item->nama,
-                        'nama_produk'=> 'Mikro'
+                        'nama' => $data->nama,
+                        'nama_produk'=> $data->refProduk->nama,
+                        'nama_sub_produk'=> $data->refSubProduk->nama,
+                        'created_at' => $item->created_at,
+                        'foto' => $data->id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
+
                     ];
                 }),
                 'attributes' => [
@@ -158,22 +167,34 @@ class Pipeline {
     public static function getDataVerifiesMenu($request, $id_pipeline) {
         try {
             $data = Model::find($id_pipeline);
-            $statusPiperline = $data && $data->tracking === Constants::ANALISA_KREDIT;
+            if(!$data) throw new \Exception("Data tidak ditemukan",400);
             $menuArr = [
                 [
-                    'code' => $id_pipeline,
+                    'code' => 1,
                     'name' => 'verifikasi data',
-                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::VALIDASI_DATA
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_ANALISA_VERIF_DATA,
+                        Constants::STEP_ANALISA_ONSITE_VISIT,
+                        Constants::STEP_ANALISA_KELENGKAPAN,
+                        Constants::STEP_ANALISA_SUBMIT,
+                    ])
                 ],
                 [
-                    'code' => $id_pipeline,
+                    'code' => 2,
                     'name' => 'onsite visit',
-                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::ON_SITE_VISIT
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_ANALISA_ONSITE_VISIT,
+                        Constants::STEP_ANALISA_KELENGKAPAN,
+                        Constants::STEP_ANALISA_SUBMIT,
+                    ])
                 ],
                 [
-                    'code' => $id_pipeline,
+                    'code' => 3,
                     'name' => 'kelengkapan data',
-                    'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::APPROVAL
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_ANALISA_KELENGKAPAN,
+                        Constants::STEP_ANALISA_SUBMIT,
+                    ])
                 ]];
 
 
@@ -185,5 +206,85 @@ class Pipeline {
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public static function updateStepAnalisaKredit($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $data = Model::find($request['id_pipeline']);
+            if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
+            $data->step_analisa_kredit = $request['step_analisa_kredit'];
+            $data->updated_by = request()->current_user->id;
+            $data->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public static function submit($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $data = Model::find($request->id_pipeline);
+            if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
+            $data->step_analisa_kredit = Constants::STEP_ANALISA_SUBMIT;
+            $data->updated_by = request()->current_user->id;
+            $data->save();
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public static function detailVerifikasi($id)
+    {
+        $data = Model::find($id);
+        if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
+        if($data->id_tipe_calon_nasabah == Constants::TCN_EFORM) $modul = $data->refEform;
+        elseif($data->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $modul = $data->refAktifitasPemasaran;
+        else $modul = $data->refLeads;
+        if($data->step_analisa_kredit >= Constants::STEP_ANALISA_VERIF_DATA) $modul = VerifValidasiData::byIdPipeline($id);
+        if(!$modul) throw new \Exception("belum melakukan validasi data", 400);
+        $result = $modul;
+        $result->nama_produk = $modul->refProduk->nama ?? null;
+        $result->nama_status_perkawinan = $modul->refStatusPerkawinan->nama ?? null;
+        $result->nama_sub_produk = $modul->refSubProduk->nama ?? null;
+        $result->nama_jenis_kelamin = $modul->refJenisKelamin->nama ?? null;
+        $result->nama_agama = $modul->refAgama->nama ?? null;
+        $result->nama_propinsi = $modul->refPropinsi->nama ?? null;
+        $result->nama_kabupaten = $modul->refKabupaten->nama ?? null;
+        $result->nama_kecamatan = $modul->refKecamatan->nama ?? null;
+        $result->nama_kelurahan = $modul->refKelurahan->nama ?? null;
+        $result->nama_propinsi_pasangan = $modul->refPropinsiPasangan->nama ?? null;
+        $result->nama_kabupaten_pasangan = $modul->refKabupatenPasangan->nama ?? null;
+        $result->nama_kecamatan_pasangan = $modul->refKecamatanPasangan->nama ?? null;
+        $result->nama_kelurahan_pasangan = $modul->refKelurahanPasangan->nama ?? null;
+        unset(
+            $modul->id_cabang,
+            $modul->refProduk,
+            $modul->refStatusPerkawinan,
+            $modul->refCabang,
+            $modul->refSubProduk,
+            $modul->refJenisKelamin,
+            $modul->refAgama,
+            $modul->refPropinsi,
+            $modul->refKabupaten,
+            $modul->refKecamatan,
+            $modul->refKelurahan,
+            $modul->refPropinsiPasangan,
+            $modul->refKabupatenPasangan,
+            $modul->refKecamatanPasangan,
+            $modul->refKelurahanPasangan,
+        );
+        return [
+            'items' => $result
+        ];
     }
 }

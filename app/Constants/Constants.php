@@ -30,6 +30,11 @@ class Constants
     const TCN_EFORM = 2;
     const TCN_LEAD = 3;
 
+    const STEP_ANALISA_VERIF_DATA = 1;
+    const STEP_ANALISA_ONSITE_VISIT = 2;
+    const STEP_ANALISA_KELENGKAPAN = 3;
+    const STEP_ANALISA_SUBMIT = 4;
+
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',

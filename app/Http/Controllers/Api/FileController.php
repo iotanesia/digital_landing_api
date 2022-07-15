@@ -61,7 +61,6 @@ class FileController extends Controller
 
             if(!$file_exist){
                 Log::debug('file not found '.$pathToFile);
-                $pathToFile = storage_path().'/app/1111.pdf';
             }
             return Helper::responseDownload($pathToFile,$filename);
         } catch (\Throwable $th) {

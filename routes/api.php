@@ -126,13 +126,14 @@ Route::prefix('v1')
 
         Route::prefix('verifikasi')->group(function () {
             /* get list */ Route::get('/',[VerifikasiController::class,'index']);
+            /* detail */ Route::get('/{id}',[VerifikasiController::class,'show']);
             /* proses validasi data */ Route::post('/',[VerifikasiController::class,'store']);
+             /* dokumen */ Route::post('/dokumen',[VerifikasiController::class,'storeDokumen']);
+            /* submit */ Route::post('/submit',[VerifikasiController::class,'submit']);
+            /* onsite visit */ Route::post('/onsite-visit',[VerifikasiController::class,'storeOnsiteVisit']);
+            /* dokumen */ Route::get('/dokumen/{id}',[VerifikasiController::class,'dokumen']);
             /* list menu */ Route::get('/menu/{id}',[VerifikasiController::class,'menu']);
             /* onsite visit */ Route::get('/onsite-visit/{id}',[VerifikasiController::class,'onsiteVisit']);
-            /* onsite visit */ Route::post('/onsite-visit',[VerifikasiController::class,'storeOnsiteVisit']);
-            /* dokumen */ Route::get('/dokumen',[VerifikasiController::class,'dokumen']);
-            /* dokumen */ Route::post('/dokumen',[VerifikasiController::class,'storeDokumen']);
-            /* submit */ Route::post('/submit',[VerifikasiController::class,'submit']);
         });
 
         Route::prefix('approval-prescreening')->group(function () {

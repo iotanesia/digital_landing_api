@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\Transaksi\Pipeline;
+use App\Query\Transaksi\VerifKelengkapanDokumen;
 use App\Query\Transaksi\VerifOnsiteVisit;
+use App\Query\Transaksi\VerifValidasiData;
 
 class VerifikasiController extends Controller
 {
@@ -18,7 +20,7 @@ class VerifikasiController extends Controller
     public function index(Request $request)
     {
         try {
-            return Helper::responseData(
+            return Helper::resultResponse(
                 Pipeline::getDataVerifies($request)
             );
         } catch (\Throwable $th) {
@@ -36,7 +38,7 @@ class VerifikasiController extends Controller
     public function menu(Request $request,$id)
     {
         try {
-            return Helper::responseData(
+            return Helper::resultResponse(
                 Pipeline::getDataVerifiesMenu($request, $id)
             );
         } catch (\Throwable $th) {
@@ -54,7 +56,7 @@ class VerifikasiController extends Controller
     {
         try {
             return Helper::resultResponse(
-                VerifOnsiteVisit::byIdPiperine($id)
+                VerifOnsiteVisit::getByIdPiperine($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -70,7 +72,7 @@ class VerifikasiController extends Controller
     public function storeOnsiteVisit(Request $request)
     {
         try {
-            return Helper::responseData(
+            return Helper::resultResponse(
                 VerifOnsiteVisit::storeOnsiteVisit($request)
             );
         } catch (\Throwable $th) {
@@ -87,8 +89,8 @@ class VerifikasiController extends Controller
     public function dokumen(Request $request,$id)
     {
         try {
-            return Helper::responseData(
-                'code here'
+            return Helper::resultResponse(
+                VerifKelengkapanDokumen::getByIdPiperine($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -104,8 +106,8 @@ class VerifikasiController extends Controller
     public function storeDokumen(Request $request)
     {
         try {
-            return Helper::responseData(
-                'code here'
+            return Helper::resultResponse(
+                VerifKelengkapanDokumen::storeDokumen($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -120,8 +122,8 @@ class VerifikasiController extends Controller
     public function submit(Request $request)
     {
         try {
-            return Helper::responseData(
-                'code here'
+            return Helper::resultResponse(
+                Pipeline::submit($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -137,8 +139,8 @@ class VerifikasiController extends Controller
     public function store(Request $request)
     {
         try {
-            return Helper::responseData(
-                'code here'
+            return Helper::resultResponse(
+                 VerifValidasiData::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -153,7 +155,13 @@ class VerifikasiController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Pipeline::detailVerifikasi($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
