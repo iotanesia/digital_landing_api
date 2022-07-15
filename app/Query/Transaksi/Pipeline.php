@@ -29,18 +29,9 @@ class Pipeline {
             $refId =  $data->ref_id;
             $dataNasabah = [];
 
-            if($tipeNasabah == 'Eform') {
-                $dataNasabah = Eform::byId($refId);
-            }
-
-            if($tipeNasabah  == 'Leads') {
-                $dataNasabah = Leads::byId($refId);
-            }
-
-            if($tipeNasabah == 'Aktifitas Pemasaran') {
-                $dataNasabah = AktifitasPemasaran::byIdForPiperline($refId);
-            }
-
+            if($tipeNasabah == 'Eform') $dataNasabah = Eform::byId($refId);
+            if($tipeNasabah  == 'Leads') $dataNasabah = Leads::byId($refId);
+            if($tipeNasabah == 'Aktifitas Pemasaran') $dataNasabah = AktifitasPemasaran::byIdForPiperline($refId);
             return [
                 'items' => [
                     'id' => $data->id,
@@ -122,7 +113,7 @@ class Pipeline {
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
                     'status' =>  $item->keterangan,
-                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null) 
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
                 ];
             }),
             'attributes' => [
@@ -184,13 +175,13 @@ class Pipeline {
                     'name' => 'kelengkapan data',
                     'is_checked' => $statusPiperline && $data->step_analisa_kredit === Constants::APPROVAL
                 ]];
-          
+
 
             return [
                 'items' => $menuArr,
                 'attributes' => null,
             ];
-            
+
         } catch (\Throwable $th) {
             throw $th;
         }
