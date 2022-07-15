@@ -142,7 +142,7 @@ Route::prefix('v1')
             /* submit */ Route::post('/',[ApprovalPrescreeningController::class,'store']);
             /* info prescreening  */ Route::get('/info-prescreening/{id}/{tipe}',[ApprovalPrescreeningController::class,'prescreening']);
             /* approval  */ Route::put('/approve',[ApprovalPrescreeningController::class,'update']);
-            /* detail */ Route::get('/{id}',[ApprovalPrescreeningController::class,'show']);
+            /* detail */ Route::get('/{id}/{tipe}',[ApprovalPrescreeningController::class,'show']);
         });
 
         // users

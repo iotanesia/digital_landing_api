@@ -11,6 +11,9 @@ use App\Models\Transaksi\LeadsPrescreening;
 use App\Models\Transaksi\AktifitasPemasaran;
 use App\Models\Transaksi\Leads;
 use App\Models\Transaksi\Eform;
+use App\Query\Transaksi\AktifitasPemasaran as TransaksiAktifitasPemasaran;
+use App\Query\Transaksi\Eform as TransaksiEform;
+use App\Query\Transaksi\Leads as TransaksiLeads;
 use App\View\Transaksi\VPrescreening AS View;
 use Illuminate\Support\Facades\DB;
 
@@ -47,9 +50,32 @@ class ApprovalPrescreening {
         }
     }
 
-    public static function byId($id)
+    public static function byId($id,$type)
     {
-        # code...
+        try {
+            if($type == 'eform') $dataNasabah = TransaksiEform::byId($id);
+            if($type == 'leads') $dataNasabah = TransaksiLeads::byId($id);
+            if($type == 'aktifitas_pemasaran') $dataNasabah = TransaksiAktifitasPemasaran::byIdForPiperline($id);
+
+            return [
+                'items' => [
+                    'id' => $dataNasabah['items']['id'] ?? null,
+                    'nomor_aplikasi' => $dataNasabah['items']['nomor_aplikasi'] ?? null,
+                    'nama' => $dataNasabah['items']['nama'] ?? null,
+                    'nik' => $dataNasabah['items']['nik'] ?? null,
+                    'email' => $dataNasabah['items']['email'] ?? null,
+                    'plafond' => $dataNasabah['items']['plafond'] ?? null,
+                    'no_hp' => $dataNasabah['items']['no_hp'] ?? null,
+                    'ref_id' => $dataNasabah['items']['id'] ?? null,
+                    'tipe_calon_nasabah' => $type,
+                    'foto_selfie' => $dataNasabah['items']['foto_selfie'] ?? null,
+                    'data_nasabah' => $dataNasabah['items'],
+                ],
+                'attributes' => null,
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public static function store($request,$is_transaction = true)

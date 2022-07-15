@@ -59,11 +59,11 @@ class ApprovalPrescreeningController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,$id)
+    public function show(Request $request,$id,$type)
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::byId($id)
+                ApprovalPrescreening::byId($id,$type)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
