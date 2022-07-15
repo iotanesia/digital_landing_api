@@ -106,4 +106,9 @@ class Leads extends Model
         return $this->belongsTo(Pipeline::class,'id_cabang','id_cabang');
     }
 
+    public function manyProfilUsaha()
+    {
+        return $this->hasMany(LeadsProfilUsaha::class,'id_leads','id');
+    }
+
 }

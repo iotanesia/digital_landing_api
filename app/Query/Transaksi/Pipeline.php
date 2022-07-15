@@ -267,6 +267,19 @@ class Pipeline {
         $result->nama_kabupaten_pasangan = $modul->refKabupatenPasangan->nama ?? null;
         $result->nama_kecamatan_pasangan = $modul->refKecamatanPasangan->nama ?? null;
         $result->nama_kelurahan_pasangan = $modul->refKelurahanPasangan->nama ?? null;
+        $result->profil_usaha = $modul->manyProfilUsaha->map(function ($item){
+            $item->nama_propinsi  = $item->refPropinsi->nama ?? null;
+            $item->nama_kabupaten = $item->refKabupaten->nama ?? null;
+            $item->nama_kecamatan = $item->refKecamatan->nama ?? null;
+            $item->nama_kelurahan = $item->refKelurahan->nama ?? null;
+            unset(
+                $item->refPropinsi,
+                $item->refKabupaten,
+                $item->refKecamatan,
+                $item->refKelurahan,
+            );
+            return $item;
+        }) ?? null;
         unset(
             $modul->id_cabang,
             $modul->refProduk,
@@ -283,6 +296,7 @@ class Pipeline {
             $modul->refKabupatenPasangan,
             $modul->refKecamatanPasangan,
             $modul->refKelurahanPasangan,
+            $modul->manyProfilUsaha
         );
         return [
             'items' => $result

@@ -2,21 +2,22 @@
 
 namespace App\Models\Transaksi;
 
-use App\Models\Master\MKabupaten;
 use App\Models\Master\MKecamatan;
 use App\Models\Master\MKelurahan;
 use App\Models\Master\MPropinsi;
+use App\Models\Master\MKabupaten;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LeadsProfilUsaha extends Model
+class VerifProfilUsaha extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'leads_profil_usaha';
+    protected $table = 'verifikasi_profil_usaha';
     protected $connection = 'transaksi';
 
     public $fillable = [
+        'id_verifikasi_validasi_data',
         'npwp',
         'nama_usaha',
         'profil_usaha',
