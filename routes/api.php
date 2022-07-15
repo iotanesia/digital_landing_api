@@ -386,6 +386,15 @@ Route::prefix('v1')
                 Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
                 Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
             });
+
+             // jenis kelengkapan dokumen
+             Route::prefix('jenis-kelengkapan-dokumen')->group(function () {
+                Route::get('/',[StatusTempatTinggalController::class,'index']);
+                Route::post('/',[StatusTempatTinggalController::class,'store']);
+                Route::get('/{id}',[StatusTempatTinggalController::class,'show']);
+                Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
+                Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
+            });
         });
 
 
