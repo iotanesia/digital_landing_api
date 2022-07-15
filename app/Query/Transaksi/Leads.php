@@ -23,6 +23,8 @@ class Leads {
             $data->nama_produk = $data->refProduk->nama ?? null;
             $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
             $data->nama_cabang = $data->refCabang->nama ?? null;
+            $data->lat = $data->refCabang->lat ?? null;
+            $data->lng = $data->refCabang->lng ?? null;
             $data->nama_status = $data->refStatus->nama ?? null;
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;

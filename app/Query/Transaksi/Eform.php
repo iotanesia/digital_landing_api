@@ -74,6 +74,8 @@ class Eform {
                     'nama_produk' => $data->refProduk->nama ?? null,
                     'nama_status_perkawinan' => $data->refStatusPerkawinan->nama ?? null,
                     'nama_cabang' => $data->refCabang->nama_cabang ?? null,
+                    'lat' => $data->refCabang->lat ?? null,
+                    'lng' => $data->refCabang->lng ?? null,
                     'nama_sub_produk' => $data->refSubProduk->nama ?? null,
                     'nama_jenis_kelamin' => $data->refJenisKelamin->nama ?? null,
                     'nama_agama' => $data->refAgama->nama ?? null,

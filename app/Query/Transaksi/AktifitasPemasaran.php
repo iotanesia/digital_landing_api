@@ -67,6 +67,8 @@ class AktifitasPemasaran {
              $data->nama_produk = $data->refProduk->nama ?? null;
              $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
              $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
+             $data->lat = $data->refCabang->lat ?? null;
+             $data->lng = $data->refCabang->lng ?? null;
              $data->nama_status_prescreening = $data->refStsPrescreening->nama ?? null;
              $data->nama_status_cutoff = $data->refStsCutoff->nama ?? null;
              $data->nama_status_pipeline = $data->refStsPipeline->nama ?? null;
