@@ -95,7 +95,6 @@ class AktifitasPemasaran {
      {
         $filter_tanggal = Helper::filterByDateDefaultWeek($request);
         try {
-            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request, $filter_tanggal){
                 if($request->nomor_aplikasi) $query->where('nomor_aplikasi','ilike',"%$request->nomor_aplikasi%");
                 $query->where('id_user', request()->current_user->id);
@@ -325,7 +324,7 @@ class AktifitasPemasaran {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $update,
                     'modul' => 'aktifitas_pemasaran'
-            ]));
+                ]));
                 dispatch($pscrng);
             }
 

@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class EformProfilUsaha extends Model
+class LeadsProfilUsaha extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $table = 'eform_profil_usaha';
+    use HasFactory, SoftDeletes;
+    protected $table = 'leads_profil_usaha';
     protected $connection = 'transaksi';
+
     public $fillable = [
         'npwp',
         'nama_usaha',
