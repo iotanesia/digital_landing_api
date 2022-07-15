@@ -56,9 +56,10 @@ class Pipeline {
     public static function getDataCurrent($request)
     {
         try {
-            $data = View::where(function ($query) use ($request){
+            $filter_tanggal = Helper::filterByDateDefaultWeek($request);
+            $data = View::where(function ($query) use ($request, $filter_tanggal){
                 $query->where('id_user',$request->current_user->id);
-                // $query->where('id_user',48);
+                $query->whereBetween('v_list_pipeline.created_at',$filter_tanggal['filter']);
                 if($request->nik) $query->where('nik',$request->nik);
                 if($request->tipe_calon_nasabah) $query->where('tipe_calon_nasabah',$request->tipe_calon_nasabah);
             })->paginate($request->limit);
