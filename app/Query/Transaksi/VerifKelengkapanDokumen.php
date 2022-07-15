@@ -48,7 +48,7 @@ class VerifKelengkapanDokumen {
 
             foreach ($request->upload as $key => $item) {
                 $check = Model::where('id',$item['id'])->first();
-                $filename = (string) Str::uuid().'.pdf';
+                $filename = (string) Str::uuid().'.png';
                 if($check) $store = $check;
                 else {
                     $store = new Model;
