@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Master;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Master\MJenisKelengkapanDokumen;
-class JenisKelengkapanDokumenController extends Controller
+use App\Query\Auth\MRole;
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class JenisKelengkapanDokumenController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisKelengkapanDokumen::getAll($request)
+                MRole::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -44,7 +44,7 @@ class JenisKelengkapanDokumenController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisKelengkapanDokumen::store($request)
+                MRole::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -61,7 +61,7 @@ class JenisKelengkapanDokumenController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisKelengkapanDokumen::byId($id)
+                MRole::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -90,7 +90,7 @@ class JenisKelengkapanDokumenController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisKelengkapanDokumen::updated($request,$id)
+                MRole::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -107,7 +107,7 @@ class JenisKelengkapanDokumenController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MJenisKelengkapanDokumen::destroy($id)
+                MRole::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
