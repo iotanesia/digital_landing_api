@@ -35,7 +35,10 @@ class ApprovalPrescreening {
                         'nama' => $item->nama,
                         'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
                         'foto_selfie' => $item->foto_selfie,
-                        'status_prescreening'=> 'Lolos Bersyarat'
+                        'status_prescreening'=> 'Lolos Bersyarat',
+                        'nama_rm' => $item->refUser->nama ?? null,
+                        'nirk_rm' => $item->refUser->nirk ?? null,
+                        'tgl_buka_rm' => $item->refUser->tgl_buka ?? null,
                     ];
                 }),
                 'attributes' => [

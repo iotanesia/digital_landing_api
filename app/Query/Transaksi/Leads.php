@@ -29,6 +29,9 @@ class Leads {
             $data->status_prescreening = $data->refStsPrescreening->nama ?? null;
             $data->status_cutoff = $data->refStsCutoff->nama ?? null;
             $data->status_pipeline = $data->refStsPipeline->nama ?? null;
+            $data->nama_rm = $data->refUser->nama ?? null;
+            $data->nirk_rm = $data->refUser->nirk ?? null;
+            $data->tgl_buka_rm = $data->refUser->tgl_buka ?? null;
             unset($data->refJenisKelamin);
             unset($data->refAgama);
             unset($data->refStatusPernikahan);
@@ -38,6 +41,7 @@ class Leads {
             unset($data->refStsPrescreening);
             unset($data->refStsCutoff);
             unset($data->refStsPipeline);
+            unset($data->refUser);
         }
 
         return ['items' => $data];

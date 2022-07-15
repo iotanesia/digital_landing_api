@@ -4,6 +4,7 @@ namespace App\View\Transaksi;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Auth\User;
 
 class VPrescreening extends Model {
     use HasFactory;
@@ -13,5 +14,10 @@ class VPrescreening extends Model {
 
     public static function getDataCurrent($request) {
 
+    }
+
+    public function refUser()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
     }
 }

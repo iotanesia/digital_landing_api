@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Auth\User;
 use App\Models\Master\MAgama;
 use App\Models\Master\MCabang;
 use App\Models\Master\MJenisKelamin;
@@ -112,5 +113,11 @@ class Eform extends Model
     public function manyProfilUsaha()
     {
         return $this->hasMany(EformProfilUsaha::class,'id_eform','id');
+    }    
+
+    public function refUser()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
     }
+    
 }

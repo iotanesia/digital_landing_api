@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -119,5 +120,9 @@ class AktifitasPemasaran extends Model
     {
         return $this->hasMany(AktifitasPemesaranProfilUsaha::class,'id_aktifitas_pemasaran','id');
     }
-
+    
+    public function refUser()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
+    }
 }

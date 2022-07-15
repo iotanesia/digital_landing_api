@@ -73,6 +73,9 @@ class AktifitasPemasaran {
              $data->nama_status_cutoff = $data->refStsCutoff->nama ?? null;
              $data->nama_status_pipeline = $data->refStsPipeline->nama ?? null;
              $data->nama_status = $data->refStatus->nama ?? null;
+             $data->nama_rm = $data->refUser->nama ?? null;
+             $data->nirk_rm = $data->refUser->nirk ?? null;
+             $data->tgl_buka_rm = $data->refUser->tgl_buka ?? null;
              unset(
                  $data->refJenisKelamin,
                  $data->refStatus,
@@ -84,6 +87,7 @@ class AktifitasPemasaran {
                  $data->refStsPrescreening,
                  $data->refStsCutoff,
                  $data->refStsPipeline,
+                 $data->refUser,
              );
 
          }

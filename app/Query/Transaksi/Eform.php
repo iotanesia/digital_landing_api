@@ -79,6 +79,9 @@ class Eform {
                     'nama_sub_produk' => $data->refSubProduk->nama ?? null,
                     'nama_jenis_kelamin' => $data->refJenisKelamin->nama ?? null,
                     'nama_agama' => $data->refAgama->nama ?? null,
+                    'nama_rm' => $data->refUser->nama ?? null,
+                    'nirk_rm' => $data->refUser->nirk ?? null,
+                    'tgl_buka_rm' => $data->refUser->tgl_buka ?? null,
                 ],
                 'attributes' => null,
             ];
