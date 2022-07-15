@@ -103,4 +103,15 @@ class ApprovalPrescreeningController extends Controller
     {
         //
     }
+
+    public function prescreening(Request $request,$id,$tipe)
+    {
+        try {
+            return Helper::resultResponse(
+                ApprovalPrescreening::getInfoPrescreening($request,$id,$tipe)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 }
