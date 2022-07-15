@@ -324,17 +324,14 @@
                         </p>
                         <table>
                             <tr>
-                                <td width="120">NIK</td>
-                                <td><b>{{$nik}}</b></td>
-                            </tr>
-                            {{-- <tr>
-                                <td>Nama</td>
-                                <td><b>{{$fullname}}</b></td>
-                            </tr> --}}
-                            <tr>
                                 <td>Nomor Aplikasi</td>
                                 <td><b>{{$nomor_aplikasi}}</b></td>
                             </tr>
+                            <tr>
+                                <td width="120">NIK</td>
+                                <td><b>{{$nik}}</b></td>
+                            </tr>
+
                         </table>
                         <p>Kunjungi Menu Cek status untuk mengetahui status proses permohonan dan untuk proses selanjutnya.</p>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -365,7 +362,7 @@
                 <tr>
                   <td class="content-block">
                     <span class="apple-link">
-                    BANK DKI
+                        <img src="{{$logo}}" width="100" />
                     </span>
                   </td>
                 </tr>

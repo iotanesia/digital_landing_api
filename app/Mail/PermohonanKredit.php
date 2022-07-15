@@ -19,6 +19,7 @@ class PermohonanKredit extends Mailable
      */
     public function __construct($data)
     {
+        $data['logo'] = 'https://digitallendingfe-dev.bankdki.co.id/eform-new/assets/images/bankdki-logo-d87f98851bad9346a293aa80fe69d250.svg';
         $this->data = $data;
     }
 
