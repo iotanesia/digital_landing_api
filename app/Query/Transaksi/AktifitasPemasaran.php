@@ -99,7 +99,7 @@ class AktifitasPemasaran {
                 $query->where('id_user', request()->current_user->id);
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
-                $query->where('status',Constants::AP_STS_BERMINAT);
+                $query->whereIn('status',[Constants::AP_STS_BERMINAT,Constants::AP_STS_BELUM_BERMINAT]);
                 $query->whereNull('is_prescreening');
                 $query->whereBetween('aktifitas_pemasaran.created_at',$filter_tanggal['filter']);
             })
@@ -139,7 +139,7 @@ class AktifitasPemasaran {
                 $query->where('is_cutoff', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_NOL);
                 $query->where('is_pipeline', Constants::IS_ACTIVE);
-                $query->where('status',Constants::AP_STS_BERMINAT);
+                $query->whereIn('status',[Constants::AP_STS_BERMINAT,Constants::AP_STS_BELUM_BERMINAT]);
                 $query->whereNull('is_prescreening');
                 if($filter_tanggal['tanggal_mulai'] || $filter_tanggal['tanggal_akhir']) {
                     $query->whereBetween('created_at',$filter_tanggal['filter']);
@@ -323,7 +323,7 @@ class AktifitasPemasaran {
                 $pscrng = (new PrescreeningJobs([
                     'items' => $update,
                     'modul' => 'aktifitas_pemasaran'
-                ]));
+            ]));
                 dispatch($pscrng);
             }
 
