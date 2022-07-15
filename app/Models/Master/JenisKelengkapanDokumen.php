@@ -13,6 +13,15 @@ class JenisKelengkapanDokumen extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'jenis_kelengkapan_dokumen';
     protected $connection = 'master';
+    public $fillable = [
+        'nama',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+    ];
 
     public function refVerifKelengkapanDokumen()
     {

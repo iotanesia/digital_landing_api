@@ -144,4 +144,10 @@ class VerifValidasiData extends Model
     {
         return $this->belongsTo(MKelurahan::class,'id_kelurahan','id_kelurahan');
     }
+
+    public function manyProfilUsaha()
+    {
+        return $this->hasMany(VerifProfilUsaha::class,'id_verifikasi_validasi_data','id');
+
+    }
 }

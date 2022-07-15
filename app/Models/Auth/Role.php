@@ -11,6 +11,16 @@ class Role extends Model
     protected $table = 'roles';
     protected $connection = 'auth';
 
+    public $fillable = [
+        'nama',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+    ];
+
     public function refRolesProduk()
     {
         return $this->belongsTo(RoleProduk::class,'id','id_role');
