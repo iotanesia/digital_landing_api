@@ -139,6 +139,7 @@ Route::prefix('v1')
         Route::prefix('approval-prescreening')->group(function () {
             /* get list */ Route::get('/',[ApprovalPrescreeningController::class,'index']);
             /* submit */ Route::post('/',[ApprovalPrescreeningController::class,'store']);
+            /* info prescreening  */ Route::get('/info-prescreening/{id}/{tipe}',[ApprovalPrescreeningController::class,'prescreening']);
             /* detail */ Route::get('/{id}',[ApprovalPrescreeningController::class,'show']);
         });
 
