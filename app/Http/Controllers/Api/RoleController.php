@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Transaksi\ApprovalPrescreening;
-
-class ApprovalPrescreeningController extends Controller
+use App\Query\Auth\MRole;
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +17,7 @@ class ApprovalPrescreeningController extends Controller
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::getDataCurrent($request)
+                MRole::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,8 +44,7 @@ class ApprovalPrescreeningController extends Controller
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::byId($request)
-
+                MRole::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -59,11 +57,11 @@ class ApprovalPrescreeningController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,$id,$type)
+    public function show(Request $request,$id)
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::byId($id,$type)
+                MRole::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -88,11 +86,11 @@ class ApprovalPrescreeningController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::approve($request)
+                MRole::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -105,16 +103,11 @@ class ApprovalPrescreeningController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function prescreening(Request $request,$id,$tipe)
+    public function destroy(Request $request,$id)
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::getInfoPrescreening($request,$id,$tipe)
+                MRole::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

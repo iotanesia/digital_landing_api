@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EformController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\UserControler;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SimulasiController;
 use App\Http\Controllers\Api\LeadsController;
 use App\Http\Controllers\Api\PasswordController;
@@ -140,7 +141,8 @@ Route::prefix('v1')
             /* get list */ Route::get('/',[ApprovalPrescreeningController::class,'index']);
             /* submit */ Route::post('/',[ApprovalPrescreeningController::class,'store']);
             /* info prescreening  */ Route::get('/info-prescreening/{id}/{tipe}',[ApprovalPrescreeningController::class,'prescreening']);
-            /* detail */ Route::get('/{id}',[ApprovalPrescreeningController::class,'show']);
+            /* approval  */ Route::put('/approve',[ApprovalPrescreeningController::class,'update']);
+            /* detail */ Route::get('/{id}/{tipe}',[ApprovalPrescreeningController::class,'show']);
         });
 
         // users
@@ -150,6 +152,15 @@ Route::prefix('v1')
             Route::put('/{id}',[UserControler::class,'update']);
             Route::delete('/{id}',[UserControler::class,'delete']);
             Route::get('/detail',[UserControler::class,'detail']);
+        });
+
+         // roles
+         Route::prefix('role')->group(function () {
+            Route::get('/',[RoleController::class,'index']);
+            Route::post('/',[RoleController::class,'save']);
+            Route::get('/{id}',[RoleController::class,'index']);
+            Route::put('/{id}',[RoleController::class,'index']);
+            Route::delete('/{id}',[RoleController::class,'delete']);
         });
         // users
         Route::prefix('pipeline')->group(function () {
@@ -381,6 +392,15 @@ Route::prefix('v1')
             });
             // status tempat tinggal
             Route::prefix('status-tempat-tinggal')->group(function () {
+                Route::get('/',[StatusTempatTinggalController::class,'index']);
+                Route::post('/',[StatusTempatTinggalController::class,'store']);
+                Route::get('/{id}',[StatusTempatTinggalController::class,'show']);
+                Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
+                Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
+            });
+
+             // jenis kelengkapan dokumen
+             Route::prefix('jenis-kelengkapan-dokumen')->group(function () {
                 Route::get('/',[StatusTempatTinggalController::class,'index']);
                 Route::post('/',[StatusTempatTinggalController::class,'store']);
                 Route::get('/{id}',[StatusTempatTinggalController::class,'show']);

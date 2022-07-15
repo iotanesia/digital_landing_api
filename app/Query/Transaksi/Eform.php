@@ -247,7 +247,7 @@ class Eform {
                              $query->orWhere('nik','ilike',"%$request->kueri%");
                              $query->orWhere('no_hp','ilike',"%$request->kueri%");
                         });
-                    })->paginate($request->limit);
+                    })->orderBy('id','desc')->paginate($request->limit);
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         return [

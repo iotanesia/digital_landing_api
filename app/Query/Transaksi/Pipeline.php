@@ -214,10 +214,9 @@ class Pipeline {
         if($is_transaction) DB::beginTransaction();
         try {
             $data = Model::find($request['id_pipeline']);
-            if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
-
+            if(!$data) throw new \Exception("Data tidak ditemukan", 400);
             $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
-            $data->updated_by =  request()->current_user->id;
+            $data->updated_by = request()->current_user->id;
             $data->save();
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
@@ -234,7 +233,7 @@ class Pipeline {
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
             $data = Model::find($request->id_pipeline);
-            if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
+            if(!$data) throw new \Exception("Data tidak ditemukan", 400);
             $data->step_analisa_kredit = Constants::STEP_ANALISA_SUBMIT;
             $data->updated_by = request()->current_user->id;
             $data->save();
@@ -248,7 +247,7 @@ class Pipeline {
     public static function detailVerifikasi($id)
     {
         $data = Model::find($id);
-        if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
+        if(!$data) throw new \Exception("Data tidak ditemukan", 400);
         if($data->id_tipe_calon_nasabah == Constants::TCN_EFORM) $modul = $data->refEform;
         elseif($data->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $modul = $data->refAktifitasPemasaran;
         else $modul = $data->refLeads;
