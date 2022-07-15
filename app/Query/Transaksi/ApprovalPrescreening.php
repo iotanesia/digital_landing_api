@@ -3,6 +3,9 @@
 namespace App\Query\Transaksi;
 
 use App\ApiHelper AS Helper;
+use App\Models\Transaksi\AktifitasPemasaranPrescreening;
+use App\Models\Transaksi\EfomPrescreening;
+use App\Models\Transaksi\LeadsPrescreening;
 use App\Query\Transaksi\AktifitasPemasaran;
 use App\Query\Transaksi\Leads;
 use App\Query\Transaksi\Eform;
@@ -56,6 +59,33 @@ class ApprovalPrescreening {
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function getInfoPrescreening($request, $id, $tipe) {
+        try {
+            if($tipe == 'eform') $data = EfomPrescreening::where('id_eform',$id)->paginate($request->limit);
+            if($tipe == 'leads') $data = LeadsPrescreening::where('id_leads',$id)->paginate($request->limit);
+            if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
+        return [
+            'items' => $data->getCollection()->transform(function ($item){
+                return [
+                    'id' => $item->id,
+                    'metode' => $item->refRules->refMetode->metode ?? null,
+                    'skema' => $item->refRules->refSkema->skema ?? null,
+                    'status' =>  $item->keterangan,
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
+                ];
+            }),
+            'attributes' => [
+                'total' => $data->total(),
+                'current_page' => $data->currentPage(),
+                'from' => $data->currentPage(),
+                'per_page' => (int) $data->perPage(),
+            ]
+        ];
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
