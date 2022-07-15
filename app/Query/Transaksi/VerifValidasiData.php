@@ -25,7 +25,10 @@ class VerifValidasiData {
             if($data) {
                 $data->fill($attr);
                 $data->save();
-            } else Model::create($attr);
+            } else $data = Model::create($attr);
+
+            VerifProfilUsaha::store($request,$data->id,false);
+
             Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => Constants::STEP_ANALISA_VERIF_DATA
@@ -36,5 +39,7 @@ class VerifValidasiData {
             throw $th;
         }
     }
+
+
 
 }

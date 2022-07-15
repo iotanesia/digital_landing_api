@@ -215,8 +215,9 @@ class Pipeline {
         try {
             $data = Model::find($request['id_pipeline']);
             if(!$data) return throw new \Exception("Data tidak ditemukan", 400);
-            $data->step_analisa_kredit = $request['step_analisa_kredit'];
-            $data->updated_by = request()->current_user->id;
+
+            $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
+            $data->updated_by =  request()->current_user->id;
             $data->save();
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
@@ -267,6 +268,19 @@ class Pipeline {
         $result->nama_kabupaten_pasangan = $modul->refKabupatenPasangan->nama ?? null;
         $result->nama_kecamatan_pasangan = $modul->refKecamatanPasangan->nama ?? null;
         $result->nama_kelurahan_pasangan = $modul->refKelurahanPasangan->nama ?? null;
+        $result->profil_usaha = $modul->manyProfilUsaha->map(function ($item){
+            $item->nama_propinsi  = $item->refPropinsi->nama ?? null;
+            $item->nama_kabupaten = $item->refKabupaten->nama ?? null;
+            $item->nama_kecamatan = $item->refKecamatan->nama ?? null;
+            $item->nama_kelurahan = $item->refKelurahan->nama ?? null;
+            unset(
+                $item->refPropinsi,
+                $item->refKabupaten,
+                $item->refKecamatan,
+                $item->refKelurahan,
+            );
+            return $item;
+        }) ?? null;
         unset(
             $modul->id_cabang,
             $modul->refProduk,
@@ -283,6 +297,7 @@ class Pipeline {
             $modul->refKabupatenPasangan,
             $modul->refKecamatanPasangan,
             $modul->refKelurahanPasangan,
+            $modul->manyProfilUsaha
         );
         return [
             'items' => $result
