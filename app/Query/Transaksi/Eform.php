@@ -54,7 +54,7 @@ class Eform {
                     'nama_pasangan' => $data->nama_pasangan,
                     'tempat_lahir_pasangan' => $data->tempat_lahir_pasangan,
                     'tgl_lahir_pasangan' => $data->tgl_lahir_pasangan,
-                    'alamat_detail' => $data->alamat_detail,
+                    'alamat' => $data->alamat,
                     'lokasi' => $data->lokasi,
                     'status' => $data->status,
                     'id_jenis_produk' => $data->id_jenis_produk,

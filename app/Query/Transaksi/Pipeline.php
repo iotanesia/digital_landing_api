@@ -29,9 +29,9 @@ class Pipeline {
             $refId =  $data->ref_id;
             $dataNasabah = [];
 
-            if($tipeNasabah == 'Eform') $dataNasabah = Eform::byId($refId);
-            if($tipeNasabah  == 'Leads') $dataNasabah = Leads::byId($refId);
-            if($tipeNasabah == 'Aktifitas Pemasaran') $dataNasabah = AktifitasPemasaran::byIdForPiperline($refId);
+            if($tipeNasabah=='Eform')$dataNasabah = Eform::byId($refId);
+            if($tipeNasabah=='Leads')$dataNasabah = Leads::byId($refId);
+            if($tipeNasabah=='Aktifitas Pemasaran')$dataNasabah = AktifitasPemasaran::byIdForPiperline($refId);
             return [
                 'items' => [
                     'id' => $data->id,
