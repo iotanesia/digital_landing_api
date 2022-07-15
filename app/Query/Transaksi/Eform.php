@@ -582,7 +582,7 @@ class Eform {
             'id_user' => $request->current_user->id,
             'nik' => $data->nik,
             'tanggal' => Carbon::now()->format('Y-m-d'),
-            'step_verifikasi' => Constants::PROSES_VERIFIKASI,
+            'step_analisa_kredit' => Constants::PROSES_VERIFIKASI,
             'tracking'=>Constants::ANALISA_KREDIT,
             'id_tipe_calon_nasabah'=>Constants::TCN_EFORM,
          ];
@@ -653,7 +653,7 @@ class Eform {
             'id_user' =>  $data->id_user,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
-            'step_verifikasi' =>  0,
+            'step_analisa_kredit' =>  0,
         ];
     }
 

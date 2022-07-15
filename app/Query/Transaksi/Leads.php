@@ -158,7 +158,7 @@ class Leads {
             'id_user' =>  $request->current_user->id,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
-            'step_verifikasi' => Constants::IS_INACTIVE,
+            'step_analisa_kredit' => Constants::IS_INACTIVE,
         ];
     }
     // update data rm
