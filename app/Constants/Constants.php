@@ -6,7 +6,7 @@ namespace App\Constants;
 class Constants
 {
     const IS_ACTIVE = 1;
-    const IS_INACTIVE = 1;
+    const IS_INACTIVE = 0;
     const IS_NOL = 0;
     const CUT_OFF = 3;
     //step verifikasi
