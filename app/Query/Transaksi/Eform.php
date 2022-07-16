@@ -659,7 +659,7 @@ class Eform {
             'id_user' =>  $data->id_user,
             'nik' =>  $data->nik,
             'tanggal' =>  Carbon::now()->format('Y-m-d'),
-            'step_analisa_kredit' =>  0,
+            'step_analisa_kredit' =>  Constants::IS_INACTIVE,
         ];
     }
 
