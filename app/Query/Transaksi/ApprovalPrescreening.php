@@ -15,6 +15,7 @@ use App\Query\Transaksi\AktifitasPemasaran as TransaksiAktifitasPemasaran;
 use App\Query\Transaksi\Eform as TransaksiEform;
 use App\Query\Transaksi\Leads as TransaksiLeads;
 use App\View\Transaksi\VPrescreening AS View;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ApprovalPrescreening {
@@ -109,8 +110,13 @@ class ApprovalPrescreening {
 
             }
             $update->is_prescreening = $request->status == Constants::IS_ACTIVE ? Constants::IS_ACTIVE : Constants::CUT_OFF;
+            $update->rejected_at = $request->status == Constants::IS_NOL ? Carbon::now() : null;
+            $update->rejected_by = $request->status == Constants::IS_NOL ? $request->current_user->nama : null;
+            $update->approved_at = $request->status == Constants::IS_ACTIVE ? Carbon::now() : null;
+            $update->approved_by = $request->status == Constants::IS_ACTIVE ? $request->current_user->nama : null;
             $update->save();
 
+            if($is_transaction) DB::commit();
             if($request->status == Constants::IS_ACTIVE) {
                 $mail_data = [
                     "fullname" => $update->nama,
@@ -127,7 +133,6 @@ class ApprovalPrescreening {
                 'nomor_aplikasi' => $update->nomor_aplikasi,
             ]];
 
-            if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;
