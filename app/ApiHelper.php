@@ -391,6 +391,18 @@ class ApiHelper {
         $weekStartDate = $now->subDay(7)->format('Y-m-d');
         $tanggal_mulai = $request->filter_tgl_mulai ?? $weekStartDate;
         $tanggal_akhir = $request->filter_tgl_akhir ? Carbon::parse($request->filter_tgl_akhir)->addDay()->format('Y-m-d') : $weekEndDate;
+
+        if($request->filter_bulan_ini){
+            $tanggal_mulai = $request->filter_tgl_mulai ?? $weekStartDate;
+            $tanggal_akhir = $request->filter_tgl_akhir ? Carbon::parse($request->filter_tgl_akhir)->addDay()->format('Y-m-d') : $weekEndDate;
+        }
+
+        if($request->filter_bulan_kemarin){
+            $bulan_kemarin = $now->subMonth();
+            $tanggal_mulai = $bulan_kemarin->format('Y-m-d');
+            $tanggal_akhir = Carbon::parse($tanggal_mulai)->addDays(7)->format('Y-m-d');
+        }
+
         return [
             'tanggal_mulai' => $tanggal_mulai,
             'tanggal_akhir' => $tanggal_akhir,
