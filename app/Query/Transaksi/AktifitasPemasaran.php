@@ -441,7 +441,7 @@ class AktifitasPemasaran {
             if(!$store) return false;
             $store->is_prescreening = $request['status']; // lolos
             $store->save();
-            $store->refPipeline()->create(self::setParamsPipeline($store)); // langsung pipeline
+            if(in_array($request['status'],[Constants::IS_ACTIVE])) $store->refPipeline()->create(self::setParamsPipeline($store)); // langsung pipeline
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
