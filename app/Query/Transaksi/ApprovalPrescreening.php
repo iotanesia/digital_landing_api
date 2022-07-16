@@ -22,6 +22,7 @@ class ApprovalPrescreening {
 
     public static function getDataCurrent($request)
     {
+        if(!in_array(4,Helper::getAllRole($request->current_user->roles))) throw new \Exception("Access Forbidden", 400);
         try {
             $data = View::where(function ($query) use ($request){
                 $query->where('is_prescreening',2);
@@ -97,6 +98,7 @@ class ApprovalPrescreening {
 
     public static function approve($request,$is_transaction = true)
     {
+        if(!in_array(4,Helper::getAllRole($request->current_user->roles))) throw new \Exception("Access Forbidden", 400);
         if($is_transaction) DB::beginTransaction();
         try {
             if($request->tipe_calon_nasabah == 'eform') {
