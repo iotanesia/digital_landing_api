@@ -108,17 +108,19 @@ class ApprovalPrescreening {
                 $update = Leads::find($request->id); $update = Leads::find($request->id);
 
             }
-            $update->is_prescreening = Constants::IS_ACTIVE;
+            $update->is_prescreening = $request->status == Constants::IS_ACTIVE ? Constants::IS_ACTIVE : Constants::CUT_OFF;
             $update->save();
 
-            $mail_data = [
-                "fullname" => $update->nama,
-                "nik" => $update->nik,
-                "nomor_aplikasi" => $update->nomor_aplikasi,
-                "reciver" =>  $update->email
-            ];
-            $mail_send = (new MailSender($mail_data));
-            dispatch($mail_send);
+            if($request->status == Constants::IS_ACTIVE) {
+                $mail_data = [
+                    "fullname" => $update->nama,
+                    "nik" => $update->nik,
+                    "nomor_aplikasi" => $update->nomor_aplikasi,
+                    "reciver" =>  $update->email
+                ];
+                $mail_send = (new MailSender($mail_data));
+                dispatch($mail_send);
+            }
 
             return ['items' => [
                 'nik' => $update->nik,
