@@ -25,7 +25,8 @@ class ApprovalPrescreening {
         if(!in_array(4,Helper::getAllRole($request->current_user->roles))) throw new \Exception("Access Forbidden", 400);
         try {
             $data = View::where(function ($query) use ($request){
-                $query->where('is_prescreening',2);
+                $query->where('is_prescreening',2)
+                      ->where('id_cabang',$request->current_user->id_cabang);
                 if($request->nik) $query->where('nik',$request->nik);
                 if($request->tipe_calon_nasabah) $query->where('tipe_calon_nasabah',$request->tipe_calon_nasabah);
             })->paginate($request->limit);

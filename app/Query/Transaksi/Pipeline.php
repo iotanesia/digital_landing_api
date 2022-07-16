@@ -86,6 +86,39 @@ class Pipeline {
         }
     }
 
+    public static function getDataCurrentBm($request)
+    {
+        try {
+            $filter_tanggal = Helper::filterByDateDefaultWeek($request);
+            $data = View::where(function ($query) use ($request, $filter_tanggal){
+                $query->where('id_cabang',$request->current_user->id_cabang);
+                $query->whereBetween('v_list_pipeline.created_at',$filter_tanggal['filter']);
+                if($request->nik) $query->where('nik',$request->nik);
+                if($request->tipe_calon_nasabah) $query->where('tipe_calon_nasabah',$request->tipe_calon_nasabah);
+            })->paginate($request->limit);
+            return [
+                'items' => $data->getCollection()->transform(function ($item){
+                    return [
+                        'id' => $item->id,
+                        'nik' => $item->nik,
+                        'nama' => $item->nama,
+                        'tipe_calon_nasabah' => $item->tipe_calon_nasabah,
+                        'foto_selfie' => $item->foto_selfie,
+                        'status_prescreening'=> 'Lolos'
+                    ];
+                }),
+                'attributes' => [
+                    'total' => $data->total(),
+                    'current_page' => $data->currentPage(),
+                    'from' => $data->currentPage(),
+                    'per_page' => (int) $data->perPage(),
+                ]
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public static function checkNasabah($nik) {
         try {
             $data = Model::where('nik', $nik)->first();
