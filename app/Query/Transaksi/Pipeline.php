@@ -291,7 +291,7 @@ class Pipeline {
         if($data->id_tipe_calon_nasabah == Constants::TCN_EFORM) $modul = $data->refEform;
         elseif($data->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $modul = $data->refAktifitasPemasaran;
         else $modul = $data->refLeads;
-        if($data->step_analisa_kredit >= 2) $modul = VerifValidasiData::byIdPipeline($id);
+        if($data->step_analisa_kredit > 0) $modul = VerifValidasiData::byIdPipeline($id);
         if(!$modul) throw new \Exception("belum melakukan validasi data", 400);
         $result = $modul;
         $result->nama_produk = $modul->refProduk->nama ?? null;
