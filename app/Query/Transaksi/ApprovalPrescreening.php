@@ -25,7 +25,8 @@ class ApprovalPrescreening {
         if(!in_array(4,Helper::getAllRole($request->current_user->roles))) throw new \Exception("Access Forbidden", 400);
         try {
             $data = View::where(function ($query) use ($request){
-                $query->where('is_prescreening',2);
+                $query->where('is_prescreening',2)
+                      ->where('id_cabang',$request->current_user->id_cabang);
                 if($request->nik) $query->where('nik',$request->nik);
                 if($request->tipe_calon_nasabah) $query->where('tipe_calon_nasabah',$request->tipe_calon_nasabah);
             })->paginate($request->limit);
@@ -148,12 +149,17 @@ class ApprovalPrescreening {
             if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
+                if($item->keterangan == 'Success'){
+                    $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
+                }else $keterangan = 'Tidak Lolos';
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
                     'status' =>  $item->keterangan,
-                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
+                    'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
+                    'detail' => $item->refRules->refMetode->id == 6 ? $item->refKolektibilitas : null
                 ];
             }),
             'attributes' => [

@@ -165,6 +165,7 @@ Route::prefix('v1')
         // users
         Route::prefix('pipeline')->group(function () {
             Route::get('/',[ApiPipelineController::class,'index']);
+            Route::get('/bm',[ApiPipelineController::class,'indexBm']);
             Route::get('/info-prescreening/{id}',[ApiPipelineController::class,'prescreening']);
             Route::get('/{id}',[ApiPipelineController::class,'show']);
         });

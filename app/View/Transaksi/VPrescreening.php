@@ -5,6 +5,7 @@ namespace App\View\Transaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Auth\User;
+use App\Models\Transaksi\Kolektibilitas;
 
 class VPrescreening extends Model {
     use HasFactory;

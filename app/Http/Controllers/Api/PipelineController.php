@@ -27,6 +27,22 @@ class PipelineController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexBm(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                Pipeline::getDataCurrentBm($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

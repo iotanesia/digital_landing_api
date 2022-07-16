@@ -116,4 +116,11 @@ class Leads extends Model
     {
         return $this->belongsTo(User::class,'id_user','id');
     }
+
+    public function refKolektibilitas()
+    {
+        // sementara diarahkan ke nik
+        return $this->belongsTo(Kolektibilitas::class,'nik','nik');
+
+    }
 }
