@@ -79,16 +79,4 @@ class MRole {
             throw $th;
         }
     }
-
-    public static function getAllRole($param) {
-        try {
-            foreach($param as $val) {
-                $result[] = $val->id_role;
-            }
-
-            return $result;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 }
