@@ -560,6 +560,8 @@ class Eform {
             $dataSend = $request->all();
             $update = Model::find($id);
             unset($dataSend['id']);
+            unset($dataSend['foto_ktp']);
+            unset($dataSend['foto_selfie']);
             foreach($dataSend as $key => $val) {
                 $update->{$key} = $val;
             }
