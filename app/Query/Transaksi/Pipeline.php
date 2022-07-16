@@ -135,19 +135,26 @@ class Pipeline {
         try {
             $dataPipeline = View::where('id', $id)->first();
             // $dataPipeline->ref_id = 109; //hard code sementara
-
             if(!$dataPipeline) throw new \Exception("Data not found.", 400);
             if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EfomPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Leads') $data = LeadsPrescreening::where('id_leads',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Aktifitas Pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$dataPipeline->ref_id)->paginate($request->limit);
         return [
-            'items' => $data->getCollection()->transform(function ($item){
+            'items' => $data->getCollection()->transform(function ($item) use ($dataPipeline){
+
+                if($item->keterangan == 'Success'){
+                    $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
+                }else $keterangan = 'Tidak Lolos';
+
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
                     'status' =>  $item->keterangan,
-                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
+                    'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
+                    'detail' => $item->refRules->refMetode->id == 6 ? $dataPipeline->refKolektibilitas : null
+
                 ];
             }),
             'attributes' => [

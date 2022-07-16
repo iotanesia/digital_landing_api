@@ -22,15 +22,14 @@ class MCabang {
         // if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
         // if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        $check_propinsi = $request->id_propinsi ? Model::where('id_propinsi',$request->id_propinsi)->first() : null;
         $check_kabupaten = $request->id_kabupaten ? Model::where('id_kabupaten',$request->id_kabupaten)->first() : null;
         $check_kecamatan = $request->id_kecamatan ? Model::where('id_kecamatan',$request->id_kecamatan)->first() : null;
 
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
-            $data = Model::where(function ($query) use ($request,$check_propinsi,$check_kabupaten,$check_kecamatan){
+            $data = Model::where(function ($query) use ($request,$check_kabupaten,$check_kecamatan){
                 if($request->nama_cabang) $query->where('nama_cabang','ilike',"%$request->nama_cabang%");
-                if($check_propinsi) $query->where('id_propinsi',$request->id_propinsi);
+                $query->where('id_propinsi',$request->id_propinsi);
                 if($check_kabupaten) $query->where('id_kabupaten',$request->id_kabupaten);
                 if($check_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
                 $query->whereNotNull('lat');
