@@ -189,11 +189,11 @@ class Tracking {
             [
                 'kode' => '02',
                 'label' => 'Analisa Kredit',
-                'tanggal' => $data->is_prescreening == Constants::CUT_OFF ? null : Carbon::now()->format('Y-m-d'),
-                'status' =>  $data->is_prescreening == Constants::CUT_OFF ? null : 'Sedang Diproses',
+                'tanggal' => in_array($data->is_prescreening,[Constants::IS_ACTIVE]) ? Carbon::now()->format('Y-m-d') : null,
+                'status' =>  in_array($data->is_prescreening,[Constants::IS_ACTIVE]) ? 'Sedang Diproses' : null ,
                 'id_status' => 0,
                 'keterangan' => null,
-                'step' => $data->is_prescreening == Constants::CUT_OFF ? null : 'Verifikasi Data'
+                'step' => in_array($data->is_prescreening,[Constants::IS_ACTIVE]) ? 'Verifikasi Data' : null,
             ],
             [
                 'kode' => '03',
