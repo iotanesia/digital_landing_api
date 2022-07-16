@@ -392,12 +392,12 @@ class ApiHelper {
         $tanggal_mulai = $request->filter_tgl_mulai ?? $weekStartDate;
         $tanggal_akhir = $request->filter_tgl_akhir ? Carbon::parse($request->filter_tgl_akhir)->addDay()->format('Y-m-d') : $weekEndDate;
 
-        if($request->filter_bulan_ini){
+        if($request->bulan_saat_ini){
             $tanggal_mulai = $request->filter_tgl_mulai ?? $weekStartDate;
             $tanggal_akhir = $request->filter_tgl_akhir ? Carbon::parse($request->filter_tgl_akhir)->addDay()->format('Y-m-d') : $weekEndDate;
         }
 
-        if($request->filter_bulan_kemarin){
+        if($request->bulan_sebelumnya){
             $bulan_kemarin = $now->subMonth();
             $tanggal_mulai = $bulan_kemarin->format('Y-m-d');
             $tanggal_akhir = Carbon::parse($tanggal_mulai)->addDays(7)->format('Y-m-d');
