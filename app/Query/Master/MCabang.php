@@ -22,7 +22,6 @@ class MCabang {
         // if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
         // if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        $check_propinsi = $request->id_propinsi ? Model::where('id_propinsi',$request->id_propinsi)->first() : null;
         $check_kabupaten = $request->id_kabupaten ? Model::where('id_kabupaten',$request->id_kabupaten)->first() : null;
         $check_kecamatan = $request->id_kecamatan ? Model::where('id_kecamatan',$request->id_kecamatan)->first() : null;
 
