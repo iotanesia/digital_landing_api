@@ -294,6 +294,7 @@ class Pipeline {
         if($data->step_analisa_kredit > 0) $modul = VerifValidasiData::byIdPipeline($id);
         if(!$modul) throw new \Exception("belum melakukan validasi data", 400);
         $result = $modul;
+        $result->nama_cabang = $modul->refCabang->nama_cabang ?? null;
         $result->nama_produk = $modul->refProduk->nama ?? null;
         $result->nama_status_perkawinan = $modul->refStatusPerkawinan->nama ?? null;
         $result->nama_sub_produk = $modul->refSubProduk->nama ?? null;
@@ -321,7 +322,6 @@ class Pipeline {
             return $item;
         }) ?? null;
         unset(
-            $modul->id_cabang,
             $modul->refProduk,
             $modul->refStatusPerkawinan,
             $modul->refCabang,
