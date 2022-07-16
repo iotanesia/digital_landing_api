@@ -24,7 +24,6 @@ class Pipeline extends Model
         'nomor_aplikasi',
         'id_tipe_calon_nasabah',
         'step_analisa_kredit',
-        'step_analisa_kredit',
         'id_user',
         'nik',
         'tanggal',
@@ -62,5 +61,5 @@ class Pipeline extends Model
         return $this->belongsTo(VerifValidasiData::class,'id_pipeline','id_pipeline');
     }
 
-   
+
 }

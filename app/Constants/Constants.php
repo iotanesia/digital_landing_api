@@ -35,6 +35,9 @@ class Constants
     const STEP_ANALISA_KELENGKAPAN = 3;
     const STEP_ANALISA_SUBMIT = 4;
 
+    const PIP_TRACKING_PRESCREENING = 1;
+    const PIP_TRACKING_VERIFIKASI = 2;
+
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',

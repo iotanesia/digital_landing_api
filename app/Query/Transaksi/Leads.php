@@ -159,7 +159,7 @@ class Leads {
     {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
-            'tracking' => 2,
+            'tracking' => Constants::PIP_TRACKING_VERIFIKASI,
             'id_tipe_calon_nasabah' => Constants::TCN_LEAD,
             'id_user' =>  $request->current_user->id,
             'nik' =>  $data->nik,
