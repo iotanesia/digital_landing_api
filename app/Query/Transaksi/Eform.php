@@ -585,6 +585,7 @@ class Eform {
     {
          return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
+            'tracking' => Constants::PIP_TRACKING_VERIFIKASI,
             'id_user' => $request->current_user->id,
             'nik' => $data->nik,
             'tanggal' => Carbon::now()->format('Y-m-d'),
@@ -654,7 +655,7 @@ class Eform {
     {
         return [
             'nomor_aplikasi' => $data->nomor_aplikasi,
-            'tracking' => 2,
+            'tracking' => Constants::PIP_TRACKING_VERIFIKASI,
             'id_tipe_calon_nasabah' => 2,
             'id_user' =>  $data->id_user,
             'nik' =>  $data->nik,
