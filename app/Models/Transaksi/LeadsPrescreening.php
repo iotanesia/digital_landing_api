@@ -33,4 +33,11 @@ class LeadsPrescreening extends Model
     {
         return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');
     }
+
+    public function refKolektibilitas()
+    {
+        // sementara diarahkan ke nik
+        return $this->belongsTo(Kolektibilitas::class,'nik','nik');
+
+    }
 }

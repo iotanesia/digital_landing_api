@@ -149,12 +149,17 @@ class ApprovalPrescreening {
             if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
+                if($item->keterangan == 'Success'){
+                    $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
+                }else $keterangan = 'Tidak Lolos';
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
                     'status' =>  $item->keterangan,
-                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
+                    'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
+                    'detail' => $item->refRules->refMetode->id == 6 ? $item->refKolektibilitas : null
                 ];
             }),
             'attributes' => [
