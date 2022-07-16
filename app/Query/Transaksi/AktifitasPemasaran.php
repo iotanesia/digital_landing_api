@@ -204,6 +204,9 @@ class AktifitasPemasaran {
             if(!$request->plafond) $require_fileds[] = 'plafond';
             if(!$request->jangka_waktu) $require_fileds[] = 'jangka_waktu';
             if(!$request->status) $require_fileds[] = 'status';
+            if(in_array($request->status,[Constants::AP_STS_BERMINAT])) {
+                if(!$request->nik) $require_fileds[] = 'nik';
+            }
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $params = $request->all();
