@@ -63,6 +63,8 @@ class VerifValidasiData extends Model
         'id_kecamatan_pasangan',
         'id_kelurahan_pasangan',
         'kodepos_pasangan',
+        'foto_ktp',
+        'foto_selfie',
     ];
 
     public function refCabang()
