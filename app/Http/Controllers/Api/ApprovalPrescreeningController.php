@@ -45,7 +45,7 @@ class ApprovalPrescreeningController extends Controller
     {
         try {
             return Helper::resultResponse(
-                ApprovalPrescreening::byId($request)
+                ApprovalPrescreening::store($request)
 
             );
         } catch (\Throwable $th) {
