@@ -13,6 +13,7 @@ class MSubProduk {
         if(!$data) return null;
         $tipe_produk = $data->refProduk->jenis ?? null;
         $data->tipe_produk = strtoupper($tipe_produk);
+        unset( $data->refProduk);
         return ['items' => $data];
     }
 
