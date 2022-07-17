@@ -24,14 +24,15 @@ class VerifProfilUsaha {
                         $store = new Model;
                         $store->id_verifikasi_validasi_data = $id_verifikasi_validasi_data;
                     };
-                    $store->nama_usaha =$item['nama_usaha'];
-                    $store->profil_usaha =$item['profil_usaha'];
-                    $store->alamat_usaha =$item['alamat_usaha'];
-                    $store->mulai_operasi =$item['mulai_operasi'];
-                    $store->id_propinsi =$item['id_propinsi'];
-                    $store->id_kabupaten =$item['id_kabupaten'];
-                    $store->id_kecamatan =$item['id_kecamatan'];
-                    $store->id_kelurahan =$item['id_kelurahan'];
+                    $store->npwp =$item['npwp'] ?? null;
+                    $store->nama_usaha =$item['nama_usaha'] ?? null;
+                    $store->profil_usaha =$item['profil_usaha'] ?? null;
+                    $store->alamat_usaha =$item['alamat_usaha'] ?? null;
+                    $store->mulai_operasi =$item['mulai_operasi'] ?? null;
+                    $store->id_propinsi =$item['id_propinsi'] ?? null;
+                    $store->id_kabupaten =$item['id_kabupaten'] ?? null;
+                    $store->id_kecamatan =$item['id_kecamatan'] ?? null;
+                    $store->id_kelurahan =$item['id_kelurahan'] ?? null;
                     $store->created_by = $request->current_user->id;
                     $store->save();
                 }
