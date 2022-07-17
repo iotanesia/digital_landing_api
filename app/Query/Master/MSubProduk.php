@@ -9,8 +9,11 @@ use App\Constants\Constants;
 class MSubProduk {
 
     public static function byId($id)
-    {
-        return ['items' => Model::find($id)];
+    {   $data = Model::find($id);
+        if(!$data) return null;
+        $tipe_produk = $data->refProduk->jenis ?? null;
+        $data->tipe_produk = strtoupper($tipe_produk);
+        return ['items' => $data];
     }
 
     public static function byKode($kode)
