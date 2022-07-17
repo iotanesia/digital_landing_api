@@ -44,12 +44,23 @@ class MRole {
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
+            $param = $request->all();
+
+            if($request->roles_produk) $store->manyRolesProduk()->createMany(self::setParamRoleProduk($param,$store->id));
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
+    }
+
+    public static function setParamRoleProduk($request,$id_roles)
+    {
+         return array_map(function ($item) use ($id_roles){
+            $item['id_role'] = $id_roles;
+            return $item;
+         },$request['roles_produk']);
     }
 
     public static function updated($request,$id,$is_transaction = true)
