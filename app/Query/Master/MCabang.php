@@ -34,7 +34,7 @@ class MCabang {
                 if($check_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
                 $query->whereNotNull('lat');
                 $query->whereNotNull('lng');
-                $query->where('id_cabang_koor','<>',701);
+                if($request->jenis_cabang) $query->where('jenis_cabang',$request->jenis_cabang);
             })->paginate($request->limit);
             return [
                 'items' => $data->items(),
