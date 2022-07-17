@@ -38,6 +38,13 @@ class Constants
     const PIP_TRACKING_PRESCREENING = 1;
     const PIP_TRACKING_VERIFIKASI = 2;
 
+    const MTD_RULES_DHN_BI = 1;
+    const MTD_RULES_DHN_DKI = 2;
+    const MTD_SIKP_Plafond = 3;
+    const MTD_SIKP_Calon = 4;
+    const MTD_DIGI_DATA = 5;
+    const MTD_SLIK_NAE = 6;
+
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',
