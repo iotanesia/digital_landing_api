@@ -326,14 +326,6 @@ class AktifitasPemasaran {
             if ($request->foto_ktp) Storage::put($params['foto_ktp'], base64_decode($imageKtp));
             if ($request->foto_selfie) Storage::put($params['foto_selfie'], base64_decode($imageselfie));
 
-            if($request->status == 2) {
-                $pscrng = (new PrescreeningJobs([
-                    'items' => $update,
-                    'modul' => 'aktifitas_pemasaran'
-                ]));
-                dispatch($pscrng);
-            }
-
             $mail_data = [
                 "fullname" => $update->nama,
                 "nik" => $update->nik,
@@ -341,8 +333,16 @@ class AktifitasPemasaran {
                 "reciver" =>  $update->email
             ];
 
-            $mail_send = (new MailSender($mail_data));
-            dispatch($mail_send);
+            if($request->status == 2) {
+                $pscrng = (new PrescreeningJobs([
+                    'items' => $update,
+                    'modul' => 'aktifitas_pemasaran'
+                ]));
+                dispatch($pscrng);
+
+                $mail_send = (new MailSender($mail_data));
+                dispatch($mail_send);
+            }
 
             return ["items" => $update];
         } catch (\Throwable $th) {
