@@ -32,7 +32,11 @@ class MSubProduk {
                 if($request->id_produk) $query->where('id_produk',$request->id_produk);
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        $tipe_produk = $item->refProduk->jenis ?? null;
+                        $item->tipe_produk = strtolower($tipe_produk);
+                        return $item;
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

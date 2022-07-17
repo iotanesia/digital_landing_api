@@ -41,6 +41,11 @@ class MSubProduk extends Model
         }
     }
 
+    public function refProduk()
+    {
+        return $this->belongsTo(MProduk::class,'id_produk','id');
+    }
+
     public static function boot()
     {
         parent::boot();
