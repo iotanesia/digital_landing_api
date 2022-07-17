@@ -288,11 +288,13 @@ class Pipeline {
     {
         $data = Model::find($id);
         if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-        if($data->id_tipe_calon_nasabah == Constants::TCN_EFORM) $modul = $data->refEform;
-        elseif($data->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $modul = $data->refAktifitasPemasaran;
-        else $modul = $data->refLeads;
-        if($data->step_analisa_kredit > 0) $modul = VerifValidasiData::byIdPipeline($id);
-        if(!$modul) throw new \Exception("belum melakukan validasi data", 400);
+        $modul = VerifValidasiData::byIdPipeline($id);
+        if(!$modul) {
+            if($data->id_tipe_calon_nasabah == Constants::TCN_EFORM) $modul = $data->refEform;
+            elseif($data->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $modul = $data->refAktifitasPemasaran;
+            else $modul = $data->refLeads;
+        }
+
         $result = $modul;
         $result->nama_cabang = $modul->refCabang->nama_cabang ?? null;
         $result->nama_produk = $modul->refProduk->nama ?? null;
