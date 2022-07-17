@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTblMasterKreditMinimumPenghasilan extends Migration
+class CreateTblRolesPermission extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateTblMasterKreditMinimumPenghasilan extends Migration
      */
     public function up()
     {
-        Schema::create('master_kredit_minimum_penghasilan', function (Blueprint $table) {
+        Schema::connection('pengaturan')->create('roles_menu', function (Blueprint $table) {
             $table->id();
-            $table->float('prosentase');
-            $table->tinyInteger('flag_aktif')->default(0);
+            $table->bigInteger('id_role');
+            $table->bigInteger('kode_menu');
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();
-            $table->bigInteger('softdelete')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +32,6 @@ class CreateTblMasterKreditMinimumPenghasilan extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_master_kredit_minimum_penghasilan');
+        Schema::connection('pengaturan')->dropIfExists('roles_menu');
     }
 }
