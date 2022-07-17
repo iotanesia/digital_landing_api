@@ -34,7 +34,8 @@ class MSubProduk {
                 return [
                     'items' => $data->getCollection()->transform(function ($item){
                         $tipe_produk = $item->refProduk->jenis ?? null;
-                        $item->tipe_produk = strtolower($tipe_produk);
+                        $item->tipe_produk = strtoupper($tipe_produk);
+                        unset( $item->refProduk);
                         return $item;
                     }),
                     'attributes' => [
