@@ -24,7 +24,6 @@ class VerifProfilUsaha {
                         $store = new Model;
                         $store->id_verifikasi_validasi_data = $id_verifikasi_validasi_data;
                     };
-                    $store->npwp =$item['npwp'];
                     $store->nama_usaha =$item['nama_usaha'];
                     $store->profil_usaha =$item['profil_usaha'];
                     $store->alamat_usaha =$item['alamat_usaha'];
