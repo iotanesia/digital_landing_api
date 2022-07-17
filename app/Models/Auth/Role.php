@@ -26,4 +26,9 @@ class Role extends Model
         return $this->belongsTo(RoleProduk::class,'id','id_role');
     }
 
+
+    public function manyRolesProduk()
+    {
+        return $this->hasMany(RoleProduk::class,'id_role','id');
+    }
 }
