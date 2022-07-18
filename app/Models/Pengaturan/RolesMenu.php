@@ -23,6 +23,11 @@ class RolesMenu extends Model
         'deleted_by',
     ];
 
+    public function refMenu()
+    {
+        return $this->belongsTo(Menu::class,'kode_menu','kode');
+    }
+
     public static function boot()
     {
         parent::boot();

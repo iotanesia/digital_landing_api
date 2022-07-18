@@ -531,7 +531,7 @@ Route::prefix('v1')
 
         // master
         Route::prefix('pengaturan')->group(function () {
-        // route agama
+        // route menu
             Route::prefix('menu')->group(function () {
                 Route::get('/',[MenuController::class,'index']);
                 Route::post('/',[MenuController::class,'store']);

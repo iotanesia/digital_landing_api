@@ -42,6 +42,21 @@ class User {
         $user->nama_role = $user->refUserRole->refRole->nama ?? null;
         $user->id_produk = $user->refUserRole->refRole->refRolesProduk->id_produk ?? null;
         $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProduk->nama ?? null;
+        $user->menu = [];
+        if ($user->refUserRole) {
+            $user->menu = $user->refUserRole->refRole->manyRolesMenu->map(function ($item){
+                return [
+                    'nama_menu' => $item->refMenu->nama ?? null,
+                    'kode_menu'=> $item->refMenu->kode ?? null,
+                    'url'=> $item->refMenu->url ?? null,
+                    'path'=> $item->refMenu->path ?? null,
+                    'icon'=> $item->refMenu->icon ?? null,
+                    'platfom'=> $item->refMenu->platfom ?? null,
+                    'modul'=> $item->refMenu->modul ?? null,
+                ];
+            });
+        }
+        
         unset(
             $user->refUserRole,
             $user->manyUserRole,

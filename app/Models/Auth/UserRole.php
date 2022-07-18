@@ -22,5 +22,6 @@ class UserRole extends Model
     {
         return $this->belongsTo(Role::class,'id_role','id');
     }
+   
 
 }
