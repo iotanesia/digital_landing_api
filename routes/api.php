@@ -36,9 +36,13 @@ use App\Http\Controllers\Master\TujuanPemasaranController;
 use App\Http\Controllers\Master\CaraPemasaranController;
 use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
+use App\Http\Controllers\Master\LinkAgeController;
 use App\Http\Controllers\Master\PromoController;
+use App\Http\Controllers\Master\ProspekUsahaController;
+use App\Http\Controllers\Master\RiwayatHubunganBankController;
 use App\Http\Controllers\Master\SubSubProdukController;
 use App\Http\Controllers\Master\TipeProdukController;
+use App\Http\Controllers\Master\WilayahPemasaranController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -408,7 +412,6 @@ Route::prefix('v1')
                 Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
                 Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
             });
-
              // jenis kelengkapan dokumen
              Route::prefix('jenis-kelengkapan-dokumen')->group(function () {
                 Route::get('/',[StatusTempatTinggalController::class,'index']);
@@ -416,6 +419,38 @@ Route::prefix('v1')
                 Route::get('/{id}',[StatusTempatTinggalController::class,'show']);
                 Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
                 Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
+            });
+            // wilayah pemasaran
+            Route::prefix('wilayah-pemasaran')->group(function () {
+                Route::get('/',[WilayahPemasaranController::class,'index']);
+                Route::post('/',[WilayahPemasaranController::class,'store']);
+                Route::get('/{id}',[WilayahPemasaranController::class,'show']);
+                Route::put('/{id}',[WilayahPemasaranController::class,'update']);
+                Route::delete('/{id}',[WilayahPemasaranController::class,'destroy']);
+            });
+            // riwayat hubungan bank
+            Route::prefix('riwayat-hubungan-bank')->group(function () {
+                Route::get('/',[RiwayatHubunganBankController::class,'index']);
+                Route::post('/',[RiwayatHubunganBankController::class,'store']);
+                Route::get('/{id}',[RiwayatHubunganBankController::class,'show']);
+                Route::put('/{id}',[RiwayatHubunganBankController::class,'update']);
+                Route::delete('/{id}',[RiwayatHubunganBankController::class,'destroy']);
+            });
+            // Prospek Usaha
+            Route::prefix('prospek-usaha')->group(function () {
+                Route::get('/',[ProspekUsahaController::class,'index']);
+                Route::post('/',[ProspekUsahaController::class,'store']);
+                Route::get('/{id}',[ProspekUsahaController::class,'show']);
+                Route::put('/{id}',[ProspekUsahaController::class,'update']);
+                Route::delete('/{id}',[ProspekUsahaController::class,'destroy']);
+            });
+            // Link Age
+            Route::prefix('link-age')->group(function () {
+                Route::get('/',[LinkAgeController::class,'index']);
+                Route::post('/',[LinkAgeController::class,'store']);
+                Route::get('/{id}',[LinkAgeController::class,'show']);
+                Route::put('/{id}',[LinkAgeController::class,'update']);
+                Route::delete('/{id}',[LinkAgeController::class,'destroy']);
             });
         });
 
