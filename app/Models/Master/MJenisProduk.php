@@ -13,13 +13,12 @@ class MJenisProduk extends Model
     protected $connection = 'master';
 
     public $fillable = [
-        'id_jenis_produk',
-        'nama_jenis_produk',
+        'id',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
         'updated_by',
-        'deleted_at',
         'deleted_by',
     ];
 
