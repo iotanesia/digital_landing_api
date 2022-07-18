@@ -181,8 +181,10 @@ class Pipeline {
 
                     if($item->id_tipe_calon_nasabah == Constants::TCN_EFORM) $data = $item->refEform;
                     elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN)   $data = $item->refAktifitasPemasaran;
-                    else $data = $item->refLeads;
+                    elseif ($item->id_tipe_calon_nasabah == Constants::TCN_LEAD) $data = $item->refLeads;
+                    else $data = null;
 
+                    $id_jenis_kelamin = $data->id_jenis_kelamin ?? null;
                     return [
                         'id' => $item->id ?? null,
                         'nik' => $item->nik ?? null,
@@ -190,7 +192,7 @@ class Pipeline {
                         'nama_produk'=> $data->refProduk->nama ?? null,
                         'nama_sub_produk'=> $data->refSubProduk->nama ?? null,
                         'created_at' => $item->created_at ?? null,
-                        'foto' => $data->id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
+                        'foto' => $id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
 
                     ];
                 }),
