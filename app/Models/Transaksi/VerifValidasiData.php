@@ -65,7 +65,12 @@ class VerifValidasiData extends Model
         'kodepos_pasangan',
         'foto_ktp',
         'foto_selfie',
-        'id_cabang'
+        'id_cabang',
+        'nik_pasangan',
+        'no_hp_pasangan',
+        'email_pasangan',
+        'id_jenis_kelamin_pasangan',
+        'id_agama_pasangan',
     ];
 
     public function refCabang()
@@ -152,5 +157,11 @@ class VerifValidasiData extends Model
     {
         return $this->hasMany(VerifProfilUsaha::class,'id_verifikasi_validasi_data','id');
 
+    }
+
+    // proses kredit
+    public function refPKreditDataPersonal()
+    {
+        return $this->belongsTo(PKreditDataPersonal::class,'id_pipeline','id_pipeline');
     }
 }

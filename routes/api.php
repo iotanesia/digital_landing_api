@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\PipelineController as ApiPipelineController;
 use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
 use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController;
+use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
@@ -143,6 +144,14 @@ Route::prefix('v1')
             /* info prescreening  */ Route::get('/info-prescreening/{id}/{tipe}',[ApprovalPrescreeningController::class,'prescreening']);
             /* approval  */ Route::put('/approve',[ApprovalPrescreeningController::class,'update']);
             /* detail */ Route::get('/{id}/{tipe}',[ApprovalPrescreeningController::class,'show']);
+        });
+
+        Route::prefix('proses-kredit')->group(function () {
+            /* get list */ Route::get('/',[ProsesKreditController::class,'index']);
+            /* save data personal */ Route::post('personal',[ProsesKreditController::class,'updateDataPersonal']);
+            /* data personal */ Route::get('personal/{id}',[ProsesKreditController::class,'dataPersonal']);
+            /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
+
         });
 
         // users

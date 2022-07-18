@@ -58,7 +58,7 @@ class Pipeline extends Model
 
     public function refVerifValidasiData()
     {
-        return $this->belongsTo(VerifValidasiData::class,'id_pipeline','id_pipeline');
+        return $this->belongsTo(VerifValidasiData::class,'id','id_pipeline');
     }
 
 
