@@ -150,6 +150,8 @@ Route::prefix('v1')
             /* get list */ Route::get('/',[ProsesKreditController::class,'index']);
             /* save data personal */ Route::post('personal',[ProsesKreditController::class,'updateDataPersonal']);
             /* data personal */ Route::get('personal/{id}',[ProsesKreditController::class,'dataPersonal']);
+            /* save data keuangan */ Route::post('keuangan',[ProsesKreditController::class,'updateDataKeuangan']);
+            /* data keuangan */ Route::get('keuangan/{id}',[ProsesKreditController::class,'dataKeuangan']);
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
         });
