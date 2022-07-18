@@ -34,6 +34,12 @@ class Constants
     const STEP_ANALISA_ONSITE_VISIT = 2;
     const STEP_ANALISA_KELENGKAPAN = 3;
     const STEP_ANALISA_SUBMIT = 4;
+    const STEP_DATA_PERSONAL = 5;
+    const STEP_DATA_KEUANGAN = 6;
+    const STEP_DATA_USAHA = 7;
+    const STEP_DATA_AGUNAN = 8;
+    const STEP_DATA_ANALISA_KREDIT = 9;
+    const STEP_DATA_VERIFIKASI_AGUNAN = 10;
 
     const PIP_TRACKING_PRESCREENING = 1;
     const PIP_TRACKING_VERIFIKASI = 2;

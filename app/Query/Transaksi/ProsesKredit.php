@@ -181,6 +181,10 @@ class ProsesKredit {
             $store->save();
 
             PKreditDataPersonal::store($request,false);
+            Model::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => Constants::STEP_DATA_PERSONAL
+            ],false);
 
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
