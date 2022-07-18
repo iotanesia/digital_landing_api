@@ -25,7 +25,7 @@ class User {
                 $query->where('is_current','<>',UserRole::is_current);
             },
             'refUserRole' => function ($query){
-                $query->where('is_current',UserRole::is_current);
+                // $query->where('is_current',UserRole::is_current);
             },
         ])->where(function ($query) use ($params){
             $query->where('nirk',$params->nirk);
