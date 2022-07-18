@@ -40,10 +40,14 @@ use App\Http\Controllers\Master\HubunganController;
 use App\Http\Controllers\Master\IntegritasUsahaController;
 use App\Http\Controllers\Master\KetergantunganPelangganController;
 use App\Http\Controllers\Master\KetergantunganSupplierController;
+use App\Http\Controllers\Master\KodeDinasController;
+use App\Http\Controllers\Master\KodePlanController;
 use App\Http\Controllers\Master\LinkAgeController;
 use App\Http\Controllers\Master\PromoController;
 use App\Http\Controllers\Master\ProspekUsahaController;
 use App\Http\Controllers\Master\RiwayatHubunganBankController;
+use App\Http\Controllers\Master\SektorEkonomiController;
+use App\Http\Controllers\Master\SopAgunanController;
 use App\Http\Controllers\Master\SubSubProdukController;
 use App\Http\Controllers\Master\TipeProdukController;
 use App\Http\Controllers\Master\WilayahPemasaranController;
@@ -489,6 +493,38 @@ Route::prefix('v1')
                 Route::get('/{id}',[KetergantunganSupplierController::class,'show']);
                 Route::put('/{id}',[KetergantunganSupplierController::class,'update']);
                 Route::delete('/{id}',[KetergantunganSupplierController::class,'destroy']);
+            });
+            // Kode Dinas
+            Route::prefix('kode-dinas')->group(function () {
+                Route::get('/',[KodeDinasController::class,'index']);
+                Route::post('/',[KodeDinasController::class,'store']);
+                Route::get('/{id}',[KodeDinasController::class,'show']);
+                Route::put('/{id}',[KodeDinasController::class,'update']);
+                Route::delete('/{id}',[KodeDinasController::class,'destroy']);
+            });
+            // SOP Agunan
+            Route::prefix('sop-agunan')->group(function () {
+                Route::get('/',[SopAgunanController::class,'index']);
+                Route::post('/',[SopAgunanController::class,'store']);
+                Route::get('/{id}',[SopAgunanController::class,'show']);
+                Route::put('/{id}',[SopAgunanController::class,'update']);
+                Route::delete('/{id}',[SopAgunanController::class,'destroy']);
+            });
+            // Kode Plan
+            Route::prefix('kode-plan')->group(function () {
+                Route::get('/',[KodePlanController::class,'index']);
+                Route::post('/',[KodePlanController::class,'store']);
+                Route::get('/{id}',[KodePlanController::class,'show']);
+                Route::put('/{id}',[KodePlanController::class,'update']);
+                Route::delete('/{id}',[KodePlanController::class,'destroy']);
+            });
+            // Sektor Ekonomi
+            Route::prefix('sektor-ekonomi')->group(function () {
+                Route::get('/',[SektorEkonomiController::class,'index']);
+                Route::post('/',[SektorEkonomiController::class,'store']);
+                Route::get('/{id}',[SektorEkonomiController::class,'show']);
+                Route::put('/{id}',[SektorEkonomiController::class,'update']);
+                Route::delete('/{id}',[SektorEkonomiController::class,'destroy']);
             });
         });
 

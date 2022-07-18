@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper AS Helper;
-use App\Query\Master\MIntegritasUsaha;
+use App\Query\Master\MKodePlan;
 
-class IntegritasUsahaController extends Controller
+class KodePlanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class IntegritasUsahaController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MIntegritasUsaha::getAll($request)
+                MKodePlan::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class IntegritasUsahaController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MIntegritasUsaha::store($request)
+                MKodePlan::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class IntegritasUsahaController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MIntegritasUsaha::byId($id)
+                MKodePlan::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -91,7 +91,7 @@ class IntegritasUsahaController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MIntegritasUsaha::updated($request,$id)
+                MKodePlan::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -108,7 +108,7 @@ class IntegritasUsahaController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MIntegritasUsaha::destroy($id)
+                MKodePlan::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
