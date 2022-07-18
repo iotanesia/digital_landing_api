@@ -148,13 +148,12 @@ class ApprovalPrescreening {
             if($tipe == 'leads') $data = LeadsPrescreening::where('id_leads',$id)->paginate($request->limit);
             if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
         return [
-            'items' => $data->getCollection()->transform(function ($item){
+            'items' => $data->getCollection()->transform(function ($item) {
                 if($item->keterangan == 'Success'){
                     $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
                 }else $keterangan = 'Tidak Lolos';
 
                 $data_plafond = isset(json_decode($item->response,true)['data']) ? json_decode($item->response,true)['data'] : [];
-
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
