@@ -184,12 +184,12 @@ class Pipeline {
                     else $data = $item->refLeads;
 
                     return [
-                        'id' => $item->id,
-                        'nik' => $item->nik,
-                        'nama' => $data->nama,
-                        'nama_produk'=> $data->refProduk->nama,
-                        'nama_sub_produk'=> $data->refSubProduk->nama,
-                        'created_at' => $item->created_at,
+                        'id' => $item->id ?? null,
+                        'nik' => $item->nik ?? null,
+                        'nama' => $data->nama ?? null,
+                        'nama_produk'=> $data->refProduk->nama ?? null,
+                        'nama_sub_produk'=> $data->refSubProduk->nama ?? null,
+                        'created_at' => $item->created_at ?? null,
                         'foto' => $data->id_jenis_kelamin == 2 ? 'female.png' : 'male.png'
 
                     ];
