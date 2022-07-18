@@ -141,7 +141,6 @@ class Pipeline {
             if($dataPipeline->tipe_calon_nasabah == 'Aktifitas Pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$dataPipeline->ref_id)->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item) use ($dataPipeline){
-
                 if($item->keterangan == 'Success'){
                     $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
                 }else $keterangan = 'Tidak Lolos';
@@ -153,7 +152,7 @@ class Pipeline {
                     'status' =>  $item->keterangan,
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
-                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refKolektibilitas : null,
+                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $dataPipeline->refKolektibilitas : null,
                     'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : []
                 ];
             }),
@@ -180,7 +179,7 @@ class Pipeline {
                 'items' => $data->getCollection()->transform(function ($item){
 
                     if($item->id_tipe_calon_nasabah == Constants::TCN_EFORM) $data = $item->refEform;
-                    elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN)   $data = $item->refAktifitasPemasaran;
+                    elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $data = $item->refAktifitasPemasaran;
                     elseif ($item->id_tipe_calon_nasabah == Constants::TCN_LEAD) $data = $item->refLeads;
                     else $data = null;
 
