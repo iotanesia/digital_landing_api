@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Query\Auth;
+namespace App\Query\Pengaturan;
 use App\ApiHelper as Helper;
-use App\Constants\Constants;
-use App\Models\Auth\Role as Model;
+use App\Models\Pengaturan\Menu as Model;
 use Illuminate\Support\Facades\DB;
-
-class MRole {
+use App\Constants\Constants;
+class MMenu {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id', $id)->first()];
+        return Model::find($id);
     }
 
     public static function getAll($request)
@@ -18,15 +17,17 @@ class MRole {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama) $query->where('nama','ilike',"%$request->nama_status_tempat_tinggal%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return $item;
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),
                         'from' => $data->currentPage(),
-                        'per_page' => $data->perPage(),
+                        'per_page' => (int) $data->perPage(),
                     ]
                 ];
         } catch (\Throwable $th) {
@@ -40,36 +41,18 @@ class MRole {
         try {
 
             $require_fileds = [];
+            if(!$request->nama) $require_fileds[] = 'kode';
             if(!$request->nama) $require_fileds[] = 'nama';
+            if(!$request->nama) $require_fileds[] = 'url';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
-            $param = $request->all();
-
-            if($request->roles_produk) $store->manyRolesProduk()->createMany(self::setParamRoleProduk($param,$store->id));
-            if($request->roles_menu) $store->manyRolesMenu()->createMany(self::setParamRoleMenu($param,$store->id));
             if($is_transaction) DB::commit();
             return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
         }
-    }
-
-    public static function setParamRoleProduk($request,$id_roles)
-    {
-         return array_map(function ($item) use ($id_roles){
-            $item['id_role'] = $id_roles;
-            return $item;
-         },$request['roles_produk']);
-    }
-
-    public static function setParamRoleMenu($request,$id_roles)
-    {
-         return array_map(function ($item) use ($id_roles){
-            $item['id_role'] = $id_roles;
-            return $item;
-         },$request['roles_menu']);
     }
 
     public static function updated($request,$id,$is_transaction = true)

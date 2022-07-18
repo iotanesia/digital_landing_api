@@ -44,6 +44,7 @@ use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
 use App\Http\Controllers\Sts\PrescreeningController;
 use App\Http\Controllers\Sts\TrackingController;
+use App\Http\Controllers\Pengaturan\MenuController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
@@ -419,6 +420,17 @@ Route::prefix('v1')
             });
         });
 
+        // master
+        Route::prefix('pengaturan')->group(function () {
+        // route agama
+            Route::prefix('menu')->group(function () {
+                Route::get('/',[MenuController::class,'index']);
+                Route::post('/',[MenuController::class,'store']);
+                Route::put('/{id}',[MenuController::class,'update']);
+                Route::delete('/{id}',[MenuController::class,'destroy']);
+            });
+
+        });
 
         Route::prefix('dashboard')->group(function () {
             Route::get('/segmen-penjaminan',[DashboardController::class,'segmenPenjaminan']);

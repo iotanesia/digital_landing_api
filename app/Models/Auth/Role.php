@@ -5,6 +5,7 @@ namespace App\Models\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Pengaturan\RolesMenu;
 class Role extends Model
 {
     use HasFactory, SoftDeletes;
@@ -26,9 +27,13 @@ class Role extends Model
         return $this->belongsTo(RoleProduk::class,'id','id_role');
     }
 
-
     public function manyRolesProduk()
     {
         return $this->hasMany(RoleProduk::class,'id_role','id');
+    }
+
+    public function manyRolesMenu()
+    {
+        return $this->hasMany(RolesMenu::class,'id_role','id');
     }
 }
