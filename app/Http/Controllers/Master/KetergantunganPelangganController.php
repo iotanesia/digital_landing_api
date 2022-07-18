@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\ApiHelper AS Helper;
+use App\Query\Master\MKetergantunganPelanggan;
 
 class KetergantunganPelangganController extends Controller
 {
@@ -12,9 +14,15 @@ class KetergantunganPelangganController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MKetergantunganPelanggan::getAll($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -35,7 +43,13 @@ class KetergantunganPelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MKetergantunganPelanggan::store($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -46,7 +60,13 @@ class KetergantunganPelangganController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MKetergantunganPelanggan::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -69,7 +89,13 @@ class KetergantunganPelangganController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MKetergantunganPelanggan::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -80,6 +106,12 @@ class KetergantunganPelangganController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MKetergantunganPelanggan::destroy($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 }

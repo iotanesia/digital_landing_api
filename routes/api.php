@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
+use App\Http\Controllers\Master\AgunanController;
 use App\Http\Controllers\Master\BannerController;
 use App\Http\Controllers\Master\KabuatenController;
 use App\Http\Controllers\Master\KecamatanController;
@@ -36,6 +37,9 @@ use App\Http\Controllers\Master\TujuanPemasaranController;
 use App\Http\Controllers\Master\CaraPemasaranController;
 use App\Http\Controllers\Master\StatusTempatTinggalController;
 use App\Http\Controllers\Master\HubunganController;
+use App\Http\Controllers\Master\IntegritasUsahaController;
+use App\Http\Controllers\Master\KetergantunganPelangganController;
+use App\Http\Controllers\Master\KetergantunganSupplierController;
 use App\Http\Controllers\Master\LinkAgeController;
 use App\Http\Controllers\Master\PromoController;
 use App\Http\Controllers\Master\ProspekUsahaController;
@@ -453,6 +457,38 @@ Route::prefix('v1')
                 Route::get('/{id}',[LinkAgeController::class,'show']);
                 Route::put('/{id}',[LinkAgeController::class,'update']);
                 Route::delete('/{id}',[LinkAgeController::class,'destroy']);
+            });
+            // Agunan
+            Route::prefix('agunan')->group(function () {
+                Route::get('/',[AgunanController::class,'index']);
+                Route::post('/',[AgunanController::class,'store']);
+                Route::get('/{id}',[AgunanController::class,'show']);
+                Route::put('/{id}',[AgunanController::class,'update']);
+                Route::delete('/{id}',[AgunanController::class,'destroy']);
+            });
+            // Integritas Usaha
+            Route::prefix('integritas-usaha')->group(function () {
+                Route::get('/',[IntegritasUsahaController::class,'index']);
+                Route::post('/',[IntegritasUsahaController::class,'store']);
+                Route::get('/{id}',[IntegritasUsahaController::class,'show']);
+                Route::put('/{id}',[IntegritasUsahaController::class,'update']);
+                Route::delete('/{id}',[IntegritasUsahaController::class,'destroy']);
+            });
+            // ketergantungan Pelanggan
+            Route::prefix('ketergantungan-pelanggan')->group(function () {
+                Route::get('/',[KetergantunganPelangganController::class,'index']);
+                Route::post('/',[KetergantunganPelangganController::class,'store']);
+                Route::get('/{id}',[KetergantunganPelangganController::class,'show']);
+                Route::put('/{id}',[KetergantunganPelangganController::class,'update']);
+                Route::delete('/{id}',[KetergantunganPelangganController::class,'destroy']);
+            });
+            // ketergantungan Supplier
+            Route::prefix('ketergantungan-supplier')->group(function () {
+                Route::get('/',[KetergantunganSupplierController::class,'index']);
+                Route::post('/',[KetergantunganSupplierController::class,'store']);
+                Route::get('/{id}',[KetergantunganSupplierController::class,'show']);
+                Route::put('/{id}',[KetergantunganSupplierController::class,'update']);
+                Route::delete('/{id}',[KetergantunganSupplierController::class,'destroy']);
             });
         });
 
