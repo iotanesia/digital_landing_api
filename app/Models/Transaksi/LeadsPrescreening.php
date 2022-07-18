@@ -29,6 +29,11 @@ class LeadsPrescreening extends Model
         'deleted_by',
     ];
 
+    public function refParent()
+    {
+        return $this->belongsTo(Leads::class,'di_leads','id');
+    }
+
     public function refRules()
     {
         return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');

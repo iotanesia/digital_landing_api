@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\ApiHelper AS Helper;
+use App\Query\Master\MWilayahPemasran;
 
 class WilayahPemasaranController extends Controller
 {
@@ -12,9 +14,15 @@ class WilayahPemasaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MWilayahPemasran::getAll($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -35,7 +43,13 @@ class WilayahPemasaranController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MWilayahPemasran::store($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -46,7 +60,13 @@ class WilayahPemasaranController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MWilayahPemasran::byId($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -69,7 +89,13 @@ class WilayahPemasaranController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MWilayahPemasran::updated($request,$id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
@@ -80,6 +106,12 @@ class WilayahPemasaranController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                MWilayahPemasran::destroy($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 }

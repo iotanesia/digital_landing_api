@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Query\Transaksi;
-use App\Models\Transaksi\PKreditDataPersonal as Model;
+use App\Models\Transaksi\PKreditDataKeuangan as Model;
 use Illuminate\Support\Facades\DB;
 
-class PKreditDataPersonal {
+class PKreditDataKeuangan {
 
-
+    public static function byIdPipeline($id_pipeline)
+    {
+        return Model::where('id_pipeline',$id_pipeline)->first();
+    }
 
     public static function store($request,$is_transaction = true)
     {
@@ -16,6 +19,7 @@ class PKreditDataPersonal {
             $require_fileds = [];
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
             $attr = $request->all();
             $attr['created_by'] = $request->current_user->id;
             $attr['updated_by'] = $request->current_user->id;

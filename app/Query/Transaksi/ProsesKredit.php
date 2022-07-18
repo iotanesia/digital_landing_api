@@ -3,6 +3,7 @@
 namespace App\Query\Transaksi;
 use Carbon\Carbon;
 use App\Models\Transaksi\Pipeline as Model;
+use App\Query\Transaksi\Pipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Models\Transaksi\VerifValidasiData;
@@ -181,9 +182,58 @@ class ProsesKredit {
             $store->save();
 
             PKreditDataPersonal::store($request,false);
-            Model::updateStepAnalisaKredit([
+            Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => Constants::STEP_DATA_PERSONAL
+            ],false);
+
+            if($is_transaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    // keuangan
+    public static function dataKeuangan($id)
+    {
+        $data = PKreditDataKeuangan::byIdPipeline($id);
+        return [
+            'items' => $data
+        ];
+    }
+
+    public static function updateDataKeuangan($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(!$request->omzet_usaha) $require_fileds[] = 'omzet_usaha';
+            if(!$request->hpp_usaha) $require_fileds[] = 'hpp_usaha';
+            if(!$request->sewa_kontrak_usaha) $require_fileds[] = 'sewa_kontrak_usaha';
+            if(!$request->gaji_pegawai_usaha) $require_fileds[] = 'gaji_pegawai_usaha';
+            if(!$request->telp_listrik_air_usaha) $require_fileds[] = 'telp_listrik_air_usaha';
+            if(!$request->transportasi_usaha) $require_fileds[] = 'transportasi_usaha';
+            if(!$request->pengeluaran_lainnya_usaha) $require_fileds[] = 'pengeluaran_lainnya_usaha';
+            if(!$request->penghasilan_lainnya_usaha) $require_fileds[] = 'penghasilan_lainnya_usaha';
+            if(!$request->belanja_rumah_tangga_umah_tangga) $require_fileds[] = 'belanja_rumah_tangga_umah_tangga';
+            if(!$request->sewa_kontrak_rumah_tangga) $require_fileds[] = 'sewa_kontrak_rumah_tangga';
+            if(!$request->pendidikan_rumah_tangga) $require_fileds[] = 'pendidikan_rumah_tangga';
+            if(!$request->telp_listrik_air_rumah_tangga) $require_fileds[] = 'telp_listrik_air_rumah_tangga';
+            if(!$request->transportasi_rumah_tangga) $require_fileds[] = 'transportasi_rumah_tangga';
+            if(!$request->pengeluaran_lainnya_rumah_tangga) $require_fileds[] = 'pengeluaran_lainnya_rumah_tangga';
+            if(!$request->angsuran_pinjaman_saat_ini_rumah_tangga) $require_fileds[] = 'angsuran_pinjaman_saat_ini_rumah_tangga';
+            if(!$request->angsuran_kredit_bank_dki_rumah_tangga) $require_fileds[] = 'angsuran_kredit_bank_dki_rumah_tangga';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            if(!$store) throw new \Exception("Data tidak ditemukan", 400);
+            PKreditDataKeuangan::store($request,false);
+            Pipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => Constants::STEP_DATA_KEUANGAN
             ],false);
 
             if($is_transaction) DB::commit();

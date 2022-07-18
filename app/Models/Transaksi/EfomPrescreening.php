@@ -30,11 +30,16 @@ class EfomPrescreening extends Model
     ];
 
 
+    public function refParent()
+    {
+        return $this->belongsTo(Eform::class,'id_eform','id');
+    }
+
     public function refRulesPrescreening()
     {
         return $this->belongsTo(RulesPrescreening::class,'id','id_prescreening_rules');
     }
-    
+
     public function refRules()
     {
         return $this->belongsTo(RulesPrescreening::class,'id_prescreening_rules','id');

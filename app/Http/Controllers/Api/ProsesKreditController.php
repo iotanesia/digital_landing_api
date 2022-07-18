@@ -76,6 +76,40 @@ class ProsesKreditController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateDataKeuangan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::updateDataKeuangan($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function dataKeuangan(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::dataKeuangan($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

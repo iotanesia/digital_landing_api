@@ -59,7 +59,17 @@ class AktifitasPemasaran extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
+        'id_propinsi',
+        'id_kabupaten',
+        'id_kecamatan',
+        'id_kelurahan',
     ];
+
+
+    public function refParent()
+    {
+        return $this->belongsTo(AktifitasPemasaran::class,'id_aktifitas_pemasaran','id');
+    }
 
     public function refStsPrescreening()
     {
@@ -120,7 +130,7 @@ class AktifitasPemasaran extends Model
     {
         return $this->hasMany(AktifitasPemesaranProfilUsaha::class,'id_aktifitas_pemasaran','id');
     }
-    
+
     public function refUser()
     {
         return $this->belongsTo(User::class,'id_user','id');

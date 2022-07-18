@@ -148,13 +148,12 @@ class ApprovalPrescreening {
             if($tipe == 'leads') $data = LeadsPrescreening::where('id_leads',$id)->paginate($request->limit);
             if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
         return [
-            'items' => $data->getCollection()->transform(function ($item){
+            'items' => $data->getCollection()->transform(function ($item) {
                 if($item->keterangan == 'Success'){
                     $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
                 }else $keterangan = 'Tidak Lolos';
 
                 $data_plafond = isset(json_decode($item->response,true)['data']) ? json_decode($item->response,true)['data'] : [];
-
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
@@ -162,7 +161,7 @@ class ApprovalPrescreening {
                     'status' =>  $item->keterangan,
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
-                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refKolektibilitas : null,
+                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refParent->refKolektibilitas : null,
                     'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : []
                 ];
             }),

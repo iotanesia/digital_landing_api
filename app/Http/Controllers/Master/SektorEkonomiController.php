@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper AS Helper;
-use App\Query\Master\MRiwayatHubunganBank;
+use App\Query\Master\MSektorEkonomi;
 
-class RiwayatHubunganBankController extends Controller
+class SektorEkonomiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class RiwayatHubunganBankController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MRiwayatHubunganBank::getAll($request)
+                MSektorEkonomi::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -45,7 +45,7 @@ class RiwayatHubunganBankController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MRiwayatHubunganBank::store($request)
+                MSektorEkonomi::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -62,7 +62,7 @@ class RiwayatHubunganBankController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MRiwayatHubunganBank::byId($id)
+                MSektorEkonomi::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -91,7 +91,7 @@ class RiwayatHubunganBankController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MRiwayatHubunganBank::updated($request,$id)
+                MSektorEkonomi::updated($request,$id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -108,7 +108,7 @@ class RiwayatHubunganBankController extends Controller
     {
         try {
             return Helper::resultResponse(
-                MRiwayatHubunganBank::destroy($id)
+                MSektorEkonomi::destroy($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
