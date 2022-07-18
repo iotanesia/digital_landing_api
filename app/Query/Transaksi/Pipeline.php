@@ -179,7 +179,7 @@ class Pipeline {
                 'items' => $data->getCollection()->transform(function ($item){
 
                     if($item->id_tipe_calon_nasabah == Constants::TCN_EFORM) $data = $item->refEform;
-                    elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN)   $data = $item->refAktifitasPemasaran;
+                    elseif($item->id_tipe_calon_nasabah == Constants::TCN_AKTIFITAS_PEMASARAN) $data = $item->refAktifitasPemasaran;
                     elseif ($item->id_tipe_calon_nasabah == Constants::TCN_LEAD) $data = $item->refLeads;
                     else $data = null;
 

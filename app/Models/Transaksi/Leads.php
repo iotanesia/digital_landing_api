@@ -54,7 +54,11 @@ class Leads extends Model
         "created_by",
         "updated_at",
         "updated_by",
-        "deleted_at"
+        "deleted_at",
+        'id_propinsi',
+        'id_kabupaten',
+        'id_kecamatan',
+        'id_kelurahan',
     ];
 
     public function refStsPrescreening()

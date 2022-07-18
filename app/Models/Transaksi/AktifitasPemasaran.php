@@ -59,6 +59,10 @@ class AktifitasPemasaran extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
+        'id_propinsi',
+        'id_kabupaten',
+        'id_kecamatan',
+        'id_kelurahan',
     ];
 
 
