@@ -123,4 +123,6 @@ class Leads extends Model
         return $this->belongsTo(Kolektibilitas::class,'nik','nik');
 
     }
+
+
 }

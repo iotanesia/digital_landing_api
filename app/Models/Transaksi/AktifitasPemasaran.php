@@ -61,6 +61,12 @@ class AktifitasPemasaran extends Model
         'deleted_by',
     ];
 
+
+    public function refParent()
+    {
+        return $this->belongsTo(AktifitasPemasaran::class,'id_aktifitas_pemasaran','id');
+    }
+
     public function refStsPrescreening()
     {
         return $this->belongsTo(StsPrescreening::class,'is_prescreening','id_prescreening');
@@ -120,7 +126,7 @@ class AktifitasPemasaran extends Model
     {
         return $this->hasMany(AktifitasPemesaranProfilUsaha::class,'id_aktifitas_pemasaran','id');
     }
-    
+
     public function refUser()
     {
         return $this->belongsTo(User::class,'id_user','id');

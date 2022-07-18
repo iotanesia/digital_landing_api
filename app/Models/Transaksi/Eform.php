@@ -113,11 +113,18 @@ class Eform extends Model
     public function manyProfilUsaha()
     {
         return $this->hasMany(EformProfilUsaha::class,'id_eform','id');
-    }    
+    }
 
     public function refUser()
     {
         return $this->belongsTo(User::class,'id_user','id');
     }
-    
+
+    public function refKolektibilitas()
+    {
+        // sementara diarahkan ke nik
+        return $this->belongsTo(Kolektibilitas::class,'nik','nik');
+
+    }
+
 }

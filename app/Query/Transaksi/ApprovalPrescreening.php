@@ -161,7 +161,7 @@ class ApprovalPrescreening {
                     'status' =>  $item->keterangan,
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
-                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refKolektibilitas : null,
+                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refParent->refKolektibilitas : null,
                     'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : []
                 ];
             }),
