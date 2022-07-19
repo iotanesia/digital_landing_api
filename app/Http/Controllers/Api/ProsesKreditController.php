@@ -159,6 +159,142 @@ class ProsesKreditController extends Controller
         }
     }
 
+
+             /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tanahKosong(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::tanahKosong($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTanahKosong(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeTanahKosong($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+             /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function kios(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::Kios($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeKios(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeKios($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+             /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function kendaraan(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::Kendaraan($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeKendaraan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeKendaraan($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+             /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function Deposito(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::Deposito($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDeposito(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeDeposito($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
     /**
      * Display the specified resource.
      *

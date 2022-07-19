@@ -182,6 +182,26 @@ Route::prefix('v1')
             /* data tanah bangunan */ Route::get('/{id}',[ProsesKreditController::class,'tanahBangunan']);
             });
 
+            Route::prefix('tanah-kosong')->group(function () {
+            /* save data tanah Kosong */ Route::post('/',[ProsesKreditController::class,'storeTanahKosong']);
+            /* data tanah Kosong */ Route::get('/{id}',[ProsesKreditController::class,'tanahKosong']);
+            });
+
+            Route::prefix('kios')->group(function () {
+            /* save data kios */ Route::post('/',[ProsesKreditController::class,'storeTanahKios']);
+            /* data kios */ Route::get('/{id}',[ProsesKreditController::class,'tanahKios']);
+            });
+
+            Route::prefix('kendaraan')->group(function () {
+            /* save data kendaraan */ Route::post('/',[ProsesKreditController::class,'storeTanahKendaraan']);
+            /* data kendaraan */ Route::get('/{id}',[ProsesKreditController::class,'tanahKendaraan']);
+            });
+
+            Route::prefix('deposito')->group(function () {
+            /* save data deposito */ Route::post('/',[ProsesKreditController::class,'storeTanahDeposito']);
+            /* data deposito */ Route::get('/{id}',[ProsesKreditController::class,'tanahDeposito']);
+            });
+
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
         });
