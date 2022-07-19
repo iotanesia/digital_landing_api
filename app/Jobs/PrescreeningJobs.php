@@ -59,6 +59,7 @@ class PrescreeningJobs implements ShouldQueue
                     $params = [
                         'nik' => $data['nik'],
                         'no_ktp' => $data['nik'],
+                        'nomor_aplikasi' => $data['nomor_aplikasi'],
                         'id' => $data['id'],
                         'id_prescreening_modul' => $data['id'],
                         'fungsi' => $rule['fungsi'],
