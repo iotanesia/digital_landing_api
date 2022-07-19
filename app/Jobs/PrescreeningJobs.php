@@ -60,6 +60,7 @@ class PrescreeningJobs implements ShouldQueue
                         'nik' => $data['nik'],
                         'no_ktp' => $data['nik'],
                         'id' => $data['id'],
+                        'id_prescreening_modul' => $data['id'],
                         'fungsi' => $rule['fungsi'],
                         'path' => $rule['path'],
                         'jenis' => $rule['jenis'],
@@ -71,7 +72,7 @@ class PrescreeningJobs implements ShouldQueue
                     $process = Kernel::rules($params);
                     // dd($process);
                     if(in_array($process,[null,0]) && $rule['is_cutoff']) {
-                        Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($data);
+                        Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($params);
                         break; // stop
                     }
 
