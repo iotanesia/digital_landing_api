@@ -47,9 +47,17 @@ class SIKPPlafondDebitur {
             ])->contentType("application/json")
             ->get(config('services.skip.host').'/middleware/sikpkur/plafond_debitur',$request);
             Log::info(json_encode($response->json()));
+            $result = $response->json();
             if($response->getStatusCode() != 200) $point = false;
             else $point = true;
+
+            if(in_array($result['code'],['99'])) {
+                $limit_aktif = $result['data'][0]['limit_aktif'] ?? null;
+                $point = $limit_aktif > 0 ? false : true;
+            }
+
             $result = $response->json();
+
             return [
                 'poin' => $point,  // always true
                 'message' => $result['message'], // diisi response message
