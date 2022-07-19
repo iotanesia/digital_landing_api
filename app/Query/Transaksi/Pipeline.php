@@ -144,12 +144,18 @@ class Pipeline {
                 if($item->keterangan == 'Success'){
                     $keterangan = in_array($item->status,[2]) ? 'Lolos melalui proses persetujuan' : 'Lolos';
                 }else $keterangan = 'Tidak Lolos';
+                $status = $item->keterangan;
+                if(in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Calon])){
+                    $status = '-';
+                    $keterangan = isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null);
+                }
+
                 $data_plafond = isset(json_decode($item->response,true)['data']) ? json_decode($item->response,true)['data'] : [];
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
-                    'status' =>  $item->keterangan,
+                    'status' =>  $status,
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
                     'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $dataPipeline->refKolektibilitas : null,
