@@ -92,6 +92,24 @@ class ProsesKreditController extends Controller
         }
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function agunan(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::agunan($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+
     /**
      * Display the specified resource.
      *

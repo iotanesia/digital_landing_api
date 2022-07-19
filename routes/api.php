@@ -162,8 +162,9 @@ Route::prefix('v1')
         Route::prefix('proses-kredit')->group(function () {
             /* get list */ Route::get('/',[ProsesKreditController::class,'index']);
             /* save data personal */ Route::post('personal',[ProsesKreditController::class,'updateDataPersonal']);
-            /* data personal */ Route::get('personal/{id}',[ProsesKreditController::class,'dataPersonal']);
             /* save data keuangan */ Route::post('keuangan',[ProsesKreditController::class,'updateDataKeuangan']);
+            /* data personal */ Route::get('agunan/{id}',[ProsesKreditController::class,'agunan']);
+            /* data personal */ Route::get('personal/{id}',[ProsesKreditController::class,'dataPersonal']);
             /* data keuangan */ Route::get('keuangan/{id}',[ProsesKreditController::class,'dataKeuangan']);
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 

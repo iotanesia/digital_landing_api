@@ -243,4 +243,8 @@ class ProsesKredit {
         }
     }
 
+    public static function agunan($id)
+    {
+        // return 
+    }
 }

@@ -88,7 +88,7 @@ class ApprovalPrescreening {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            //code...
+
 
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
@@ -159,7 +159,7 @@ class ApprovalPrescreening {
                     $keterangan = isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null);
                 }
 
-                $data_plafond = isset(json_decode($item->response,true)['data']) ? json_decode($item->response,true)['data'] : [];
+                $data_plafond = $item->refParent->refPlafondDebitur ?? null;
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
@@ -168,7 +168,7 @@ class ApprovalPrescreening {
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
                     'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refParent->refKolektibilitas : null,
-                    'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : []
+                    'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : null
                 ];
             }),
             'attributes' => [

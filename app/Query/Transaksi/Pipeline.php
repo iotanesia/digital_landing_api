@@ -150,7 +150,7 @@ class Pipeline {
                     $keterangan = isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null);
                 }
 
-                $data_plafond = isset(json_decode($item->response,true)['data']) ? json_decode($item->response,true)['data'] : [];
+                $data_plafond = $data_plafond = $item->refParent->refPlafondDebitur ?? null;
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
@@ -159,7 +159,7 @@ class Pipeline {
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
                     'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $dataPipeline->refKolektibilitas : null,
-                    'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : []
+                    'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : null
                 ];
             }),
             'attributes' => [

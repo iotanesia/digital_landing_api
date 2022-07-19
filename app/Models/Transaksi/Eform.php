@@ -127,4 +127,10 @@ class Eform extends Model
 
     }
 
+    public function refPlafondDebitur()
+    {
+        return $this->belongsTo(PlafondDebitur::class,'nomor_aplikasi','nomor_aplikasi');
+
+    }
+
 }

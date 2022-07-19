@@ -141,4 +141,10 @@ class AktifitasPemasaran extends Model
         // sementara diarahkan ke nik
         return $this->belongsTo(Kolektibilitas::class,'nik','nik');
     }
+    
+    public function refPlafondDebitur()
+    {
+        return $this->belongsTo(PlafondDebitur::class,'nomor_aplikasi','nomor_aplikasi');
+
+    }
 }
