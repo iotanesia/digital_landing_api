@@ -109,6 +109,55 @@ class ProsesKreditController extends Controller
         }
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeAgunan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeAgunan($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+         /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tanahBangunan(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::tanahBangunan($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTanahBangunan(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeTanahBangunan($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 
     /**
      * Display the specified resource.

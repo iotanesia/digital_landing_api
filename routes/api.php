@@ -161,11 +161,27 @@ Route::prefix('v1')
 
         Route::prefix('proses-kredit')->group(function () {
             /* get list */ Route::get('/',[ProsesKreditController::class,'index']);
-            /* save data personal */ Route::post('personal',[ProsesKreditController::class,'updateDataPersonal']);
-            /* save data keuangan */ Route::post('keuangan',[ProsesKreditController::class,'updateDataKeuangan']);
-            /* data personal */ Route::get('agunan/{id}',[ProsesKreditController::class,'agunan']);
-            /* data personal */ Route::get('personal/{id}',[ProsesKreditController::class,'dataPersonal']);
-            /* data keuangan */ Route::get('keuangan/{id}',[ProsesKreditController::class,'dataKeuangan']);
+
+            Route::prefix('personal')->group(function () {
+            /* save data personal */ Route::post('/',[ProsesKreditController::class,'updateDataPersonal']);
+            /* data personal */ Route::get('/{id}',[ProsesKreditController::class,'dataPersonal']);
+            });
+
+            Route::prefix('keuangan')->group(function () {
+            /* save data keuangan */ Route::post('/',[ProsesKreditController::class,'updateDataKeuangan']);
+            /* data keuangan */ Route::get('/{id}',[ProsesKreditController::class,'dataKeuangan']);
+            });
+
+            Route::prefix('agunan')->group(function () {
+            /* save data agunan */ Route::post('/',[ProsesKreditController::class,'storeAgunan']);
+            /* data agunan */ Route::get('/{id}',[ProsesKreditController::class,'agunan']);
+            });
+
+            Route::prefix('tanah-bangunan')->group(function () {
+            /* save data tanah bangunan */ Route::post('/',[ProsesKreditController::class,'storeTanahBangunan']);
+            /* data tanah bangunan */ Route::get('/{id}',[ProsesKreditController::class,'tanahBangunan']);
+            });
+
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
         });

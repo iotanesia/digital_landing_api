@@ -243,8 +243,61 @@ class ProsesKredit {
         }
     }
 
-    public static function agunan($id)
+    public static function agunan($id_pipeline)
     {
-        // return 
+        return [
+            'items' => PKreditDataAgunan::byIdpipeline($id_pipeline)
+        ];
     }
+
+    public static function storeAgunan($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            if(!$store) throw new \Exception("Data tidak ditemukan", 400);
+            $result = PKreditDataAgunan::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function tanahBangunan($id_proses_data_agunan)
+    {
+        return [
+            'items' => PKreditDatAgunanTanahBangunan::byIdProsesDataAgunan($id_proses_data_agunan)
+        ];
+    }
+
+    public static function storeTanahBangunan($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            $result = PKreditDatAgunanTanahBangunan::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+
 }
