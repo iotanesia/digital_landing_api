@@ -44,17 +44,20 @@ class User {
         $user->nama_produk = $user->refUserRole->refRole->refRolesProduk->refProduk->nama ?? null;
         $user->menu = [];
         if ($user->refUserRole) {
-            $user->menu = $user->refUserRole->refRole->manyRolesMenu->map(function ($item) {
-                return  [
-                    'nama_menu' => $item->refMenu->nama ?? null,
-                    'kode_menu'=> $item->refMenu->kode ?? null,
-                    'url'=> $item->refMenu->url ?? null,
-                    'path'=> $item->refMenu->path ?? null,
-                    'icon'=> $item->refMenu->icon ?? null,
-                    'platfom'=> $item->refMenu->platfom ?? null,
-                    'modul'=> $item->refMenu->modul ?? null,
-                ];
-            });
+            $menuArr = [];
+            foreach ($user->refUserRole->refRole->manyRolesMenu as $item) {
+                $menuArr[$item->refMenu->platform][] = [
+                        'nama_menu' => $item->refMenu->nama ?? null,
+                        'kode_menu'=> $item->refMenu->kode ?? null,
+                        'url'=> $item->refMenu->url ?? null,
+                        'path'=> $item->refMenu->path ?? null,
+                        'icon'=> $item->refMenu->icon ?? null,
+                        'platform'=> $item->refMenu->platform ?? null,
+                        'modul'=> $item->refMenu->modul ?? null,
+                    ];
+            };
+
+            $user->menu = $menuArr;
         }
         
         unset(

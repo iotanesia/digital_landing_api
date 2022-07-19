@@ -18,7 +18,7 @@ class Menu extends Model
         'url',
         'path',
         'icon',
-        'platfom',
+        'platform',
         'modul',
         'created_at',
         'created_by',
