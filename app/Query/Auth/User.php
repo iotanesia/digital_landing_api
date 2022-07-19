@@ -45,7 +45,7 @@ class User {
         $user->menu = [];
         if ($user->refUserRole) {
             $user->menu = $user->refUserRole->refRole->manyRolesMenu->map(function ($item) {
-                return $item[$item->refMenu->platfom] = [
+                return  [
                     'nama_menu' => $item->refMenu->nama ?? null,
                     'kode_menu'=> $item->refMenu->kode ?? null,
                     'url'=> $item->refMenu->url ?? null,
