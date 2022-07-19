@@ -69,16 +69,15 @@ class PrescreeningJobs implements ShouldQueue
                         'id_prescreening_rules' => $rule['id'],
                     ];
 
-                    // kondisi jika cut of
                     $process = Kernel::rules($params);
-                    // dd($process);
+                    // kondisi jika cut of
                     if(in_array($process,[null,0]) && $rule['is_cutoff']) {
                         Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($params);
                         break; // stop
                     }
 
                     if($key == $total_rules) {
-                        $pipeline = (new AfterPrescreeningJobs($this->data));
+                        $pipeline = (new AfterPrescreeningJobs($this->data,$process));
                         dispatch($pipeline);
                     }
                 }

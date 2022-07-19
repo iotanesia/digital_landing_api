@@ -18,14 +18,16 @@ class AfterPrescreeningJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $data;
+    public $status;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data,$status)
     {
         $this->data = $data;
+        $this->status = $status;
     }
 
     /**
@@ -43,7 +45,7 @@ class AfterPrescreeningJobs implements ShouldQueue
             $params['id_metode'] = 6; // click
             $params['id_prescreening_modul'] = $data['id'];
             $params['id_prescreening_skema'] = $data['id_prescreening_skema'];
-
+            $params['status'] = $this->status;
             // jika terdapat metode prescreening clik
             $rules = RulesPrescreening::getRules($params);
             if($rules){
@@ -56,7 +58,7 @@ class AfterPrescreeningJobs implements ShouldQueue
                         Constants::MODEL_MAIN[$modul]::isPrescreeningSuccess($params);
                     }else Constants::MODEL_MAIN[$modul]::isPrescreeningFailed($params);
                 }
-            }
+            }else Constants::MODEL_MAIN[$modul]::isPrescreeningSuccess($params);
         Log::info('end after prescreening '.$data['id'].'-'.$modul.'-'.Carbon::now());
         } catch (\Throwable $th) {
             throw $th;
