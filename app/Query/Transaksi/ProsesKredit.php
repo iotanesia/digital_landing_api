@@ -302,109 +302,109 @@ class ProsesKredit {
 
     public static function tanahKosong($id_proses_data_agunan)
     {
-        // return [
-        //     'items' => PKreditDatAgunanTanahKosong::byIdProsesDataAgunan($id_proses_data_agunan)
-        // ];
+        return [
+            'items' => PKreditDatAgunanTanahKosong::byIdProsesDataAgunan($id_proses_data_agunan)
+        ];
     }
 
     public static function storeTanahKosong($request,$is_transaction = true)
     {
-        // if($is_transaction) DB::beginTransaction();
-        // try {
+        if($is_transaction) DB::beginTransaction();
+        try {
 
-        //     $require_fileds = [];
-        //     if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
-        //     if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $require_fileds = [];
+            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        //     $result = PKreditDatAgunanTanahKosong::store($request,false);
-        //     if($is_transaction) DB::commit();
-        //     return [
-        //         'items' => $result
-        //     ];
-        // } catch (\Throwable $th) {
-        //     if($is_transaction) DB::rollback();
-        //     throw $th;
-        // }
+            $result = PKreditDatAgunanTanahKosong::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
     }
 
     public static function kios($id_proses_data_agunan)
     {
-        // return [
-        //     'items' => PKreditDatAgunanTanahKios::byIdProsesDataAgunan($id_proses_data_agunan)
-        // ];
+        return [
+            'items' => PKreditDatAgunanKios::byIdProsesDataAgunan($id_proses_data_agunan)
+        ];
     }
 
     public static function storeKios($request,$is_transaction = true)
     {
-        // if($is_transaction) DB::beginTransaction();
-        // try {
+        if($is_transaction) DB::beginTransaction();
+        try {
 
-        //     $require_fileds = [];
-        //     if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
-        //     if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $require_fileds = [];
+            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        //     $result = PKreditDatAgunanTanahKios::store($request,false);
-        //     if($is_transaction) DB::commit();
-        //     return [
-        //         'items' => $result
-        //     ];
-        // } catch (\Throwable $th) {
-        //     if($is_transaction) DB::rollback();
-        //     throw $th;
-        // }
+            $result = PKreditDatAgunanKios::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
     }
 
     public static function kendaraan($id_proses_data_agunan)
     {
-        // return [
-        //     'items' => PKreditDatAgunanTanahKendaraan::byIdProsesDataAgunan($id_proses_data_agunan)
-        // ];
+        return [
+        'items' => PKreditDatAgunanKendaraanBermotor::byIdProsesDataAgunan($id_proses_data_agunan)
+        ];
     }
 
     public static function storeKendaraan($request,$is_transaction = true)
     {
-        // if($is_transaction) DB::beginTransaction();
-        // try {
+        if($is_transaction) DB::beginTransaction();
+        try {
 
-        //     $require_fileds = [];
-        //     if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
-        //     if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $require_fileds = [];
+            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        //     $result = PKreditDatAgunanTanahKendaraan::store($request,false);
-        //     if($is_transaction) DB::commit();
-        //     return [
-        //         'items' => $result
-        //     ];
-        // } catch (\Throwable $th) {
-        //     if($is_transaction) DB::rollback();
-        //     throw $th;
-        // }
+            $result = PKreditDatAgunanKendaraanBermotor::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
     }
 
     public static function deposito($id_proses_data_agunan)
     {
-        // return [
-        //     'items' => PKreditDatAgunanTanahDeposito::byIdProsesDataAgunan($id_proses_data_agunan)
-        // ];
+        return [
+            'items' => PKreditDatAgunanDeposito::byIdProsesDataAgunan($id_proses_data_agunan)
+        ];
     }
 
     public static function storeDeposito($request,$is_transaction = true)
     {
-        // if($is_transaction) DB::beginTransaction();
-        // try {
+        if($is_transaction) DB::beginTransaction();
+        try {
 
-        //     $require_fileds = [];
-        //     if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
-        //     if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $require_fileds = [];
+            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-        //     $result = PKreditDatAgunanTanahDeposito::store($request,false);
-        //     if($is_transaction) DB::commit();
-        //     return [
-        //         'items' => $result
-        //     ];
-        // } catch (\Throwable $th) {
-        //     if($is_transaction) DB::rollback();
-        //     throw $th;
-        // }
+            $result = PKreditDatAgunanDeposito::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
     }
 }

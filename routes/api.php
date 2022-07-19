@@ -188,18 +188,18 @@ Route::prefix('v1')
             });
 
             Route::prefix('kios')->group(function () {
-            /* save data kios */ Route::post('/',[ProsesKreditController::class,'storeTanahKios']);
-            /* data kios */ Route::get('/{id}',[ProsesKreditController::class,'tanahKios']);
+            /* save data kios */ Route::post('/',[ProsesKreditController::class,'storeKios']);
+            /* data kios */ Route::get('/{id}',[ProsesKreditController::class,'Kios']);
             });
 
             Route::prefix('kendaraan')->group(function () {
-            /* save data kendaraan */ Route::post('/',[ProsesKreditController::class,'storeTanahKendaraan']);
-            /* data kendaraan */ Route::get('/{id}',[ProsesKreditController::class,'tanahKendaraan']);
+            /* save data kendaraan */ Route::post('/',[ProsesKreditController::class,'storeKendaraan']);
+            /* data kendaraan */ Route::get('/{id}',[ProsesKreditController::class,'Kendaraan']);
             });
 
             Route::prefix('deposito')->group(function () {
-            /* save data deposito */ Route::post('/',[ProsesKreditController::class,'storeTanahDeposito']);
-            /* data deposito */ Route::get('/{id}',[ProsesKreditController::class,'tanahDeposito']);
+            /* save data deposito */ Route::post('/',[ProsesKreditController::class,'storeDeposito']);
+            /* data deposito */ Route::get('/{id}',[ProsesKreditController::class,'Deposito']);
             });
 
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);

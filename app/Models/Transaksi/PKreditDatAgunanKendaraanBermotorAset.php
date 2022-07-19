@@ -11,4 +11,13 @@ class PKreditDatAgunanKendaraanBermotorAset extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'proses_kredit_data_agunan_kendaraan_bermotor_aset';
     protected $connection = 'transaksi';
+    public $fillable = [
+        'id_proses_kredit_data_agunan_tanah_kosong',
+        'foto',
+        'created_at',
+        'updated_at',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+    ];
 }
