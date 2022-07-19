@@ -240,7 +240,7 @@ class AktifitasPemasaran {
             $reqRiwayat['id_cara_pemasaran'] = $request->id_cara_pemasaran;
             $reqRiwayat['informasi_aktifitas'] =  $request->informasi_aktifitas;
             $reqRiwayat['lokasi'] = $request->lokasi;
-            $store = ModelRiwayat::create($reqRiwayat);
+            ModelRiwayat::create($reqRiwayat);
 
             if($is_transaction) DB::commit();
 
