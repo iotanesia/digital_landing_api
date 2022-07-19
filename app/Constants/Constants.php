@@ -46,8 +46,8 @@ class Constants
 
     const MTD_RULES_DHN_BI = 1;
     const MTD_RULES_DHN_DKI = 2;
-    const MTD_SIKP_Plafond = 3;
-    const MTD_SIKP_Calon = 4;
+    const MTD_SIKP_Calon = 3;
+    const MTD_SIKP_Plafond = 4;
     const MTD_DIGI_DATA = 5;
     const MTD_SLIK_NAE = 6;
 
