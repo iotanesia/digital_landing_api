@@ -5,6 +5,8 @@ use App\Models\Transaksi\VerifKelengkapanDokumen as Model;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Models\Master\JenisKelengkapanDokumen;
+use App\Models\Transaksi\Pipeline;
+use App\Models\Transaksi\VerifValidasiData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,11 +14,19 @@ class VerifKelengkapanDokumen {
 
     public static function getByIdPiperine($id_pipeline)
     {
+
+      try {
+        $check = VerifValidasiData::where('id_pipeline',$id_pipeline)->first();
+        if(!$check) throw new \Exception("Data belum divalidasi", 400);
+        $dokumen = $check->refSubProduk->dokumen ?? null;
         $data = JenisKelengkapanDokumen::with([
             'refVerifKelengkapanDokumen' => function ($query) use ($id_pipeline){
                 $query->where('id_pipeline',$id_pipeline);
             }
-        ])->get()->map(function ($item){
+        ])
+        ->whereIn('id',explode(';',$dokumen))
+        ->orderBy('id','asc')
+        ->get()->map(function ($item){
             $item->id_dokumen = $item->id;
             $item->path = $item->refVerifKelengkapanDokumen->path ?? null;
             $item->created_at = $item->refVerifKelengkapanDokumen->created_at ?? null;
@@ -33,6 +43,9 @@ class VerifKelengkapanDokumen {
             return $item;
         });
         return ['items' => $data];
+      } catch (\Throwable $th) {
+        throw $th;
+      }
     }
 
     public static function storeDokumen($request, $is_transaction = true)
