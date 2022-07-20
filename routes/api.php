@@ -51,6 +51,7 @@ use App\Http\Controllers\Master\SopAgunanController;
 use App\Http\Controllers\Master\SubSubProdukController;
 use App\Http\Controllers\Master\TipeProdukController;
 use App\Http\Controllers\Master\WilayahPemasaranController;
+use App\Http\Controllers\Master\CoverageObligationController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -563,6 +564,14 @@ Route::prefix('v1')
                 Route::get('/{id}',[SektorEkonomiController::class,'show']);
                 Route::put('/{id}',[SektorEkonomiController::class,'update']);
                 Route::delete('/{id}',[SektorEkonomiController::class,'destroy']);
+            });
+            // Coverage Obligation
+            Route::prefix('coverage-obligation')->group(function () {
+                Route::get('/',[CoverageObligationController::class,'index']);
+                Route::post('/',[CoverageObligationController::class,'store']);
+                Route::get('/{id}',[CoverageObligationController::class,'show']);
+                Route::put('/{id}',[CoverageObligationController::class,'update']);
+                Route::delete('/{id}',[CoverageObligationController::class,'destroy']);
             });
         });
 
