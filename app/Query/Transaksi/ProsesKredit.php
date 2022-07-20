@@ -407,4 +407,33 @@ class ProsesKredit {
             throw $th;
         }
     }
+
+    public static function dataUsaha($id_pipeline)
+    {
+        return [
+            'items' => PKreditDataUsaha::byIdpipeline($id_pipeline)
+        ];
+    }
+
+    public static function storeDataUsaha($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            if(!$store) throw new \Exception("Data tidak ditemukan", 400);
+            $result = PKreditDataUsaha::store($request,false);
+            if($is_transaction) DB::commit();
+            return [
+                'items' => $result
+            ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
 }
