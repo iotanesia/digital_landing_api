@@ -601,12 +601,12 @@ Route::prefix('v1')
                 Route::get('/{id}',[BiBuktiDokKepemilikanController::class,'show']);
             });
             // BI Pengikatan Internal
-            Route::prefix('bi-pengikatan-notaril')->group(function () {
+            Route::prefix('bi-pengikatan-internal')->group(function () {
                 Route::get('/',[BiPengikatanInternalController::class,'index']);
                 Route::get('/{id}',[BiPengikatanInternalController::class,'show']);
             });
             // BI Pengikatan Notaril
-            Route::prefix('bi-bukti-dok-kepemilikan')->group(function () {
+            Route::prefix('bi-pengikatan-notaril')->group(function () {
                 Route::get('/',[BiPengikatanNotarilController::class,'index']);
                 Route::get('/{id}',[BiPengikatanNotarilController::class,'show']);
             });
