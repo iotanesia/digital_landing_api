@@ -345,6 +345,91 @@ class ProsesKreditController extends Controller
         }
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function analisa(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::analisa($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeAnalisa(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeAnalisa($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function verifikasi(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::verifikasi($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeVerifikasi(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeVerifikasi($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function selesai(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::selesai($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

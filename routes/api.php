@@ -208,6 +208,17 @@ Route::prefix('v1')
             /* data usaha */ Route::get('/{id}',[ProsesKreditController::class,'dataUsaha']);
             });
 
+            Route::prefix('analisa')->group(function () {
+            /* save data analisa */ Route::post('/',[ProsesKreditController::class,'storeAnalisa']);
+            /* data analisa */ Route::get('/{id}',[ProsesKreditController::class,'analisa']);
+            });
+
+            Route::prefix('verifikasi')->group(function () {
+            /* save data verifikasi */ Route::post('/',[ProsesKreditController::class,'storeVerifikasi']);
+            /* data verifikasi */ Route::get('/{id}',[ProsesKreditController::class,'verifikasi']);
+            });
+
+            /* menu */ Route::get('selesai/{id}',[ProsesKreditController::class,'selesai']);
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
         });

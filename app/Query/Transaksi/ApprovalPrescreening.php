@@ -6,7 +6,7 @@ use App\ApiHelper AS Helper;
 use App\Constants\Constants;
 use App\Jobs\MailSender;
 use App\Models\Transaksi\AktifitasPemasaranPrescreening;
-use App\Models\Transaksi\EfomPrescreening;
+use App\Models\Transaksi\EformPrescreening;
 use App\Models\Transaksi\LeadsPrescreening;
 use App\Models\Transaksi\AktifitasPemasaran;
 use App\Models\Transaksi\Leads;
@@ -144,7 +144,7 @@ class ApprovalPrescreening {
 
     public static function getInfoPrescreening($request, $id, $tipe) {
         try {
-            if($tipe == 'eform') $data = EfomPrescreening::where('id_eform',$id)->paginate($request->limit);
+            if($tipe == 'eform') $data = EformPrescreening::where('id_eform',$id)->paginate($request->limit);
             if($tipe == 'leads') $data = LeadsPrescreening::where('id_leads',$id)->paginate($request->limit);
             if($tipe == 'aktifitas_pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$id)->paginate($request->limit);
         return [

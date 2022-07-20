@@ -6,6 +6,7 @@ use App\Models\Transaksi\Pipeline as Model;
 use App\Query\Transaksi\Pipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
+use App\Query\Transaksi\PKreditDataAnalisa;
 use App\Query\Skema\AgunanNilai;
 use App\Query\Transaksi\VerifValidasiData;
 use Illuminate\Support\Facades\DB;
@@ -55,32 +56,68 @@ class ProsesKredit {
                 [
                     'code' => 1,
                     'name' => 'data personal',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_PERSONAL,
+                        Constants::STEP_DATA_KEUANGAN,
+                        Constants::STEP_DATA_USAHA,
+                        Constants::STEP_DATA_ANALISA_KREDIT,
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+                    ])
                 ],
                 [
                     'code' => 2,
                     'name' => 'data keuangan',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_KEUANGAN,
+                        Constants::STEP_DATA_USAHA,
+                        Constants::STEP_DATA_ANALISA_KREDIT,
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+
+                    ])
                 ],
                 [
                     'code' => 3,
                     'name' => 'data usaha',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_USAHA,
+                        Constants::STEP_DATA_AGUNAN,
+                        Constants::STEP_DATA_ANALISA_KREDIT,
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+
+                    ])
                 ],
                 [
                     'code' => 4,
                     'name' => 'data agunan',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_AGUNAN,
+                        Constants::STEP_DATA_ANALISA_KREDIT,
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+
+                    ])
                 ],
                 [
                     'code' => 5,
                     'name' => 'analisa kredit',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_ANALISA_KREDIT,
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+
+                    ])
                 ],
                 [
                     'code' => 6,
                     'name' => 'verifikasi agunan',
-                    'is_checked' => false
+                    'is_checked' => in_array($data->step_analisa_kredit,[
+                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
+                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+
+                    ])
                 ]
             ];
 
@@ -438,6 +475,60 @@ class ProsesKredit {
             return [
                 'items' => $result
             ];
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function analisa($id_pipeline)
+    {
+        return [
+            'items' => PKreditDataAnalisa::byIdpipeline($id_pipeline)
+        ];
+    }
+
+    public static function storeAnalisa($request,$is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+            PKreditDataAnalisa::store($request);
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function verifikasi($id_pipeline)
+    {
+        return [
+            'items' => PKreditDatAgunanVerifikasi::byIdpipeline($id_pipeline)
+        ];
+    }
+
+    public static function storeVerifikasi($request,$is_transaction = true)
+    {
+
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            PKreditDatAgunanVerifikasi::storeDokumen($request);
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+    public static function selesai($id,$is_transaction = true)
+    {
+
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            Pipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $id,
+                'step_analisa_kredit' => Constants::STEP_DATA_SEDANG_PROSES_SKORING
+            ],false);
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;

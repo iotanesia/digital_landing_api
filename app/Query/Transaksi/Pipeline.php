@@ -6,7 +6,7 @@ use App\View\Transaksi\VListPipeline as View;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
 use App\Models\Transaksi\AktifitasPemasaranPrescreening;
-use App\Models\Transaksi\EfomPrescreening;
+use App\Models\Transaksi\EformPrescreening;
 use App\Models\Transaksi\LeadsPrescreening;
 use App\Query\Status\StsTracking;
 use Carbon\Carbon;
@@ -136,7 +136,7 @@ class Pipeline {
             $dataPipeline = View::where('id', $id)->first();
             // $dataPipeline->ref_id = 109; //hard code sementara
             if(!$dataPipeline) throw new \Exception("Data not found.", 400);
-            if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EfomPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
+            if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EformPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Leads') $data = LeadsPrescreening::where('id_leads',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Aktifitas Pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$dataPipeline->ref_id)->paginate($request->limit);
         return [
@@ -263,7 +263,8 @@ class Pipeline {
         try {
             $data = Model::find($request['id_pipeline']);
             if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-            $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
+            // $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
+            $data->step_analisa_kredit = $data->step_analisa_kredit <= $request['step_analisa_kredit'] ? $request['step_analisa_kredit'] : $data->step_analisa_kredit ;
             $data->updated_by = request()->current_user->id;
             $data->save();
             if($is_transaction) DB::commit();
