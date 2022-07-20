@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Master\MAgunan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,4 +23,9 @@ class PKreditDataAgunan extends Model
         'updated_by',
         'deleted_at',
     ];
+
+    public function refAgunan()
+    {
+        return $this->belongsTo(MAgunan::class,'id_agunan','id');
+    }
 }
