@@ -7,6 +7,7 @@ use App\Constants\Constants;
 use App\Models\Master\JenisKelengkapanDokumen;
 use App\Models\Transaksi\Pipeline;
 use App\Models\Transaksi\VerifValidasiData;
+use App\Query\Transaksi\Pipeline as TransaksiPipeline;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -74,7 +75,7 @@ class VerifKelengkapanDokumen {
                 Storage::put($filename, base64_decode($item['file']));
             }
 
-            Pipeline::updateStepAnalisaKredit([
+            TransaksiPipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => Constants::STEP_ANALISA_KELENGKAPAN
             ],false);
