@@ -54,7 +54,7 @@ class SIKPPlafondDebitur {
             if(in_array($result['code'],['99'])) {
                 $limit_aktif = $result['data'][0]['limit_aktif'] ?? null;
                 $point = $limit_aktif > 0 ? false : true;
-                $data = $result['data'][0];
+                $data = $result['data'][0] ?? [];
                 $data['nomor_aplikasi'] = $params['nomor_aplikasi'];
                 PlafondDebitur::prescreening($data,false);
             }
