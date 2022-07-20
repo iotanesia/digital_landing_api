@@ -6,7 +6,8 @@ use App\Models\Transaksi\Pipeline as Model;
 use App\Query\Transaksi\Pipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
-use App\Models\Transaksi\VerifValidasiData;
+use App\Query\Skema\AgunanNilai;
+use App\Query\Transaksi\VerifValidasiData;
 use Illuminate\Support\Facades\DB;
 
 
@@ -176,7 +177,7 @@ class ProsesKredit {
             }
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            $store =  VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$store) throw new \Exception("Data tidak ditemukan", 400);
             $store->fill($request->all());
             $store->save();
@@ -228,7 +229,7 @@ class ProsesKredit {
             if(!$request->angsuran_kredit_bank_dki_rumah_tangga) $require_fileds[] = 'angsuran_kredit_bank_dki_rumah_tangga';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            $store =  VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$store) throw new \Exception("Data tidak ditemukan", 400);
             PKreditDataKeuangan::store($request,false);
             Pipeline::updateStepAnalisaKredit([
@@ -259,7 +260,7 @@ class ProsesKredit {
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            $store =  VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$store) throw new \Exception("Data tidak ditemukan", 400);
             $result = PKreditDataAgunan::store($request,false);
             if($is_transaction) DB::commit();
@@ -274,9 +275,15 @@ class ProsesKredit {
 
     public static function tanahBangunan($id_proses_data_agunan)
     {
-        return [
-            'items' => PKreditDatAgunanTanahBangunan::byIdProsesDataAgunan($id_proses_data_agunan)
-        ];
+        try {
+
+            return [
+                'items' => PKreditDatAgunanTanahBangunan::byIdProsesDataAgunan($id_proses_data_agunan),
+            ];
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public static function storeTanahBangunan($request,$is_transaction = true)

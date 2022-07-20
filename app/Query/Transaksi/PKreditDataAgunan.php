@@ -7,10 +7,16 @@ use Illuminate\Support\Facades\DB;
 class PKreditDataAgunan
 {
 
+    public static function byId($id)
+    {
+        return Model::find($id);
+
+    }
+
     public static function byIdpipeline($id_pipeline)
     {
         return Model::where('id_pipeline',$id_pipeline)->get();
-        
+
     }
 
     public static function store($request,$is_transaction = true)

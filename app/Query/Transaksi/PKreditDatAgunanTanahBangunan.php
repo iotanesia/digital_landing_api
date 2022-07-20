@@ -3,6 +3,7 @@
 namespace App\Query\Transaksi;
 
 use App\Models\Transaksi\PKreditDatAgunanTanahBangunan as Model;
+use App\Query\Skema\AgunanNilai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -10,31 +11,86 @@ class PKreditDatAgunanTanahBangunan
 {
     public static function byIdProsesDataAgunan($id_proses_data_agunan)
     {
+
         try {
+
+            $data_agunan = PKreditDataAgunan::byId($id_proses_data_agunan);
+            if(!$data_agunan) throw new \Exception("Data tidak ditemukan", 400);
             $data = Model::where('id_proses_data_agunan',$id_proses_data_agunan)->first();
-            if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-            $data->aset = $data->manyAset->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'foto' => $item->foto
-                ];
-            }) ?? null;
-            $data->asuransi = $data->manyAsuransi->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'nama_perusahaan' => $item->nama_perusahaan,
-                    'tgl_awal' => $item->tgl_awal,
-                    'tgl_akhir' => $item->tgl_akhir,
-                    'nilai' => $item->nilai,
-                ];
-            }) ?? null;
-            unset(
-                $data->manyAset,
-                $data->manyAsuransi
-            );
-            return $data;
+            $result = new \stdClass;
+            $result->id_proses_data_agunan = $data->id_proses_data_agunan ?? null;
+            $result->tanggal_pemeriksaan = $data->tanggal_pemeriksaan ?? null;
+            $result->luas_tanah = $data->luas_tanah ?? null;
+            $result->luas_bangunan = $data->luas_bangunan ?? null;
+            $result->harga_tanah = $data->harga_tanah ?? null;
+            $result->harga_bangunan = $data->harga_bangunan ?? null;
+            $result->no_bukti_kepemilikan = $data->no_bukti_kepemilikan ?? null;
+            $result->pemilik_agunan = $data->harga_pemilik_agunanbangunan ?? null;
+            $result->alamat_agunan = $data->alamat_agunan ?? null;
+            $result->jenis_dokumen = $data->jenis_dokumen ?? null;
+            $result->tgl_jatuh_tempo = $data->tgl_jatuh_tempo ?? null;
+            $result->no_sertifikat = $data->no_sertifikat ?? null;
+            $result->tgl_sertifikat = $data->tgl_sertifikat ?? null;
+            $result->nama_sertifikat = $data->nama_sertifikat ?? null;
+            $result->no_sugs = $data->no_sugs ?? null;
+            $result->tgl_gs = $data->tgl_gs ?? null;
+            $result->usia_bangunan = $data->usia_bangunan ?? null;
+            $result->lebar_jalan_depan = $data->lebar_jalan_depan ?? null;
+            $result->no_imb = $data->no_imb ?? null;
+            $result->tgl_imb = $data->tgl_imb ?? null;
+            $result->atas_nama_imb = $data->atas_nama_imb ?? null;
+            $result->alamat_imb = $data->alamat_imb ?? null;
+            $result->spesifikasi_bangunan = $data->spesifikasi_bangunan ?? null;
+            $result->nilai_penyusutan_bangunan = $data->nilai_penyusutan_bangunan ?? null;
+            $result->nilai_market = $data->nilai_market ?? null;
+            $result->collateral_class =  AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'collateral_class');
+            $result->jenis_agunan =  AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'jenis_agunan');
+            $result->sifat_agunan = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'sifat_agunan');
+            $result->penerbit_agunan = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'penerbit_agunan');
+            $result->cash_non_cash = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'cash_non_cash');
+            $result->jenis_pengikatan = $data->jenis_pengikatan ?? null;
+            $result->coverage_obligation = $data->coverage_obligation ?? null;
+            $result->collateral_mortage_priority = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'collateral_mortage_priority');
+            $result->allow_acct_attached_to_coll = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'allow_acct_attached_to_coll');
+            $result->customer_or_bank_has_coll = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'customer_or_bank_has_coll');
+            $result->nama_perusahaan_appraisal = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'nama_perusahaan_appraisal');
+            $result->collateral_status = $data->collateral_status ?? null;
+            $result->coll_status_of_acct = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'coll_status_of_acct');
+            $result->coll_utilized_amout = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'coll_utilized_amout');
+            $result->jenis_asuransi = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'jenis_asuransi');
+            $result->jenis_agunan_ppap = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'jenis_agunan_ppap');
+            $result->bi_penilaian_menurut_bank = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'bi_penilaian_menurut_bank');
+            $result->bi_pengikatan_intenal = $data->bi_pengikatan_intenal ?? null;
+            $result->bi_pengikatan_notaril = $data->bi_pengikatan_notaril ?? null;
+            $result->bi_bukti_dok_kepemilikan = $data->bi_bukti_dok_kepemilikan ?? null;
+            $result->bi_dati = $data->bi_dati ?? null;
+            $result->utillized_amout = $data->utillized_amout ?? null;
+            $result->lokasi = $data->lokasi ?? null;
+            if($data) {
+                $result->aset = $data->manyAset->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'foto' => $item->foto
+                    ];
+                }) ?? [];
+                $result->asuransi = $data->manyAsuransi->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'nama_perusahaan' => $item->nama_perusahaan,
+                        'tgl_awal' => $item->tgl_awal,
+                        'tgl_akhir' => $item->tgl_akhir,
+                        'nilai' => $item->nilai,
+                    ];
+                }) ?? [];
+            }else {
+                $result->aset = [];
+                $result->asuransi = [];
+            }
+
+
+            return $result;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -48,8 +104,24 @@ class PKreditDatAgunanTanahBangunan
             $require_fileds = [];
             if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $data_agunan = PKreditDataAgunan::byId($request->id_proses_data_agunan);
+            if(!$data_agunan) throw new \Exception("Data tidak ditemukan", 400);
 
             $attr = $request->all();
+            $attr['collateral_class'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'collateral_class');
+            $attr['jenis_agunan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_agunan');
+            $attr['sifat_agunan'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'sifat_agunan');
+            $attr['penerbit_agunan'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'penerbit_agunan');
+            $attr['cash_non_cash'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'cash_non_cash');
+            $attr['collateral_mortage_priority'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'collateral_mortage_priority');
+            $attr['allow_acct_attached_to_coll'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'allow_acct_attached_to_coll');
+            $attr['customer_or_bank_has_coll'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'customer_or_bank_has_coll');
+            $attr['nama_perusahaan_appraisal'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'nama_perusahaan_appraisal');
+            $attr['coll_status_of_acct'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_status_of_acct');
+            $attr['coll_utilized_amout'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_utilized_amout');
+            $attr['jenis_asuransi'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_asuransi');
+            $attr['jenis_agunan_ppap'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_agunan_ppap');
+            $attr['bi_penilaian_menurut_bank'] = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_penilaian_menurut_bank');
             $attr['created_by'] = $request->current_user->id;
             $attr['updated_by'] = $request->current_user->id;
             $store =  Model::where([
