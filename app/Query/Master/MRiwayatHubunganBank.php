@@ -9,7 +9,7 @@ class MRiwayatHubunganBank {
 
     public static function byId($id)
     {
-        return Model::find($id);
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)

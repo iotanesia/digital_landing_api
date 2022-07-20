@@ -286,6 +286,7 @@ Route::prefix('v1')
             Route::prefix('agama')->group(function () {
                 Route::get('/',[AgamaController::class,'index']);
                 Route::post('/',[AgamaController::class,'store']);
+                Route::get('/{id}',[AgamaController::class,'show']);
                 Route::put('/{id}',[AgamaController::class,'update']);
                 Route::delete('/{id}',[AgamaController::class,'destroy']);
             });

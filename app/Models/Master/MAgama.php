@@ -9,7 +9,6 @@ class MAgama extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'agama';
-    protected $primaryKey = 'id_agama';
     protected $connection = 'master';
     public $fillable = [
         'agama',
