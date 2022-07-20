@@ -52,6 +52,11 @@ use App\Http\Controllers\Master\SubSubProdukController;
 use App\Http\Controllers\Master\TipeProdukController;
 use App\Http\Controllers\Master\WilayahPemasaranController;
 use App\Http\Controllers\Master\CoverageObligationController;
+use App\Http\Controllers\Master\BiBuktiDokKepemilikanController;
+use App\Http\Controllers\Master\BiPengikatanInternalController;
+use App\Http\Controllers\Master\BiPengikatanNotarilController;
+use App\Http\Controllers\Master\CollateralStatusController;
+use App\Http\Controllers\Master\JenisPengikatanController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -589,6 +594,31 @@ Route::prefix('v1')
                 Route::get('/{id}',[CoverageObligationController::class,'show']);
                 Route::put('/{id}',[CoverageObligationController::class,'update']);
                 Route::delete('/{id}',[CoverageObligationController::class,'destroy']);
+            });
+            // BI Bukti Dok Kepemilikan
+            Route::prefix('bi-bukti-dok-kepemilikan')->group(function () {
+                Route::get('/',[BiBuktiDokKepemilikanController::class,'index']);
+                Route::get('/{id}',[BiBuktiDokKepemilikanController::class,'show']);
+            });
+            // BI Pengikatan Internal
+            Route::prefix('bi-pengikatan-notaril')->group(function () {
+                Route::get('/',[BiPengikatanInternalController::class,'index']);
+                Route::get('/{id}',[BiPengikatanInternalController::class,'show']);
+            });
+            // BI Pengikatan Notaril
+            Route::prefix('bi-bukti-dok-kepemilikan')->group(function () {
+                Route::get('/',[BiPengikatanNotarilController::class,'index']);
+                Route::get('/{id}',[BiPengikatanNotarilController::class,'show']);
+            });
+            // Collateral Status
+            Route::prefix('collateral-status')->group(function () {
+                Route::get('/',[CollateralStatusController::class,'index']);
+                Route::get('/{id}',[CollateralStatusController::class,'show']);
+            });
+            // Jenis Pengikatan
+            Route::prefix('jenis-pengikatan')->group(function () {
+                Route::get('/',[JenisPengikatanController::class,'index']);
+                Route::get('/{id}',[JenisPengikatanController::class,'show']);
             });
         });
 
