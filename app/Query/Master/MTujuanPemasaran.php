@@ -10,7 +10,7 @@ class MTujuanPemasaran {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_tujuan_pemasaran', $id)->first()];
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)
