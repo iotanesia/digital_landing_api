@@ -56,7 +56,7 @@ class SIKPPlafondDebitur {
                 $point = $limit_aktif > 0 ? false : true;
                 $data = $result['data'][0];
                 $data['nomor_aplikasi'] = $params['nomor_aplikasi'];
-                PlafondDebitur::prescreening($data);
+                PlafondDebitur::prescreening($data,false);
             }
             return [
                 'poin' => $point,  // always true
