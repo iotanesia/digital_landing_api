@@ -203,6 +203,11 @@ Route::prefix('v1')
             /* data deposito */ Route::get('/{id}',[ProsesKreditController::class,'Deposito']);
             });
 
+            Route::prefix('usaha')->group(function () {
+            /* save data usaha */ Route::post('/',[ProsesKreditController::class,'storeDataUsaha']);
+            /* data usaha */ Route::get('/{id}',[ProsesKreditController::class,'dataUsaha']);
+            });
+
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
         });

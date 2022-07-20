@@ -311,6 +311,39 @@ class ProsesKreditController extends Controller
             return Helper::setErrorResponse($th);
         }
     }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function dataUsaha(Request $request,$id)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::dataUsaha($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDataUsaha(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                ProsesKredit::storeDataUsaha($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 
     /**
      * Show the form for editing the specified resource.
