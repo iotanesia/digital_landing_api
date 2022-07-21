@@ -547,7 +547,7 @@ class ProsesKredit {
             $data = VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$data) throw new \Exception("Data Pipeline tidak ditemukan", 400);
             $taksasi = $request->nilai_market * $sop->presentase / 100;
-            $ltv = $data->plafond / $request->nilai_market;
+            $ltv = $request->nilai_market ? $data->plafond / $request->nilai_market : 0;
             return [
                 'ltv' =>  $ltv,
                 'taksasi' =>  $taksasi

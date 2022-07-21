@@ -89,7 +89,6 @@ class PKreditDatAgunanTanahBangunan
                 $result->asuransi = [];
             }
 
-
             return $result;
         } catch (\Throwable $th) {
             throw $th;

@@ -13,30 +13,76 @@ class PKreditDatAgunanKios
     public static function byIdProsesDataAgunan($id_proses_data_agunan)
     {
         try {
+
+            $data_agunan = PKreditDataAgunan::byId($id_proses_data_agunan);
+            if(!$data_agunan) throw new \Exception("Data tidak ditemukan", 400);
             $data = Model::where('id_proses_data_agunan',$id_proses_data_agunan)->first();
-            if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-            $data->aset = $data->manyAset->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'foto' => $item->foto
-                ];
-            }) ?? null;
-            $data->asuransi = $data->manyAsuransi->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'nama_perusahaan' => $item->nama_perusahaan,
-                    'tgl_awal' => $item->tgl_awal,
-                    'tgl_akhir' => $item->tgl_akhir,
-                    'nilai' => $item->nilai,
-                ];
-            }) ?? null;
-            unset(
-                $data->manyAset,
-                $data->manyAsuransi
-            );
-            return $data;
+            $result = new \stdClass;
+            $result->id_proses_data_agunan = $data->id_proses_data_agunan ?? null;
+            $result->jenis_kendaraan = $data->jenis_kendaraan ?? null;
+            $result->penggunaan_jaminan = $data->penggunaan_jaminan ?? null;
+            $result->nama_pemilik_bpkb = $data->nama_pemilik_bpkb ?? null;
+            $result->nama_pemilik_saat_ini = $data->nama_pemilik_saat_ini ?? null;
+            $result->alamat_pemilik_saat_ini = $data->alamat_pemilik_saat_ini ?? null;
+            $result->no_faktur = $data->no_faktur ?? null;
+            $result->no_mesin = $data->no_mesin ?? null;
+            $result->no_rangka = $data->no_rangka ?? null;
+            $result->no_polisi = $data->no_polisi ?? null;
+            $result->no_bpkb = $data->no_bpkb ?? null;
+            $result->no_stnk = $data->no_stnk ?? null;
+            $result->warna = $data->warna ?? null;
+            $result->tahun = $data->tahun ?? null;
+            $result->merk = $data->merk ?? null;
+            $result->model = $data->model ?? null;
+            $result->nilai_market = $data->nilai_market ?? null;
+            $result->collateral_class = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'collateral_class');
+            $result->jenis_agunan = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'jenis_agunan');
+            $result->sifat_agunan = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'sifat_agunan');
+            $result->penerbit_agunan = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'penerbit_agunan');
+            $result->cash_non_cash = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'cash_non_cash');
+            $result->jenis_pengikatan = $data->jenis_pengikatan ?? null;
+            $result->coverage_obligation = $data->coverage_obligation ?? null;
+            $result->collateral_mortage_priority = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'collateral_mortage_priority');
+            $result->allow_acct_attached_to_coll = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'allow_acct_attached_to_coll');
+            $result->customer_or_bank_has_coll = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'customer_or_bank_has_coll');
+            $result->nama_perusahaan_appraisal = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'nama_perusahaan_appraisal');
+            $result->collateral_status = AgunanNilai::setByIdAgunan($data_agunan->id_agunan,'collateral_status');
+            $result->coll_status_of_acct = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_status_of_acct');
+            $result->coll_utilized_amout = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_utilized_amout');
+            $result->jenis_asuransi = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_asuransi');
+            $result->jenis_agunan_ppap = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_agunan_ppap');
+            $result->bi_penilaian_menurut_bank = AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_penilaian_menurut_bank');
+            $result->bi_pengikatan_intenal = $data->bi_pengikatan_intenal ?? null;
+            $result->bi_pengikatan_notaril = $data->bi_pengikatan_notaril ?? null;
+            $result->bi_bukti_dok_kepemilikan = $data->bi_bukti_dok_kepemilikan ?? null;
+            $result->bi_dati = $data->bi_dati ?? null;
+            $result->utillized_amout = $data->utillized_amout ?? null;
+
+            if($data) {
+                $result->aset = $data->manyAset->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'foto' => $item->foto
+                    ];
+                }) ?? [];
+                $result->asuransi = $data->manyAsuransi->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'nama_perusahaan' => $item->nama_perusahaan,
+                        'tgl_awal' => $item->tgl_awal,
+                        'tgl_akhir' => $item->tgl_akhir,
+                        'nilai' => $item->nilai,
+                    ];
+                }) ?? [];
+            
+            } else {
+                $result->aset = [];
+                $result->asuransi = [];
+            }
+
+            return $result;
         } catch (\Throwable $th) {
             throw $th;
         }
