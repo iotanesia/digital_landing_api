@@ -59,6 +59,7 @@ use App\Http\Controllers\Master\BiPengikatanInternalController;
 use App\Http\Controllers\Master\BiPengikatanNotarilController;
 use App\Http\Controllers\Master\CollateralStatusController;
 use App\Http\Controllers\Master\JenisPengikatanController;
+use App\Http\Controllers\Master\JenisSkemaController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -632,6 +633,11 @@ Route::prefix('v1')
             Route::prefix('jenis-pengikatan')->group(function () {
                 Route::get('/',[JenisPengikatanController::class,'index']);
                 Route::get('/{id}',[JenisPengikatanController::class,'show']);
+            });
+            // Jenis Skema
+            Route::prefix('jenis-skema')->group(function () {
+                Route::get('/',[JenisSkemaController::class,'index']);
+                Route::get('/{id}',[JenisSkemaController::class,'show']);
             });
         });
 
