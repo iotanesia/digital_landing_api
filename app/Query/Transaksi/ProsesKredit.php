@@ -431,7 +431,7 @@ class ProsesKredit {
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            $store =  VerifValidasiData::where('id_pipeline',$request->id_pipeline)->first();
+            $store =  VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$store) throw new \Exception("Data tidak ditemukan", 400);
             $result = PKreditDataUsaha::store($request,false);
             if($is_transaction) DB::commit();
