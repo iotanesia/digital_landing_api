@@ -41,6 +41,7 @@ class PKreditDataAnalisa extends Model
         'jenis_bank_garansi',
         'id_lokasi_proyek',
         'sandi_realisasi',
+        'rpc_sisa_penghasilan',
         'created_at',
         'created_by',
         'updated_at',

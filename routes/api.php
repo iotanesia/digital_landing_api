@@ -17,6 +17,8 @@ use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
 use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController;
 use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
+use App\Http\Controllers\Api\PencairanController;
+use App\Http\Controllers\Api\AkadController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\AgunanController;
@@ -57,6 +59,7 @@ use App\Http\Controllers\Master\BiPengikatanInternalController;
 use App\Http\Controllers\Master\BiPengikatanNotarilController;
 use App\Http\Controllers\Master\CollateralStatusController;
 use App\Http\Controllers\Master\JenisPengikatanController;
+use App\Http\Controllers\Master\JenisSkemaController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -227,6 +230,17 @@ Route::prefix('v1')
             /* menu */ Route::get('selesai/{id}',[ProsesKreditController::class,'selesai']);
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
+        });
+
+        Route::prefix('pencairan')->group(function () {
+            Route::get('/',[PencairanController::class,'index']);
+            Route::get('/{id}',[PencairanController::class,'show']);
+            Route::post('/',[PencairanController::class,'store']);
+        });
+        Route::prefix('akad')->group(function () {
+            Route::get('/',[AkadController::class,'index']);
+            Route::get('/{id}',[AkadController::class,'show']);
+            Route::post('/',[AkadController::class,'store']);
         });
 
         // users
@@ -625,6 +639,10 @@ Route::prefix('v1')
             Route::prefix('lokasi-proyek')->group(function () {
                 Route::get('/',[LokasiProyekController::class,'index']);
                 Route::get('/{id}',[LokasiProyekController::class,'show']);
+            // Jenis Skema
+            Route::prefix('jenis-skema')->group(function () {
+                Route::get('/',[JenisSkemaController::class,'index']);
+                Route::get('/{id}',[JenisSkemaController::class,'show']);
             });
         });
 

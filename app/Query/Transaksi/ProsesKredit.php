@@ -6,6 +6,7 @@ use App\Models\Transaksi\Pipeline as Model;
 use App\Query\Transaksi\Pipeline;
 use App\ApiHelper as Helper;
 use App\Constants\Constants;
+use App\Query\Master\SopAgunan;
 use App\Query\Transaksi\PKreditDataAnalisa;
 use App\Query\Skema\AgunanNilai;
 use App\Query\Transaksi\VerifValidasiData;
@@ -330,6 +331,7 @@ class ProsesKredit {
 
             $require_fileds = [];
             if(!$request->id_agunan) $require_fileds[] = 'id_agunan';
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $result = PKreditDatAgunanTanahBangunan::store($request,false);
@@ -531,6 +533,26 @@ class ProsesKredit {
             ],false);
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
+            throw $th;
+        }
+    }
+
+
+    public static function setLtvTaksasi($request)
+    {
+        try {
+
+            $sop = SopAgunan::byIdAgunan($request->id_agunan);
+            if(!$sop) throw new \Exception("Sop agunan belum dibuat", 400);
+            $data = VerifValidasiData::byIdPipeline($request->id_pipeline);
+            if(!$data) throw new \Exception("Data Pipeline tidak ditemukan", 400);
+            $taksasi = $request->nilai_market * $sop->presentase / 100;
+            $ltv = $data->plafond / $request->nilai_market;
+            return [
+                'ltv' =>  $ltv,
+                'taksasi' =>  $taksasi
+            ];
+        } catch (\Throwable $th) {
             throw $th;
         }
     }

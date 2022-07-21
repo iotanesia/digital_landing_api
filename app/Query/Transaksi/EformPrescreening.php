@@ -3,9 +3,17 @@
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\EformPrescreening as Model;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
 use Illuminate\Support\Facades\DB;
 
 class EformPrescreening {
+
+    public static function sikpMetode($id_eform)
+    {
+        return Model::join('skema.prescreening_rules','transaksi.eform_prescreening.id_prescreening_rules','skema.prescreening_rules.id')
+        ->where('id_metode',Constants::MTD_RULES_DHN_DKI)
+        ->where('id_eform',$id_eform)->first();
+    }
 
       // prescreening
       public static function prescreening($request,$is_transaction = true)

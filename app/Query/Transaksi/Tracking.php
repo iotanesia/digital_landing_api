@@ -174,12 +174,21 @@ class Tracking {
         ->where('nik',$request->nik)
         ->first();
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
+
+        $sikp = EformPrescreening::sikpMetode($data->id);
+        $ket_sikp = $sikp->keterangan ?? null;
+        $ket_digidata = $data->refPrescreening->keterangan ?? null;
+        $ket = null;
+        if($ket_sikp)  $ket = 'sikp';
+        if(!$ket_sikp && $ket_digidata) $ket = 'dukcapil';
+
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
-        $data->test = $data->refPrescreening ?? null;
+
+
         $data->step = [
             [
                 'kode' => '01',
@@ -187,7 +196,7 @@ class Tracking {
                 'tanggal' => Carbon::parse($data->created_at)->format('Y-m-d'),
                 'status' => $data->refStsPrescreening->nama ?? null,
                 'id_status' => $data->is_prescreening ?? null,
-                'keterangan' => null,
+                'keterangan' => $ket,
                 'step' => null
             ],
             [

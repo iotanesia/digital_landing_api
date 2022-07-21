@@ -48,6 +48,7 @@ class PKreditDataAnalisa
             $result->jenis_bank_garansi = $data->jenis_bank_garansi ?? null;
             $result->id_lokasi_proyek = $data->id_lokasi_proyek ?? null;
             $result->sandi_realisasi = $data->sandi_realisasi ?? null;
+            $result->rpc_sisa_penghasilan = $data->rpc_sisa_penghasilan ?? null;
             return $result;
         } catch (\Throwable $th) {
             throw $th;
