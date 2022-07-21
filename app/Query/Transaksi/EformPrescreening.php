@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Query\Transaksi;
-use App\Models\Transaksi\EfomPrescreening as Model;
+use App\Models\Transaksi\EformPrescreening as Model;
 use App\ApiHelper as Helper;
 use Illuminate\Support\Facades\DB;
 

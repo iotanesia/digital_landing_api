@@ -18,6 +18,7 @@ use App\Models\Master\MStatusPernikahan;
 use App\Models\Master\MSubProduk;
 use App\Models\Status\StsPrescreening;
 
+
 class Eform extends Model
 {
     use HasFactory, SoftDeletes;
@@ -131,6 +132,11 @@ class Eform extends Model
     {
         return $this->belongsTo(PlafondDebitur::class,'nomor_aplikasi','nomor_aplikasi');
 
+    }
+
+    public function refPrescreening()
+    {
+        return $this->belongsTo(EformPrescreening::class,'id','id_eform');
     }
 
 }

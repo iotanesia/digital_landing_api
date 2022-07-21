@@ -166,7 +166,11 @@ class Tracking {
         if(!$request->nomor_aplikasi) $require_fileds[] = 'nomor_aplikasi';
         if(!$request->nik) $require_fileds[] = 'nik';
         if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-        $data = Model::where('nomor_aplikasi',$request->nomor_aplikasi)
+        $data = Model::with([
+            'refPrescreening' => function ($query){
+                $query->where('request','ilike','%trx%');
+            }
+        ])->where('nomor_aplikasi',$request->nomor_aplikasi)
         ->where('nik',$request->nik)
         ->first();
         if(!$data) throw new \Exception("Data tidak ditemukan.", 400);
@@ -175,7 +179,7 @@ class Tracking {
         $data->nama_produk = $data->refProduk->nama ?? null;
         $data->nama_sub_produk = $data->refSubProduk->nama ?? null;
         $data->jenis_kelamin = $data->refJenisKelamin->nama ?? null;
-
+        $data->test = $data->refPrescreening ?? null;
         $data->step = [
             [
                 'kode' => '01',

@@ -4,7 +4,7 @@ namespace App\Query\Transaksi;
 use App\View\Transaksi\VPrescreening as View;
 use App\Constants\Constants;
 use App\Models\Transaksi\AktifitasPemasaranPrescreening;
-use App\Models\Transaksi\EfomPrescreening;
+use App\Models\Transaksi\EformPrescreening;
 use App\Models\Transaksi\LeadsPrescreening;
 use Carbon\Carbon;
 
@@ -48,7 +48,7 @@ class VPrescreening {
             // $dataPipeline->ref_id = 109; //hard code sementara
 
             if(!$dataPipeline) throw new \Exception("Data not found.", 400);
-            if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EfomPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
+            if($dataPipeline->tipe_calon_nasabah == 'Eform') $data = EformPrescreening::where('id_eform',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Leads') $data = LeadsPrescreening::where('id_leads',$dataPipeline->ref_id)->paginate($request->limit);
             if($dataPipeline->tipe_calon_nasabah == 'Aktifitas Pemasaran') $data = AktifitasPemasaranPrescreening::where('id_aktifitas_pemasaran',$dataPipeline->ref_id)->paginate($request->limit);
         return [
@@ -58,7 +58,7 @@ class VPrescreening {
                     'metode' => $item->refRules->refMetode->metode ?? null,
                     'skema' => $item->refRules->refSkema->skema ?? null,
                     'status' =>  $item->keterangan,
-                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null) 
+                    'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null)
                 ];
             }),
             'attributes' => [
