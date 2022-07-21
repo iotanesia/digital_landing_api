@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\TrackingController as ApiTrackingController;
 use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController;
 use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
+use App\Http\Controllers\Api\PencairanController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\AgunanController;
@@ -226,6 +227,11 @@ Route::prefix('v1')
             /* menu */ Route::get('selesai/{id}',[ProsesKreditController::class,'selesai']);
             /* menu */ Route::get('menu/{id}',[ProsesKreditController::class,'menu']);
 
+        });
+
+        Route::prefix('pencairan')->group(function () {
+            Route::get('/',[PencairanController::class,'index']);
+            Route::get('/{id}',[PencairanController::class,'show']);
         });
 
         // users
