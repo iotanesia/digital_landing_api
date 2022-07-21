@@ -6,6 +6,7 @@ use App\Models\Transaksi\PKreditDatAgunanDeposito as Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Query\Skema\AgunanNilai;
 
 class PKreditDatAgunanDeposito
 {
@@ -49,8 +50,29 @@ class PKreditDatAgunanDeposito
             $require_fileds = [];
             if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $data_agunan = PKreditDataAgunan::byId($request->id_proses_data_agunan);
+            if(!$data_agunan) throw new \Exception("Data tidak ditemukan", 400);
 
             $attr = $request->all();
+            $attr['collateral_class'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'collateral_class');
+            $attr['jenis_agunan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_agunan');
+            $attr['sifat_agunan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'sifat_agunan');
+            $attr['penerbiit_agunan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'penerbit_agunan');
+            $attr['cash_non_cash'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'cash_non_cash');
+            $attr['jenis_pengikatan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_pengikatan');
+            $attr['coverage_obligation'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coverage_oblligation');
+            $attr['collateral_mortage_priority'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'collateral_mortage_priority');
+            $attr['allow_acct_attached_to_coll'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'allow_acct_attached_to_coll');
+            $attr['customer_or_bank_has_coll'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'customer_or_bank_has_coll');
+            $attr['nama_perusahaan_appraisal'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'nama_perusahaan_appraisal');
+            $attr['coll_status_of_acct'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_status_of_acct');
+            $attr['coll_utilized_amount'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'coll_utilized_amout');
+            $attr['jenis_asuransi'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_asuransi');
+            $attr['jenis_agunan_ppap'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'jenis_agunan_ppap');
+            $attr['bi_penilaian_menurut_bank'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_penilaian_menurut_bank');
+            $attr['bi_pengikatan_internal'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_pengikatan_internal');
+            $attr['bi_pengikatan_notaril'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_pengikatan_notaril');
+            $attr['bi_bukti_dok_kepemilikan'] =  AgunanNilai::setByIdAgunanNilai($data_agunan->id_agunan,'bi_bukti_dok_kepemilikan');
             $attr['created_by'] = $request->current_user->id;
             $attr['updated_by'] = $request->current_user->id;
             $store =  Model::where([

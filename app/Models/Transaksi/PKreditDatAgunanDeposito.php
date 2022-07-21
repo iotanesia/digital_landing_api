@@ -40,7 +40,7 @@ class PKreditDatAgunanDeposito extends Model
         'coll_utilized_amout',
         'jenis_asuransi',
         'jenis_agunan_ppap',
-        'penilaian_menurut_bank',
+        'bi_penilaian_menurut_bank',
         'bi_pengikatan_intenal',
         'bi_pengikatan_notaril',
         'bi_bukti_dok_kepemilikan',
