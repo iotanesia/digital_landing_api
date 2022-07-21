@@ -100,12 +100,10 @@ class PKreditDatAgunanTanahBangunan
     {
         if($is_transaction) DB::beginTransaction();
         try {
-
             $require_fileds = [];
             if(!$request->id_agunan) $require_fileds[] = 'id_agunan';
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-
 
             $attr = $request->all();
             $attr['collateral_class'] =  AgunanNilai::setByIdAgunanNilai($request->id_agunan,'collateral_class');
