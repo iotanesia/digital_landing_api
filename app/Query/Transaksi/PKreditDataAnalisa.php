@@ -19,8 +19,6 @@ class PKreditDataAnalisa
             else $modul = $pipeline->refLeads;
 
             $keuangan = PKreditDataKeuangan::byIdPipeline($id_pipeline);
-            if(!$keuangan) throw new \Exception("Data Keuangan tidak ditemukan", 400);
-
 
             $data = Model::where('id_pipeline',$id_pipeline)->first();
             $result = new \stdClass;
@@ -36,8 +34,8 @@ class PKreditDataAnalisa
             $result->kode_plan = $data->kode_plan ?? null;
             $result->kode_dinas = $data->kode_dinas ?? null;
             $result->id_sektor_ekonomi = $data->id_sektor_ekonomi ?? null;
-            $result->idir = $data->idir ?? $keuangan->idir;
-            $result->rpc = $data->rpc ?? $keuangan->rpc;
+            $result->idir = $keuangan->idir ?? null;
+            $result->rpc =  $keuangan->rpc ?? null;
             $result->kategori_debitur = $data->kategori_debitur ?? null;
             $result->kategori_portofolio = $data->kategori_portofolio ?? null;
             $result->jenis_kredit = $data->jenis_kredit ?? null;
@@ -52,7 +50,7 @@ class PKreditDataAnalisa
             $result->jenis_bank_garansi = $data->jenis_bank_garansi ?? null;
             $result->id_lokasi_proyek = $data->id_lokasi_proyek ?? null;
             $result->sandi_realisasi = $data->sandi_realisasi ?? null;
-            $result->rpc_sisa_penghasilan = $data->rpc_sisa_penghasilan ?? $keuangan->rpc_sisa_penghasilan;
+            $result->rpc_sisa_penghasilan = $keuangan->rpc_sisa_penghasilan ?? null;
             return $result;
         } catch (\Throwable $th) {
             throw $th;
