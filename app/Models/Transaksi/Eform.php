@@ -139,4 +139,9 @@ class Eform extends Model
         return $this->belongsTo(EformPrescreening::class,'id','id_eform');
     }
 
+    public function refPrescreeningSIKP()
+    {
+        return $this->belongsTo(EformPrescreening::class,'id','id_eform');
+    }
+
 }
