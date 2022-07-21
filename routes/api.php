@@ -640,6 +640,7 @@ Route::prefix('v1')
                 Route::get('/',[LokasiProyekController::class,'index']);
                 Route::get('/{id}',[LokasiProyekController::class,'show']);
             // Jenis Skema
+            });
             Route::prefix('jenis-skema')->group(function () {
                 Route::get('/',[JenisSkemaController::class,'index']);
                 Route::get('/{id}',[JenisSkemaController::class,'show']);
