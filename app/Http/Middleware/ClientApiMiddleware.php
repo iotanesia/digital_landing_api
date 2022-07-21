@@ -38,7 +38,7 @@ class ClientApiMiddleware
             'ip_registered' => in_array($request->getClientIp(),explode(';',$client->ip_whitelist)),
         ];
         // * check ip access
-        if(!in_array(true,$access_validation)) throw new \Exception("your IP is not allowed to access  - ip ".$request->getClientIp(), 401);
+        if(!in_array(true,$access_validation)) throw new \Exception("your IP is not allowed to access  - ip-address ".$request->getClientIp(), 401);
         $request->client = $client;
         return $next($request);
     }
