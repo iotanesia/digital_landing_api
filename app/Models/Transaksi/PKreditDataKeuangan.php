@@ -33,6 +33,7 @@ class PKreditDataKeuangan extends Model
        'idir',
        'rpc',
        'profitability',
+       'rpc_sisa_penghasilan',
        'created_at',
        'updated_at',
        'deleted_at',
