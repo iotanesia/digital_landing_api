@@ -5,6 +5,7 @@ namespace App\Models\Transaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Master\MSubSubProduk;
 
 class PKreditDataAnalisa extends Model
 {
@@ -49,5 +50,10 @@ class PKreditDataAnalisa extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public function refSubSubProduk()
+    {
+        return $this->belongsTo(MSubSubProduk::class,'id_sub_sub_produk','id');
+    }
 
 }

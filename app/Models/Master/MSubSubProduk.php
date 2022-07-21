@@ -21,4 +21,9 @@ class MSubSubProduk extends Model
         'deleted_at',
         'deleted_by',
     ];
+
+    public function refSubProduk()
+    {
+        return $this->belongsTo(MSubProduk::class,'id_sub_produk','id');
+    }
 }

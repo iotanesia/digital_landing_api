@@ -51,6 +51,9 @@ class PKreditDataAnalisa
             $result->id_lokasi_proyek = $data->id_lokasi_proyek ?? null;
             $result->sandi_realisasi = $data->sandi_realisasi ?? null;
             $result->rpc_sisa_penghasilan = $keuangan->rpc_sisa_penghasilan ?? null;
+            $result->nama_sub_sub_produk = $data->refSubSubProduk->nama;
+            $result->nama_sub_produk = $data->refSubSubProduk->refSubProduk->nama;
+            $result->nama_produk = $data->refSubSubProduk->refSubProduk->refProduk->nama;
             return $result;
         } catch (\Throwable $th) {
             throw $th;
