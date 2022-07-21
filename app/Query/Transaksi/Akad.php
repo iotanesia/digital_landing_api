@@ -3,7 +3,7 @@
 namespace App\Query\Transaksi;
 
 
-class Pencairan
+class Akad
 {
     public static function byId($id)
     {
@@ -59,7 +59,7 @@ class Pencairan
                     'from' => '10',
                     'per_page' => '4',
                 ]
-                ];
+            ];
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -72,7 +72,7 @@ class Pencairan
 
             //if($is_transaction) DB::commit();
 
-            return ["items" => $request->keterangan];
+            return ["items" => $request->id_officer];
         } catch (\Throwable $th) {
             //if($is_transaction) DB::rollBack();
             throw $th;

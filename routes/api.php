@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\PrescreeningController AS ApiPrescreeningController
 use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
 use App\Http\Controllers\Api\PencairanController;
+use App\Http\Controllers\Api\AkadController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\AgunanController;
@@ -232,6 +233,12 @@ Route::prefix('v1')
         Route::prefix('pencairan')->group(function () {
             Route::get('/',[PencairanController::class,'index']);
             Route::get('/{id}',[PencairanController::class,'show']);
+            Route::post('/',[PencairanController::class,'store']);
+        });
+        Route::prefix('akad')->group(function () {
+            Route::get('/',[AkadController::class,'index']);
+            Route::get('/{id}',[AkadController::class,'show']);
+            Route::post('/',[AkadController::class,'store']);
         });
 
         // users

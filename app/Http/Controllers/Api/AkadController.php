@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
-use App\Query\Transaksi\Pencairan;
-class PencairanController extends Controller
+use App\Query\Transaksi\Akad;
+class AkadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class PencairanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Pencairan::getAll($request)
+                Akad::getAll($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -51,7 +51,7 @@ class PencairanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Pencairan::store($request)
+                Akad::store($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -68,7 +68,7 @@ class PencairanController extends Controller
     {
         try {
             return Helper::resultResponse(
-                Pencairan::byId($id)
+                Akad::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
