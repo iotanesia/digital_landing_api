@@ -13,7 +13,7 @@ class MPropinsi extends Model
 
     public $fillable = [
         'id_propinsi',
-        'nama_propinsi',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

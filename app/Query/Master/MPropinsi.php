@@ -24,7 +24,7 @@ class MPropinsi {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_propinsi) $query->where('nama_propinsi','ilike',"%$request->nama_propinsi%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })
             ->orderBy('id_propinsi','asc')
             ->paginate($request->limit);
@@ -48,7 +48,7 @@ class MPropinsi {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_propinsi) $require_fileds[] = 'nama_propinsi';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

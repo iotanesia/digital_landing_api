@@ -11,7 +11,7 @@ class MJenisInstansi extends Model
     protected $table = 'jenis_instansi';
     protected $connection = 'master';
     public $fillable = [
-        'nama_jenis_instansi',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
