@@ -23,7 +23,7 @@ class MKelurahan {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_kelurahan) $query->where('nama_kelurahan','ilike',"%$request->nama_kelurahan%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->id_kecamatan) $query->where('id_kecamatan',$request->id_kecamatan);
             })
             ->orderBy('id_kelurahan','asc')
@@ -49,7 +49,7 @@ class MKelurahan {
 
             $require_fileds = [];
             if(!$request->id_kecamatan) $require_fileds[] = 'id_kecamatan';
-            if(!$request->nama_kelurahan) $require_fileds[] = 'nama_kelurahan';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

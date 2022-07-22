@@ -14,7 +14,8 @@ class MKelurahan extends Model
     public $fillable = [
         'id_kecamatan',
         'id_kelurahan',
-        'nama_kelurahan',
+        'nama',
+        'kode_pos',
         'created_at',
         'created_by',
         'updated_at',

@@ -23,7 +23,7 @@ class MKabupaten {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_kabupaten) $query->where('nama_kabupaten','ilike',"%$request->nama_kabupaten%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
                 if($request->id_propinsi) $query->where('id_propinsi',$request->id_propinsi);
             })
             ->orderBy('id_kabupaten','asc')
@@ -48,7 +48,6 @@ class MKabupaten {
         try {
 
             $require_fileds = [];
-            if(!$request->agama) $require_fileds[] = 'agama';
             if(!$request->id_propinsi) $require_fileds[] = 'id_propinsi';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 

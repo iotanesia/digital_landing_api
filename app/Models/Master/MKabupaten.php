@@ -14,7 +14,7 @@ class MKabupaten extends Model
     public $fillable = [
         'id_propinsi',
         'id_kabupaten',
-        'nama_kabupaten',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

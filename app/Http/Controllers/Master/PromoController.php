@@ -62,7 +62,7 @@ class PromoController extends Controller
     {
         try {
             return Helper::resultResponse(
-                CPromo::byKode($id)
+                CPromo::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

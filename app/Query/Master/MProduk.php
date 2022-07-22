@@ -53,7 +53,7 @@ class MProduk {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_produk) $require_fileds[] = 'nama_produk';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             if($request->foto_produk){
