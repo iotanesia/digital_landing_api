@@ -15,14 +15,14 @@ class MStatusPernikahan {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id', $id)->first()];
+        return ['items' => Model::find($id)];
     }
 
     public static function getAll($request)
     {
         try {
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_status_pernikahan) $query->where('nama_status_pernikahan','ilike',"%$request->nama_status_pernikahan%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),

@@ -12,8 +12,7 @@ class MStatusPernikahan extends Model
     protected $connection = 'master';
     protected $primaryKey = 'id';
     public $fillable = [
-        'nama_status_pernikahan',
-        'kode_status_pernikahan',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
