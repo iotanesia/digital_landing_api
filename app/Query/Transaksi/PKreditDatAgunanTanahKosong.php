@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PKreditDatAgunanTanahKosong 
+class PKreditDatAgunanTanahKosong
 {
     public static function byIdProsesDataAgunan($id_proses_data_agunan)
     {
@@ -104,7 +104,7 @@ class PKreditDatAgunanTanahKosong
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            
+
             $attr = $request->all();
             $attr['collateral_class'] =  AgunanNilai::setByIdAgunanNilai($request->id_agunan,'collateral_class');
             $attr['jenis_agunan'] =  AgunanNilai::setByIdAgunanNilai($request->id_agunan,'jenis_agunan');
@@ -124,7 +124,7 @@ class PKreditDatAgunanTanahKosong
             $attr['updated_by'] = $request->current_user->id;
 
             $agunan = PKreditDataAgunan::store($request,false);
-            $id_proses_data_agunan =  !$request->id_proses_data_agunan ?? $agunan->id;
+            $id_proses_data_agunan =  $request->id_proses_data_agunan ?? $agunan->id;
             $store =  Model::where([
                 'id_proses_data_agunan' => $id_proses_data_agunan,
             ])->first();
