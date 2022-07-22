@@ -251,14 +251,14 @@ class ProsesKredit {
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(!$request->omzet_usaha) $require_fileds[] = 'omzet_usaha';
             if(!$request->hpp_usaha) $require_fileds[] = 'hpp_usaha';
-            if($request->sewa_kontrak_usaha !== null) $require_fileds[] = 'sewa_kontrak_usaha';
+            if($request->sewa_kontrak_usaha === null) $require_fileds[] = 'sewa_kontrak_usaha';
             if(!$request->gaji_pegawai_usaha) $require_fileds[] = 'gaji_pegawai_usaha';
             if(!$request->telp_listrik_air_usaha) $require_fileds[] = 'telp_listrik_air_usaha';
             if(!$request->transportasi_usaha) $require_fileds[] = 'transportasi_usaha';
-            if(!$request->pengeluaran_lainnya_usaha !== null) $require_fileds[] = 'pengeluaran_lainnya_usaha';
+            if(!$request->pengeluaran_lainnya_usaha === null) $require_fileds[] = 'pengeluaran_lainnya_usaha';
             if(!$request->belanja_rumah_tangga_umah_tangga) $require_fileds[] = 'belanja_rumah_tangga_umah_tangga';
             if(!$request->sewa_kontrak_rumah_tangga) $require_fileds[] = 'sewa_kontrak_rumah_tangga';
-            if(!$request->pendidikan_rumah_tangga !== null) $require_fileds[] = 'pendidikan_rumah_tangga';
+            if(!$request->pendidikan_rumah_tangga === null) $require_fileds[] = 'pendidikan_rumah_tangga';
             if(!$request->telp_listrik_air_rumah_tangga) $require_fileds[] = 'telp_listrik_air_rumah_tangga';
             if(!$request->transportasi_rumah_tangga) $require_fileds[] = 'transportasi_rumah_tangga';
             if(!$request->pengeluaran_lainnya_rumah_tangga) $require_fileds[] = 'pengeluaran_lainnya_rumah_tangga';
