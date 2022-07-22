@@ -439,10 +439,6 @@ class ProsesKredit {
         if($is_transaction) DB::beginTransaction();
         try {
 
-            $require_fileds = [];
-            if(!$request->id_proses_data_agunan) $require_fileds[] = 'id_proses_data_agunan';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
-
             $result = PKreditDatAgunanDeposito::store($request,false);
             if($is_transaction) DB::commit();
             return [
