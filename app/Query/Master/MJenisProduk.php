@@ -22,8 +22,7 @@ class MJenisProduk {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_jenis_produk) $query->where('nama_jenis_produk','ilike',"%$request->nama_jenis_produk%");
-                if($request->id_tipe_produk) $query->where('id_tipe_produk',$request->id_tipe_produk);
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -45,7 +44,7 @@ class MJenisProduk {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_jenis_produk) $require_fileds[] = 'nama_jenis_produk';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

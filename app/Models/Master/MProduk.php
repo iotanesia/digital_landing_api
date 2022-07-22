@@ -12,12 +12,9 @@ class MProduk extends Model
     protected $connection = 'master';
 
     public $fillable = [
-        'id_produk',
+        'id_tipe_produk',
         'nama',
-        'suku_bunga',
-        'rasio_pembayaran_utang',
-        'maks_period',
-        'maks_plafon',
+        'jenis',
         'title',
         'banner',
         'deskripsi',

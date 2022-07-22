@@ -14,7 +14,7 @@ class MKecamatan extends Model
     public $fillable = [
         'id_kabupaten',
         'id_kecamatan',
-        'nama_kecamatan',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
