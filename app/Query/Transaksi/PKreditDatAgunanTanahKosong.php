@@ -60,34 +60,28 @@ class PKreditDatAgunanTanahKosong
             $result->bi_dati = $data->bi_dati ?? null;
             $result->utillized_amout = $data->utillized_amout ?? null;
             $result->lokasi = $data->lokasi ?? null;
-
-
-
-
-
-            $data = Model::where('id_proses_data_agunan',$id_proses_data_agunan)->first();
-            if(!$data) throw new \Exception("Data tidak ditemukan", 400);
-            $data->aset = $data->manyAset->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'foto' => $item->foto
-                ];
-            }) ?? null;
-            $data->asuransi = $data->manyAsuransi->map(function ($item)
-            {
-                return [
-                    'id' => $item->id,
-                    'nama_perusahaan' => $item->nama_perusahaan,
-                    'tgl_awal' => $item->tgl_awal,
-                    'tgl_akhir' => $item->tgl_akhir,
-                    'nilai' => $item->nilai,
-                ];
-            }) ?? null;
-            unset(
-                $data->manyAset,
-                $data->manyAsuransi
-            );
+            if($data) {
+                $result->aset = $data->manyAset->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'foto' => $item->foto
+                    ];
+                }) ?? [];
+                $result->asuransi = $data->manyAsuransi->map(function ($item)
+                {
+                    return [
+                        'id' => $item->id,
+                        'nama_perusahaan' => $item->nama_perusahaan,
+                        'tgl_awal' => $item->tgl_awal,
+                        'tgl_akhir' => $item->tgl_akhir,
+                        'nilai' => $item->nilai,
+                    ];
+                }) ?? [];
+            }else {
+                $result->aset = [];
+                $result->asuransi = [];
+            }
             return $data;
         } catch (\Throwable $th) {
             throw $th;
