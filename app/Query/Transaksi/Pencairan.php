@@ -2,6 +2,7 @@
 
 namespace App\Query\Transaksi;
 
+use Illuminate\Support\Str;
 
 class Pencairan
 {
@@ -11,11 +12,13 @@ class Pencairan
             'data_debitur' => [
                 'nama_debitur' => 'Mira Setiawan',
                 'produk' => 'MIKRO',
+                'foto' => (string) Str::uuid().'.png'
             ],
             'data_rm' => [
                 'nama_rm' => 'Wan Adli',
                 'kode_rm' => '1111111111',
-                'cabang' => 'PUSAT'
+                'cabang' => 'PUSAT',
+                'foto' => (string) Str::uuid().'.png'
             ]
         ];
         return ['items' => $output];
@@ -26,24 +29,28 @@ class Pencairan
         try {
             $output = [
                 [
+                    'id' => 1,
                     'nama_debitur' => 'Mira Setiawan',
                     'produk' => 'MIKRO',
                     'sub_produk' => 'MIKRO',
                     'plafond' => 'Rp. 100.000.000'
                 ],
                 [
+                    'id' => 2,
                     'nama_debitur' => 'Mira Setiawan',
                     'produk' => 'MIKRO',
                     'sub_produk' => 'KUR',
                     'plafond' => 'Rp. 100.000.000'
                 ],
                 [
+                    'id' => 3,
                     'nama_debitur' => 'Mira Setiawan',
                     'produk' => 'KMG',
                     'sub_produk' => 'KMG Griya Monas',
                     'plafond' => 'Rp. 100.000.000'
                 ],
                 [
+                    'id' => 4,
                     'nama_debitur' => 'Mira Setiawan',
                     'produk' => 'KPR',
                     'sub_produk' => 'KPR',
