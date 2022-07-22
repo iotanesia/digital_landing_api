@@ -15,17 +15,12 @@ class CPromo {
         return ['items' => Model::find($id)];
     }
 
-    public static function byKode($kode)
-    {
-        return ['items' => Model::where('kode_produk',$kode)->first()];
-    }
-
     public static function getAll($request)
     {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_produk) $query->where('nama_produk','ilike',"%$request->nama_produk%");
+                if($request->judul) $query->where('judul','ilike',"%$request->judul%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -47,14 +42,14 @@ class CPromo {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_produk) $require_fileds[] = 'nama_produk';
+            if(!$request->judul) $require_fileds[] = 'judul';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             if($request->foto){
                 $image = $request->foto;  // your base64 encoded
                 $namafoto =(string) Str::uuid().'.png';
             }
-            
+
             $store = Model::create($request->all());
             if($is_transaction) DB::commit();
             if($request->foto) Storage::put($namafoto, base64_decode($image));

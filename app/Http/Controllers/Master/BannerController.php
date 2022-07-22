@@ -62,7 +62,7 @@ class BannerController extends Controller
     {
         try {
             return Helper::resultResponse(
-                CBanner::byKode($id)
+                CBanner::byId($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

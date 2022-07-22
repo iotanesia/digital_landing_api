@@ -11,7 +11,8 @@ class MJenisKelamin extends Model
     protected $table = 'jenis_kelamin';
     protected $connection = 'master';
     public $fillable = [
-        'nama_jenis_kelamin',
+        'kode',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
