@@ -52,6 +52,70 @@ class Constants
     const MTD_DIGI_DATA = 5;
     const MTD_SLIK_NAE = 6;
 
+    const MENU_PROSES_KREDIT = [
+        [
+            'code' => 5,
+            'name' => 'data personal',
+            'validate' => [
+                self::STEP_DATA_PERSONAL,
+                self::STEP_DATA_KEUANGAN,
+                self::STEP_DATA_USAHA,
+                self::STEP_DATA_ANALISA_KREDIT,
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+        ],
+        [
+            'code' => 6,
+            'name' => 'data keuangan',
+            'validate' => [
+                self::STEP_DATA_KEUANGAN,
+                self::STEP_DATA_USAHA,
+                self::STEP_DATA_ANALISA_KREDIT,
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+        ],
+        [
+            'code' => 7,
+            'name' => 'data usaha',
+            'validate' => [
+                self::STEP_DATA_USAHA,
+                self::STEP_DATA_ANALISA_KREDIT,
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+        ],
+        [
+            'code' => 8,
+            'name' => 'data agunan',
+            'validate' => [
+                self::STEP_DATA_AGUNAN,
+                self::STEP_DATA_ANALISA_KREDIT,
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+        ],
+        [
+            'code' => 9,
+            'name' => 'analisa kredit',
+            'validate' => [
+                self::STEP_DATA_ANALISA_KREDIT,
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+
+        ],
+        [
+            'code' => 10,
+            'name' => 'verifikasi agunan',
+            'validate' => [
+                self::STEP_DATA_VERIFIKASI_AGUNAN,
+                self::STEP_DATA_SEDANG_PROSES_SKORING,
+            ]
+        ]
+    ];
+
     const MODEL_PRESCREENING = [
         'eform' => '\App\Query\Transaksi\EformPrescreening',
         'aktifitas_pemasaran' => '\App\Query\Transaksi\AktifitasPemasaranPrescreening',

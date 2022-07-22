@@ -9,6 +9,7 @@ use App\Constants\Constants;
 use App\Query\Master\SopAgunan;
 use App\Query\Transaksi\PKreditDataAnalisa;
 use App\Query\Skema\AgunanNilai;
+use App\Query\Skema\AgunanSkemaProduk;
 use App\Query\Transaksi\VerifValidasiData;
 use Illuminate\Support\Facades\DB;
 
@@ -53,78 +54,35 @@ class ProsesKredit {
         try {
             $data = Model::find($id_pipeline);
             if(!$data) throw new \Exception("Data tidak ditemukan",400);
-            $menuArr = [
-                [
-                    'code' => 1,
-                    'name' => 'data personal',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
+            $valid = VerifValidasiData::byIdPipeline($id_pipeline);
+            if(!$valid) throw new \Exception("Belum melakukan validasi data",400);
+            $skema = AgunanSkemaProduk::getSkema($valid);
+            $menu = array_map(function ($item) use ($skema,$data){
+
+                // check step
+                if($skema['step']){
+                    if(in_array($item['code'],[
                         Constants::STEP_DATA_PERSONAL,
                         Constants::STEP_DATA_KEUANGAN,
                         Constants::STEP_DATA_USAHA,
-                        Constants::STEP_DATA_ANALISA_KREDIT,
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
-                    ])
-                ],
-                [
-                    'code' => 2,
-                    'name' => 'data keuangan',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
-                        Constants::STEP_DATA_KEUANGAN,
-                        Constants::STEP_DATA_USAHA,
-                        Constants::STEP_DATA_ANALISA_KREDIT,
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+                    ])) array_push($item['validate'],Constants::STEP_DATA_AGUNAN);
+                }
 
-                    ])
-                ],
-                [
-                    'code' => 3,
-                    'name' => 'data usaha',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
-                        Constants::STEP_DATA_USAHA,
-                        Constants::STEP_DATA_AGUNAN,
-                        Constants::STEP_DATA_ANALISA_KREDIT,
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
+                // checked info
+                $item['is_checked'] = in_array($data->step_analisa_kredit,$item['validate']);
+                unset(
+                    $item['validate']
+                );
 
-                    ])
-                ],
-                [
-                    'code' => 4,
-                    'name' => 'data agunan',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
-                        Constants::STEP_DATA_AGUNAN,
-                        Constants::STEP_DATA_ANALISA_KREDIT,
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
-
-                    ])
-                ],
-                [
-                    'code' => 5,
-                    'name' => 'analisa kredit',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
-                        Constants::STEP_DATA_ANALISA_KREDIT,
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
-
-                    ])
-                ],
-                [
-                    'code' => 6,
-                    'name' => 'verifikasi agunan',
-                    'is_checked' => in_array($data->step_analisa_kredit,[
-                        Constants::STEP_DATA_VERIFIKASI_AGUNAN,
-                        Constants::STEP_DATA_SEDANG_PROSES_SKORING,
-
-                    ])
-                ]
-            ];
+                // set menu
+                if(!$skema['menu']) {
+                    if(!in_array($item['code'],[Constants::STEP_DATA_AGUNAN])) return $item;
+                }else return $item;
+            },Constants::MENU_PROSES_KREDIT);
 
 
             return [
-                'items' => $menuArr,
+                'items' => array_values(array_filter($menu)),
                 'attributes' => null,
             ];
 
