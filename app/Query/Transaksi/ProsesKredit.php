@@ -257,12 +257,12 @@ class ProsesKredit {
             if(!$request->transportasi_usaha) $require_fileds[] = 'transportasi_usaha';
             if(!$request->pengeluaran_lainnya_usaha === null) $require_fileds[] = 'pengeluaran_lainnya_usaha';
             if(!$request->belanja_rumah_tangga_umah_tangga) $require_fileds[] = 'belanja_rumah_tangga_umah_tangga';
-            if(!$request->sewa_kontrak_rumah_tangga) $require_fileds[] = 'sewa_kontrak_rumah_tangga';
+            if(!$request->sewa_kontrak_rumah_tangga === null) $require_fileds[] = 'sewa_kontrak_rumah_tangga';
             if(!$request->pendidikan_rumah_tangga === null) $require_fileds[] = 'pendidikan_rumah_tangga';
             if(!$request->telp_listrik_air_rumah_tangga) $require_fileds[] = 'telp_listrik_air_rumah_tangga';
             if(!$request->transportasi_rumah_tangga) $require_fileds[] = 'transportasi_rumah_tangga';
             if(!$request->pengeluaran_lainnya_rumah_tangga) $require_fileds[] = 'pengeluaran_lainnya_rumah_tangga';
-            if(!$request->angsuran_pinjaman_saat_ini_rumah_tangga !== null) $require_fileds[] = 'angsuran_pinjaman_saat_ini_rumah_tangga';
+            if(!$request->angsuran_pinjaman_saat_ini_rumah_tangga === null) $require_fileds[] = 'angsuran_pinjaman_saat_ini_rumah_tangga';
             if(!$request->angsuran_kredit_bank_dki_rumah_tangga) $require_fileds[] = 'angsuran_kredit_bank_dki_rumah_tangga';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
