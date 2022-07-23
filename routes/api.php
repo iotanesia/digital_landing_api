@@ -237,8 +237,8 @@ Route::prefix('v1')
 
         Route::prefix('skoring')->group(function () {
             /* get list */ Route::get('/',[SkoringController::class,'index']);
-            /* proses assign */ Route::post('/assign',[SkoringController::class,'storeAssign']);
-            /* get assign */ Route::get('/assign/{id}',[SkoringController::class,'assign']);
+            /* proses assign */ Route::post('/asign',[SkoringController::class,'storeAsign']);
+            /* get asign */ Route::get('/info-approver/{id}',[SkoringController::class,'approver']);
 
             Route::prefix('approval-verifikasi')->group(function () {
             /* get list */ Route::get('/',[SkoringController::class,'approvalVerifikasi']);

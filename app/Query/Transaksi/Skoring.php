@@ -52,12 +52,25 @@ class Skoring {
         }
     }
 
-    public static function assign($id)
+    public static function approver($id)
     {
-        # code...
+        $getInfoRM = Model::where([
+            'id_pipeline' => $id
+        ])->first();
+        $cabangRM = $getInfoRM->id_cabang ?? null;
+        $getBM = User::getInfoBM($cabangRM);
+        if(!$getBM) throw new \Exception("Role BM pada cabang ".$getInfoRM->refCabang->nama_cabang.' belum diataur', 400);
+
+        $result = new \stdClass;
+        $result->nama_bm = $getBM->nama ?? null;
+        $result->nirk_bm = $getBM->nirk ?? null;
+        $result->jabatan_nm = $getBM->refUserRole->refRole->nama ?? null;
+        return [
+            'items' => $result
+        ];
     }
 
-    public static function storeAssign($request,$is_trasaction = true)
+    public static function storeAsign($request,$is_trasaction = true)
     {
         if($is_trasaction) DB::beginTransaction();
         try {
