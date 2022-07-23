@@ -3,12 +3,15 @@
 namespace App\Query\Transaksi;
 use App\Models\Transaksi\PKreditDataUsaha as Model;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class PKreditDataUsaha {
 
     public static function byIdPipeline($id_pipeline)
     {
-        return Model::where('id_pipeline',$id_pipeline)->first();
+        $data = Model::where('id_pipeline',$id_pipeline)->first();
+        if(!$data) $data = new stdClass;
+        return $data;
     }
 
     public static function store($request,$is_transaction = true)
