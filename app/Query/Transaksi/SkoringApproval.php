@@ -28,7 +28,9 @@ class SkoringApproval
     public static function getDataCurrent($request) {
         $data = Model::where(function ($query) use ($request){
             if($request->nama) $query->where('nama','ilike',"%$request->nama%");
-        })->paginate($request->limit);
+        })
+        ->where('id_user', $request->current_user->id)
+        ->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
                 $item->nama = $item->refPipeline->refVerifValidasiData->nama ?? null;
