@@ -242,6 +242,7 @@ class Tracking {
         ];
 
         unset(
+            $data->refPrescreening,
             $data->refStsPrescreening,
             $data->refStatusPerkawinan,
             $data->refCabang,
