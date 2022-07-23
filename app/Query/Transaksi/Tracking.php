@@ -177,10 +177,13 @@ class Tracking {
 
         $sikp = EformPrescreening::sikpMetode($data->id);
         $ket_sikp = $sikp->keterangan ?? null;
+        $sts_sikp = $ket_sikp == 'Failed' ? false : true;
         $ket_digidata = $data->refPrescreening->keterangan ?? null;
+        $sts_digidata = $ket_digidata == 'Failed' ? false : true;
+
         $ket = null;
-        if($ket_sikp)  $ket = 'sikp';
-        if(!$ket_sikp && $ket_digidata) $ket = 'dukcapil';
+        if(!$sts_sikp)  $ket = 'sikp';
+        if(!$sts_digidata) $ket = 'dukcapil';
 
         $data->status_perkawinan = $data->refStatusPerkawinan->nama ?? null;
         $data->nama_cabang = $data->refCabang->nama_cabang ?? null;
