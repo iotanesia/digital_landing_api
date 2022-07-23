@@ -56,6 +56,7 @@ use App\Http\Controllers\Master\TipeProdukController;
 use App\Http\Controllers\Master\WilayahPemasaranController;
 use App\Http\Controllers\Master\CoverageObligationController;
 use App\Http\Controllers\Master\BiBuktiDokKepemilikanController;
+use App\Http\Controllers\Master\BiDatiController;
 use App\Http\Controllers\Master\BiPengikatanInternalController;
 use App\Http\Controllers\Master\BiPengikatanNotarilController;
 use App\Http\Controllers\Master\CollateralStatusController;
@@ -658,6 +659,11 @@ Route::prefix('v1')
             Route::prefix('jenis-skema')->group(function () {
                 Route::get('/',[JenisSkemaController::class,'index']);
                 Route::get('/{id}',[JenisSkemaController::class,'show']);
+            });
+            // bi dati
+            Route::prefix('bi-dati')->group(function () {
+                Route::get('/',[BiDatiController::class,'index']);
+                Route::get('/{id}',[BiDatiController::class,'show']);
             });
         });
 
