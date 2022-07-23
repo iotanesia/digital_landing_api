@@ -26,4 +26,24 @@ class SkoringPenilaian
             throw $th;
         }
     }
+
+    public static function updteJenis($request, $is_transaction = true)
+    {
+        if($is_transaction) DB::beginTransaction();
+        try {
+
+            $store =  Model::where([
+                'id_pipeline' => $request['id_pipeline'],
+            ])->first();
+            if(!$store) throw new \Exception("Data tidak ditemukan", 400);
+            $store->jenis = 'rejected';
+            $store->save();
+
+            if($is_transaction) DB::commit();
+            return $store;
+        } catch (\Throwable $th) {
+            if($is_transaction) DB::rollBack();
+            throw $th;
+        }
+    }
 }
