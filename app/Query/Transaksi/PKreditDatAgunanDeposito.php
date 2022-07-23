@@ -118,6 +118,7 @@ class PKreditDatAgunanDeposito
                 'id_proses_data_agunan' => $id_proses_data_agunan,
             ])->first();
             if(!$store) $store = new Model;
+            $attr['id_proses_data_agunan'] = $id_proses_data_agunan;
             $store->fill($attr);
             $store->save();
 
