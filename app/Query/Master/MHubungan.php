@@ -18,7 +18,7 @@ class MHubungan {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_hubungan) $query->where('nama_hubungan','ilike',"%$request->nama_hubungan%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -40,7 +40,7 @@ class MHubungan {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_hubungan) $require_fileds[] = 'nama_hubungan';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

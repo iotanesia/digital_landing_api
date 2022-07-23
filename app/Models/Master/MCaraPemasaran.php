@@ -11,8 +11,7 @@ class MCaraPemasaran extends Model
     protected $table = 'cara_pemasaran';
     protected $connection = 'master';
     public $fillable = [
-        'nama_cara_pemasaran',
-        'kode_cara_pemasaran',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

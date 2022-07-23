@@ -18,7 +18,7 @@ class MJenisKelengkapanDokumen {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama) $query->where('nama','ilike',"%$request->nama_status_tempat_tinggal%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),

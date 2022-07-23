@@ -60,6 +60,7 @@ use App\Http\Controllers\Master\BiPengikatanNotarilController;
 use App\Http\Controllers\Master\CollateralStatusController;
 use App\Http\Controllers\Master\JenisPengikatanController;
 use App\Http\Controllers\Master\JenisSkemaController;
+use App\Http\Controllers\Master\JenisKelengkapanDokumenController;
 use App\Http\Controllers\Sts\AktifitasPemasaranController as StsAktifitasPemasaranController;
 use App\Http\Controllers\Sts\CutoffController;
 use App\Http\Controllers\Sts\PipelineController;
@@ -458,7 +459,7 @@ Route::prefix('v1')
                 Route::put('/{id}',[TingkatPendidikanController::class,'update']);
                 Route::delete('/{id}',[TingkatPendidikanController::class,'destroy']);
             });
-            // route tingkat pendidikan
+            // route status pernikahan
             Route::prefix('status-pernikahan')->group(function () {
                 Route::get('/',[StatusPernikahanController::class,'index']);
                 Route::post('/',[StatusPernikahanController::class,'store']);
@@ -500,11 +501,11 @@ Route::prefix('v1')
             });
              // jenis kelengkapan dokumen
              Route::prefix('jenis-kelengkapan-dokumen')->group(function () {
-                Route::get('/',[StatusTempatTinggalController::class,'index']);
-                Route::post('/',[StatusTempatTinggalController::class,'store']);
-                Route::get('/{id}',[StatusTempatTinggalController::class,'show']);
-                Route::put('/{id}',[StatusTempatTinggalController::class,'update']);
-                Route::delete('/{id}',[StatusTempatTinggalController::class,'destroy']);
+                Route::get('/',[JenisKelengkapanDokumenController::class,'index']);
+                Route::post('/',[JenisKelengkapanDokumenController::class,'store']);
+                Route::get('/{id}',[JenisKelengkapanDokumenController::class,'show']);
+                Route::put('/{id}',[JenisKelengkapanDokumenController::class,'update']);
+                Route::delete('/{id}',[JenisKelengkapanDokumenController::class,'destroy']);
             });
             // wilayah pemasaran
             Route::prefix('wilayah-pemasaran')->group(function () {

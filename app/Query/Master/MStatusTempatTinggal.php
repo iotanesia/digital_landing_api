@@ -18,7 +18,7 @@ class MStatusTempatTinggal {
         try {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
-                if($request->nama_status_tempat_tinggal) $query->where('nama_status_tempat_tinggal','ilike',"%$request->nama_status_tempat_tinggal%");
+                if($request->nama) $query->where('nama','ilike',"%$request->nama%");
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),
@@ -40,7 +40,7 @@ class MStatusTempatTinggal {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_status_tempat_tinggal) $require_fileds[] = 'nama_status_tempat_tinggal';
+            if(!$request->nama) $require_fileds[] = 'nama';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());
