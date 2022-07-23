@@ -31,6 +31,7 @@ class ProsesKredit {
                 });
                 $query->where('tracking',Constants::ANALISA_KREDIT);
                 $query->where('step_analisa_kredit','>=',Constants::STEP_ANALISA_SUBMIT);
+                $query->where('step_analisa_kredit','<',Constants::STEP_DATA_SEDANG_PROSES_SKORING);
                 $query->where('id_user',$request->current_user->id);
             })->paginate($request->limit);
             return [
