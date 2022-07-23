@@ -15,6 +15,8 @@ class SkoringPenilaianDetail extends Model
     public $fillable = [
         'id_skoring_penilaian',
         'id_skor',
+        'id_skor_detail',
+        'hasil',
         'penilaian',
         "created_at",
         "created_by",

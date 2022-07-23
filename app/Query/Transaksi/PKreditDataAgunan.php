@@ -15,7 +15,7 @@ class PKreditDataAgunan
 
     public static function byIdpipeline($id_pipeline)
     {
-        return Model::where('id_pipeline',$id_pipeline)->get()->map(function ($item)
+        return Model::where('id_pipeline',$id_pipeline)->orderBy('id','desc')->get()->map(function ($item)
         {
             $item->nama_agunan = $item->refAgunan->nama ?? null;
             unset(
@@ -44,8 +44,7 @@ class PKreditDataAgunan
             $attr['created_by'] = $request->current_user->id;
             $attr['updated_by'] = $request->current_user->id;
             $store =  Model::where([
-                'id_pipeline' => $request->id_pipeline,
-                'id_agunan' => $request->id_agunan,
+                'id' => $request->id_proses_data_agunan,
             ])->first();
             if(!$store) $store = new Model;
             $store->fill($attr);

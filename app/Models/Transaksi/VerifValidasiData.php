@@ -83,9 +83,19 @@ class VerifValidasiData extends Model
         return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin','id');
     }
 
+    public function refJenisKelaminPasangan()
+    {
+        return $this->belongsTo(MJenisKelamin::class,'id_jenis_kelamin_pasangan','id');
+    }
+
     public function refAgama()
     {
         return $this->belongsTo(MAgama::class,'id_agama','id');
+    }
+
+    public function refAgamaPasangan()
+    {
+        return $this->belongsTo(MAgama::class,'id_agama_pasangan','id');
     }
 
     public function refProduk()

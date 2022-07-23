@@ -128,11 +128,12 @@ class PKreditDatAgunanTanahBangunan
             $attr['updated_by'] = $request->current_user->id;
 
             $agunan = PKreditDataAgunan::store($request,false);
-            $id_proses_data_agunan =  $request->id_proses_data_agunan ??  $agunan->id;
+            $id_proses_data_agunan =  $request->id_proses_data_agunan ?? $agunan->id;
             $store =  Model::where([
                 'id_proses_data_agunan' => $id_proses_data_agunan,
             ])->first();
             if(!$store) $store = new Model;
+            $attr['id_proses_data_agunan'] = $id_proses_data_agunan;
             $store->fill($attr);
             $store->save();
 

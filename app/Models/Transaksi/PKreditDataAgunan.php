@@ -13,6 +13,7 @@ class PKreditDataAgunan extends Model
     protected $table = 'proses_kredit_data_agunan';
     protected $connection = 'transaksi';
     public $fillable = [
+        'id',
         'id_pipeline',
         'id_agunan',
         'ltv',

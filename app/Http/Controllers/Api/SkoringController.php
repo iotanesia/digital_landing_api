@@ -32,11 +32,11 @@ class SkoringController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function storeAssign(Request $request)
+    public function storeAsign(Request $request)
     {
         try {
             return Helper::resultResponse(
-                Skoring::storeAssign($request)
+                Skoring::storeAsign($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -49,11 +49,11 @@ class SkoringController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function assign(Request $request,$id)
+    public function approver(Request $request,$id)
     {
         try {
             return Helper::resultResponse(
-                Skoring::assign($id)
+                Skoring::approver($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
