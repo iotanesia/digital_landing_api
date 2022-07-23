@@ -84,6 +84,11 @@ class PKreditDatAgunanTanahBangunan
                         'nilai' => $item->nilai,
                     ];
                 }) ?? [];
+
+                unset(
+                    $data->manyAset,
+                    $data->manyAsuransi,
+                );
             }else {
                 $result->aset = [];
                 $result->asuransi = [];

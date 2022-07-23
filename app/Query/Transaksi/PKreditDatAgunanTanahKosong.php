@@ -78,11 +78,17 @@ class PKreditDatAgunanTanahKosong
                         'nilai' => $item->nilai,
                     ];
                 }) ?? [];
+
+
+                unset(
+                    $data->manyAset,
+                    $data->manyAsuransi,
+                );
             }else {
                 $result->aset = [];
                 $result->asuransi = [];
             }
-            return $data;
+            return $result;
         } catch (\Throwable $th) {
             throw $th;
         }

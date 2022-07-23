@@ -481,6 +481,7 @@ class ProsesKredit {
         }
     }
 
+    // proses scoring
     public static function selesai($id,$is_transaction = true)
     {
 
