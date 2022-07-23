@@ -16,6 +16,8 @@ use App\Query\Master\SkorDetailNilai;
 use App\Query\Master\SkorDetail;
 use App\Query\Master\Skor;
 use App\Query\Transaksi\PKreditDataKeuangan;
+use App\Query\Transaksi\SkoringPenilaian;
+use App\Query\Transaksi\SkoringPenilaianDetail;
 
 
 class ProsesKredit {
@@ -503,6 +505,7 @@ class ProsesKredit {
             $total_karakter = $karakter['skor_integritas_usaha'] + $karakter['skor_riwayat_hub_bank'];
             $total_manajemen = $manajemen['skor_prospek_usaha'] + $manajemen['skor_lama_usaha'] + $manajemen['skor_jangka_waktu'];
             $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
+            $total = round($total_financial + $total_karakter + $total_manajemen + $total_lingkungan_bisnis,2);
 
             $attr = [];
             $attr['skor_integritas_usaha'] = $karakter['skor_integritas_usaha'];
@@ -518,18 +521,27 @@ class ProsesKredit {
             $attr['skor_ketergantungan_supplier'] = $lingkungan_bisnis['skor_ketergantungan_supplier'];
             $attr['skor_wilayah_pemasaran'] = $lingkungan_bisnis['skor_wilayah_pemasaran'];
 
-            $attr['total_financial'] = $total_financial;
-            $attr['total_karakter'] = $total_karakter;
-            $attr['total_manajemen'] = $total_manajemen;
-            $attr['total_lingkungan_bisnis'] = $total_lingkungan_bisnis;
+            $penilaian = [];
+            $penilaianDetail = [$total_financial,$total_karakter,$total_manajemen,$total_lingkungan_bisnis];
+            $penilaianDetail['total_financial'] = $total_financial;
+            $penilaianDetail['total_karakter'] = $total_karakter;
+            $penilaianDetail['total_manajemen'] = $total_manajemen;
+            $penilaianDetail['total_lingkungan_bisnis'] = $total_lingkungan_bisnis;
 
+            $penilaian['id_pipeline'] = $id;
+            $penilaian['skor'] = $total;
 
+            if($total > 85) $penilaian['jenis'] = 'approved';
+            elseif($total <= 85 && $total > 60) $penilaian['jenis'] = 'menunggu approval';
+            else $penilaian['jenis'] = 'reject';
+
+            $result = SkoringPenilaian::store($penilaian,false);
 
             Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $id,
                 'step_analisa_kredit' => Constants::STEP_DATA_SEDANG_PROSES_SKORING
             ],false);
-            return ['items' => $attr];
+            return ['items' => $penilaian];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;
