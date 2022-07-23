@@ -514,10 +514,74 @@ class ProsesKredit {
             $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
             $total = round($total_financial + $total_karakter + $total_manajemen + $total_lingkungan_bisnis,2);
 
-            $total_financial_arr = [$financial['skor_rpc'], $financial['skor_idir'], $financial['skor_profitability']];
-            $total_karakter_arr = [$karakter['skor_integritas_usaha'], $karakter['skor_riwayat_hub_bank']];
-            $total_manajemen_arr = [$manajemen['skor_prospek_usaha'], $manajemen['skor_lama_usaha'], $manajemen['skor_jangka_waktu']];
-            $total_lingkungan_bisnis_arr = [$lingkungan_bisnis['skor_ketergantungan_pelanggan'], $lingkungan_bisnis['skor_jenis_produk'], $lingkungan_bisnis['skor_ketergantungan_supplier'], $lingkungan_bisnis['skor_wilayah_pemasaran']];
+            $total_financial_arr = [
+                [
+                    $financial['skor_rpc'],
+                    $financial['nilai_rpc'],
+                    $financial['id_rpc'],
+                ],
+                [
+                    $financial['skor_idir'],
+                    $financial['nilai_idir'],
+                    $financial['id_idir']
+                ],
+                [
+                    $financial['skor_profitability'],
+                    $financial['nilai_profitability'],
+                    $financial['id_profitability']
+                ]
+            ];
+            $total_karakter_arr = [
+                [
+                    $karakter['skor_integritas_usaha'],
+                    $karakter['nilai_integritas_usaha'],
+                    $karakter['id_integritas_usaha']
+                ],
+                [
+                    $karakter['skor_riwayat_hub_bank'],
+                    $karakter['nilai_riwayat_hub_bank'],
+                    $karakter['id_riwayat_hub_bank']
+                ]
+            ];
+            $total_manajemen_arr = [
+                [
+                    $manajemen['skor_prospek_usaha'],
+                    $manajemen['nilai_prospek_usaha'],
+                    $manajemen['id_prospek_usaha']
+                ],
+                [
+                    $manajemen['skor_lama_usaha'],
+                    $manajemen['nilai_lama_usaha'],
+                    $manajemen['id_lama_usaha']
+                ],
+                [
+                    $manajemen['skor_jangka_waktu'],
+                    $manajemen['nilai_jangka_waktu'],
+                    $manajemen['id_jangka_waktu']
+                ]
+            ];
+            $total_lingkungan_bisnis_arr = [
+                [
+                    $lingkungan_bisnis['skor_ketergantungan_pelanggan'],
+                    $lingkungan_bisnis['nilai_ketergantungan_pelanggan'],
+                    $lingkungan_bisnis['id_ketergantungan_pelanggan']
+                ],
+                [
+                    $lingkungan_bisnis['skor_jenis_produk'],
+                    $lingkungan_bisnis['nilai_jenis_produk'],
+                    $lingkungan_bisnis['id_jenis_produk']
+                ],
+                [
+                    $lingkungan_bisnis['skor_ketergantungan_supplier'],
+                    $lingkungan_bisnis['nilai_ketergantungan_supplier'],
+                    $lingkungan_bisnis['id_ketergantungan_supplier']
+                ],
+                [
+                    $lingkungan_bisnis['skor_wilayah_pemasaran'],
+                    $lingkungan_bisnis['nilai_wilayah_pemasaran'],
+                    $lingkungan_bisnis['id_wilayah_pemasaran']
+                ]
+            ];
             $penilaianDetail = array(1 => $total_financial_arr, 2 => $total_karakter_arr, 3 => $total_manajemen_arr, 4 => $total_lingkungan_bisnis_arr);
 
             $penilaian = [];
@@ -533,15 +597,14 @@ class ProsesKredit {
             foreach($penilaianDetail as $key=>$val) {
                 $storeDetail = [];
                 $storeDetail['id'] = null;
-                $storeDetail['val_penilaian'] = $val;
+                $storeDetail['val'] = $val;
                 $storeDetail['id_skoring_penilaian'] = $result->id;
                 $storeDetail['id_skor'] = $key;
-                $index = 1;
-                foreach ($storeDetail['val_penilaian'] as $val){
-                    $storeDetail['id_skor_detail'] = $index;
-                    $storeDetail['penilaian'] = $val;
+                foreach ($storeDetail['val'] as $val){
+                    $storeDetail['hasil'] = $val[0];
+                    $storeDetail['penilaian'] = $val[1];
+                    $storeDetail['id_skor_detail'] = $val[2];
                     $resultDetail = SkoringPenilaianDetail::store($storeDetail);
-                    $index++;
                 }
             }
 
@@ -584,14 +647,23 @@ class ProsesKredit {
             $skor = Skor::byId($id_skor);
             $skor_detail = SkorDetail::byIdSkor($id_skor);
             $itemsArr = [];
+            $listId = [];
             foreach($skor_detail as $key) {
                 $itemsArr[] = $key->bobot;
+                $listId[] = $key->id;
             }
-            $nilai1 = ((SkorDetailNilai::pembanding('id_integritas_usaha',$usaha->id_integritas_usaha)/3) * $itemsArr[0]) * $skor->bobot;
-            $nilai2 = ((SkorDetailNilai::pembanding('id_riwayat_hubungan_bank',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[1]) * $skor->bobot;
+            $nilai1 = SkorDetailNilai::pembanding('id_integritas_usaha',$usaha->id_integritas_usaha);
+            $nilai2 = SkorDetailNilai::pembanding('id_riwayat_hubungan_bank',$usaha->id_riwayat_hubungan_bank);
+
+            $hasil1 = (($nilai1/3) * $itemsArr[0]) * $skor->bobot;
+            $hasil2 = (($nilai2/3) * $itemsArr[1]) * $skor->bobot;
             return [
-                'skor_integritas_usaha' =>  round($nilai1,2),
-                'skor_riwayat_hub_bank' =>  round($nilai2,2)
+                'skor_integritas_usaha' =>  round($hasil1,2),
+                'skor_riwayat_hub_bank' =>  round($hasil2,2),
+                'nilai_integritas_usaha' =>  $nilai1,
+                'nilai_riwayat_hub_bank' =>  $nilai2,
+                'id_integritas_usaha' =>  $listId[0],
+                'id_riwayat_hub_bank' =>  $listId[1]
             ];
         } catch (\Throwable $th) {
             throw $th;
@@ -607,8 +679,10 @@ class ProsesKredit {
             $skor = Skor::byId($id_skor);
             $skor_detail = SkorDetail::byIdSkor($id_skor);
             $itemsArr = [];
+            $listId = [];
             foreach($skor_detail as $key) {
                 $itemsArr[] = $key->bobot;
+                $listId[] = $key->id;
             }
             if($keuangan->rpc < 2) $kondisi1 = '< 2';
             elseif ($keuangan->rpc >= 2 && $keuangan->rpc <= 2.90) $kondisi1 = '>= 2 and <= 2.90';
@@ -625,13 +699,23 @@ class ProsesKredit {
             elseif ($keuangan->profitability >= 15 && $keuangan->profitability <= 25) $kondisi3 = '>= 15 and <= 25';
             else $kondisi3 = null;
 
-            $nilai1 = ((SkorDetailNilai::pembanding('rpc',$kondisi1)/3) * $itemsArr[0]) * $skor->bobot;
-            $nilai2 = ((SkorDetailNilai::pembanding('idir',$kondisi2)/3) * $itemsArr[1]) * $skor->bobot;
-            $nilai3 = ((SkorDetailNilai::pembanding('profitability',$kondisi3)/3) * $itemsArr[2]) * $skor->bobot;
+            $nilai1 = SkorDetailNilai::pembanding('rpc',$kondisi1);
+            $nilai2 = SkorDetailNilai::pembanding('idir',$kondisi2);
+            $nilai3 = SkorDetailNilai::pembanding('profitability',$kondisi3);
+
+            $hasil1 = (($nilai1/3) * $itemsArr[0]) * $skor->bobot;
+            $hasil2 = (($nilai2/3) * $itemsArr[1]) * $skor->bobot;
+            $hasil3 = (($nilai3/3) * $itemsArr[2]) * $skor->bobot;
             return [
-                'skor_rpc' =>  round($nilai1,2),
-                'skor_idir' =>  round($nilai2,2),
-                'skor_profitability' =>  round($nilai3,2)
+                'skor_rpc' =>  round($hasil1,2),
+                'skor_idir' =>  round($hasil2,2),
+                'skor_profitability' =>  round($hasil3,2),
+                'nilai_rpc' =>  round($nilai1,2),
+                'nilai_idir' =>  round($nilai2,2),
+                'nilai_profitability' =>  round($nilai3,2),
+                'id_rpc' =>  $listId[0],
+                'id_idir' =>  $listId[1],
+                'id_profitability' =>  $listId[2]
             ];
         } catch (\Throwable $th) {
             throw $th;
@@ -647,8 +731,10 @@ class ProsesKredit {
             $skor = Skor::byId($id_skor);
             $skor_detail = SkorDetail::byIdSkor($id_skor);
             $itemsArr = [];
+            $listId = [];
             foreach($skor_detail as $key) {
                 $itemsArr[] = $key->bobot;
+                $listId[] = $key->id;
             }
             if($usaha->lama_usaha <= 3) $kondisi1 = '<= 3';
             elseif ($usaha->lama_usaha > 3 && $usaha->lama_usaha <= 7) $kondisi1 = '> 3 and <= 7';
@@ -660,13 +746,23 @@ class ProsesKredit {
             elseif ($usaha->jangka_waktu < 1) $kondisi2 = '< 1';
             else $kondisi2 = null;
 
-            $nilai1 = ((SkorDetailNilai::pembanding('id_prospek_usaha',$usaha->id_prospek_usaha)/3) * $itemsArr[0]) * $skor->bobot;
-            $nilai2 = ((SkorDetailNilai::pembanding('lama_usaha',$kondisi1)/3) * $itemsArr[1]) * $skor->bobot;
-            $nilai3 = ((SkorDetailNilai::pembanding('jangka_waktu',$kondisi2)/3) * $itemsArr[2]) * $skor->bobot;
+            $nilai1 = SkorDetailNilai::pembanding('id_prospek_usaha',$usaha->id_prospek_usaha);
+            $nilai2 = SkorDetailNilai::pembanding('lama_usaha',$kondisi1);
+            $nilai3 = SkorDetailNilai::pembanding('jangka_waktu',$kondisi2);
+
+            $hasil1 = (($nilai1/3) * $itemsArr[0]) * $skor->bobot;
+            $hasil2 = (($nilai2/3) * $itemsArr[1]) * $skor->bobot;
+            $hasil3 = (($nilai3/3) * $itemsArr[2]) * $skor->bobot;
             return [
-                'skor_prospek_usaha' =>  round($nilai1,2),
-                'skor_lama_usaha' =>  round($nilai2,2),
-                'skor_jangka_waktu' =>  round($nilai3,2)
+                'skor_prospek_usaha' =>  round($hasil1,2),
+                'skor_lama_usaha' =>  round($hasil2,2),
+                'skor_jangka_waktu' =>  round($hasil3,2),
+                'nilai_prospek_usaha' =>  $nilai1,
+                'nilai_lama_usaha' =>  $nilai2,
+                'nilai_jangka_waktu' =>  $nilai3,
+                'id_prospek_usaha' =>  $listId[0],
+                'id_lama_usaha' =>  $listId[1],
+                'id_jangka_waktu' =>  $listId[2]
             ];
         } catch (\Throwable $th) {
             throw $th;
@@ -682,18 +778,33 @@ class ProsesKredit {
             $skor = Skor::byId($id_skor);
             $skor_detail = SkorDetail::byIdSkor($id_skor);
             $itemsArr = [];
+            $listId = [];
             foreach($skor_detail as $key) {
                 $itemsArr[] = $key->bobot;
+                $listId[] = $key->id;
             }
-            $nilai1 = ((SkorDetailNilai::pembanding('id_ketergantungan_pelanggan',$usaha->id_integritas_usaha)/3) * $itemsArr[0]) * $skor->bobot;
-            $nilai2 = ((SkorDetailNilai::pembanding('id_jenis_produk',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[1]) * $skor->bobot;
-            $nilai3 = ((SkorDetailNilai::pembanding('id_ketergantungan_supplier',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[2]) * $skor->bobot;
-            $nilai4 = ((SkorDetailNilai::pembanding('id_wilayah_pemasaran',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[3]) * $skor->bobot;
+            $nilai1 = SkorDetailNilai::pembanding('id_ketergantungan_pelanggan',$usaha->id_integritas_usaha);
+            $nilai2 = SkorDetailNilai::pembanding('id_jenis_produk',$usaha->id_riwayat_hubungan_bank);
+            $nilai3 = SkorDetailNilai::pembanding('id_ketergantungan_supplier',$usaha->id_riwayat_hubungan_bank);
+            $nilai4 = SkorDetailNilai::pembanding('id_wilayah_pemasaran',$usaha->id_riwayat_hubungan_bank);
+
+            $hasil1 = (($nilai1/3) * $itemsArr[0]) * $skor->bobot;
+            $hasil2 = (($nilai2/3) * $itemsArr[1]) * $skor->bobot;
+            $hasil3 = (($nilai3/3) * $itemsArr[2]) * $skor->bobot;
+            $hasil4 = (($nilai4/3) * $itemsArr[3]) * $skor->bobot;
             return [
-                'skor_ketergantungan_pelanggan' =>  round($nilai1,2),
-                'skor_jenis_produk' =>  round($nilai2,2),
-                'skor_ketergantungan_supplier' =>  round($nilai3,2),
-                'skor_wilayah_pemasaran' =>  round($nilai4,2)
+                'skor_ketergantungan_pelanggan' =>  round($hasil1,2),
+                'skor_jenis_produk' =>  round($hasil2,2),
+                'skor_ketergantungan_supplier' =>  round($hasil3,2),
+                'skor_wilayah_pemasaran' =>  round($hasil4,2),
+                'nilai_ketergantungan_pelanggan' =>  $nilai1,
+                'nilai_jenis_produk' =>  $nilai2,
+                'nilai_ketergantungan_supplier' =>  $nilai3,
+                'nilai_wilayah_pemasaran' =>  $nilai4,
+                'id_ketergantungan_pelanggan' =>  $listId[0],
+                'id_jenis_produk' =>  $listId[1],
+                'id_ketergantungan_supplier' =>  $listId[2],
+                'id_wilayah_pemasaran' =>  $listId[3]
             ];
         } catch (\Throwable $th) {
             throw $th;
