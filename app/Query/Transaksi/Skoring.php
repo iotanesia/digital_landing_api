@@ -6,9 +6,9 @@ use App\Constants\Constants;
 use App\Models\Transaksi\Pipeline;
 use Carbon\Carbon;
 use App\Models\Transaksi\VerifValidasiData as Model;
-
-
-
+use App\Query\Auth\User;
+use App\Query\Transaksi\Pipeline as TransaksiPipeline;
+use Illuminate\Support\Facades\DB;
 class Skoring {
 
     public static function getDataCurrent($request)
@@ -52,13 +52,41 @@ class Skoring {
         }
     }
 
-    public static function approval($id)
+    public static function assign($id)
     {
         # code...
     }
 
-    public static function storeApproval($request)
+    public static function storeAssign($request,$is_trasaction = true)
     {
-        # code...
+        if($is_trasaction) DB::beginTransaction();
+        try {
+
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            $getInfoRM = Model::where([
+                'id_pipeline' => $request->id_pipeline
+            ])->first();
+            $cabangRM = $getInfoRM->id_cabang ?? null;
+            $getBM = User::getInfoBM($cabangRM);
+            if(!$getBM) throw new \Exception("Role BM pada cabang ".$getInfoRM->refCabang->nama_cabang.' belum diataur', 400);
+
+            SkoringApproval::store([
+                'id_pipeline' => $request->id_pipeline,
+                'id_cabang' => $getBM->id_cabang,
+                'id_user' => $getBM->id,
+            ],false);
+
+            TransaksiPipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => Constants::STEP_APPROVAL_PROSES_SKORING
+            ],false);
+
+            if($is_trasaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_trasaction) DB::beginTransaction();
+            throw $th;
+        }
     }
 }

@@ -236,8 +236,14 @@ Route::prefix('v1')
 
         Route::prefix('skoring')->group(function () {
             /* get list */ Route::get('/',[SkoringController::class,'index']);
-            /* get approval */ Route::get('/approval/{id}',[SkoringController::class,'approval']);
-            /* proses approval */ Route::post('/approval',[SkoringController::class,'storeApproval']);
+            /* proses assign */ Route::post('/assign',[SkoringController::class,'storeAssign']);
+            /* get assign */ Route::get('/assign/{id}',[SkoringController::class,'assign']);
+
+            Route::prefix('approval-verifikasi')->group(function () {
+            /* get list */ Route::get('/',[SkoringController::class,'approvalVerifikasi']);
+            /* approval */ Route::post('/',[SkoringController::class,'storeApprovalVerifikasi']);
+            /* info rm */ Route::get('/info-rm/{id}',[SkoringController::class,'inform']);
+            });
         });
 
         Route::prefix('pencairan')->group(function () {

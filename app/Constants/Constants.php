@@ -41,6 +41,8 @@ class Constants
     const STEP_DATA_ANALISA_KREDIT = 9;
     const STEP_DATA_VERIFIKASI_AGUNAN = 10;
     const STEP_DATA_SEDANG_PROSES_SKORING = 11;
+    const STEP_APPROVAL_PROSES_SKORING = 12;
+    const STEP_KELENGKAPAN_ADMINISTRASI = 13;
 
     const PIP_TRACKING_PRESCREENING = 1;
     const PIP_TRACKING_VERIFIKASI = 2;
@@ -51,6 +53,8 @@ class Constants
     const MTD_SIKP_Plafond = 4;
     const MTD_DIGI_DATA = 5;
     const MTD_SLIK_NAE = 6;
+
+    const USR_ID_BM = 4;
 
     const MENU_PROSES_KREDIT = [
         [
