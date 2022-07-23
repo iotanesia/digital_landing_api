@@ -25,4 +25,21 @@ class SkoringApproval
         }
     }
 
+    public static function getDataCurrent($request) {
+        $data = Model::where(function ($query) use ($request){
+            if($request->nama) $query->where('nama','ilike',"%$request->nama%");
+        })->paginate($request->limit);
+        return [
+            'items' => $data->getCollection()->transform(function ($item){
+                return $item;
+            }),
+            'attributes' => [
+                'total' => $data->total(),
+                'current_page' => $data->currentPage(),
+                'from' => $data->currentPage(),
+                'per_page' => (int) $data->perPage(),
+            ]
+        ];
+    }
+
 }

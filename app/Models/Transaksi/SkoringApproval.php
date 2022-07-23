@@ -24,6 +24,11 @@ class SkoringApproval extends Model
         "deleted_at",
     ];
 
+    public function refPipeline()
+    {
+        return $this->belongsTo(Pipeline::class,'id_pipeline','id');
+    }
+
     public static function boot()
     {
         parent::boot();

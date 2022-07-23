@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
 use App\Query\Transaksi\Skoring;
+use App\Query\Transaksi\SkoringApproval;
 
 class SkoringController extends Controller
 {
@@ -67,7 +68,7 @@ class SkoringController extends Controller
     {
         try {
             return Helper::resultResponse(
-                "code here"
+                SkoringApproval::getDataCurrent($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
