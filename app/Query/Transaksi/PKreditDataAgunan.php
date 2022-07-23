@@ -15,7 +15,7 @@ class PKreditDataAgunan
 
     public static function byIdpipeline($id_pipeline)
     {
-        return Model::where('id_pipeline',$id_pipeline)->get()->map(function ($item)
+        return Model::where('id_pipeline',$id_pipeline)->orderBy('id','desc')->get()->map(function ($item)
         {
             $item->nama_agunan = $item->refAgunan->nama ?? null;
             unset(
