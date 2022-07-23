@@ -262,7 +262,6 @@ class Pipeline {
     {
         if($is_transaction) DB::beginTransaction();
         try {
-            dd($request);
             $data = Model::find($request['id_pipeline']);
             if(!$data) throw new \Exception("Data tidak ditemukan", 400);
             // $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
