@@ -494,21 +494,17 @@ class ProsesKredit {
         if($is_transaction) DB::beginTransaction();
         try {
             $id_skor = [1,2,3,4];
-
             $financial = ProsesKredit::setFinancial($id,$id_skor[0]);
             $karakter = ProsesKredit::setKarakter($id,$id_skor[1]);
             $manajemen = ProsesKredit::setManajemen($id,$id_skor[2]);
             $lingkungan_bisnis = ProsesKredit::setLingkunganBisnis($id,$id_skor[3]);
-
             $total_financial = $financial['skor_rpc'] + $financial['skor_idir'] + $financial['skor_profitability'];
             $total_karakter = $karakter['skor_integritas_usaha'] + $karakter['skor_riwayat_hub_bank'];
             $total_manajemen = $manajemen['skor_prospek_usaha'] + $manajemen['skor_lama_usaha'] + $manajemen['skor_jangka_waktu'];
             $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
             $total = round($total_financial + $total_karakter + $total_manajemen + $total_lingkungan_bisnis,2);
-
             $penilaian = [];
             $penilaianDetail = array(1 => $total_financial, 2 => $total_karakter, 3 => $total_manajemen, 4 => $total_lingkungan_bisnis);
-
             $penilaian['id_pipeline'] = $id;
             $penilaian['skor'] = $total;
 
@@ -516,14 +512,15 @@ class ProsesKredit {
             elseif($total <= 85 && $total > 60) $penilaian['jenis'] = 'menunggu approval';
             else $penilaian['jenis'] = 'reject';
 
-            $result = SkoringPenilaian::store($penilaian,false);
+            $result = SkoringPenilaian::store($penilaian);
 
             foreach($penilaianDetail as $key=>$val) {
                 $storeDetail = [];
+                $storeDetail['id'] = null;
                 $storeDetail['penilaian'] = $val;
                 $storeDetail['id_skoring_penilaian'] = $result->id;
                 $storeDetail['id_skor'] = $key;
-                $resultDetail = SkoringPenilaianDetail::store($storeDetail,false);
+                $resultDetail = SkoringPenilaianDetail::store($storeDetail);
             }
 
             Pipeline::updateStepAnalisaKredit([
@@ -536,7 +533,6 @@ class ProsesKredit {
             throw $th;
         }
     }
-
 
     public static function setLtvTaksasi($request)
     {

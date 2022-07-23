@@ -3,6 +3,8 @@
 namespace App\Query\Transaksi;
 
 use App\Models\Transaksi\SkoringPenilaian as Model;
+use Illuminate\Support\Facades\DB;
+
 class SkoringPenilaian
 {
     public static function store($request, $is_transaction = true)

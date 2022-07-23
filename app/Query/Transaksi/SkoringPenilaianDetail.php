@@ -3,6 +3,8 @@
 namespace App\Query\Transaksi;
 
 use App\Models\Transaksi\SkoringPenilaianDetail as Model;
+use Illuminate\Support\Facades\DB;
+
 class SkoringPenilaianDetail
 {
     public static function store($request, $is_transaction = true)
@@ -11,7 +13,7 @@ class SkoringPenilaianDetail
         try {
 
             $store =  Model::where([
-                'id_skoring_penilaian' => $request['id_skoring_penilaian'],
+                'id' => $request['id'],
             ])->first();
             if(!$store) $store = new Model;
             $store->fill($request);
