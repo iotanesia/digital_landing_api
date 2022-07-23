@@ -512,7 +512,7 @@ class ProsesKredit {
             elseif($total <= 85 && $total > 60) $penilaian['jenis'] = 'menunggu approval';
             else $penilaian['jenis'] = 'reject';
 
-            $result = SkoringPenilaian::store($penilaian);
+            $result = SkoringPenilaian::store($penilaian,false);
 
             foreach($penilaianDetail as $key=>$val) {
                 $storeDetail = [];
@@ -520,7 +520,7 @@ class ProsesKredit {
                 $storeDetail['penilaian'] = $val;
                 $storeDetail['id_skoring_penilaian'] = $result->id;
                 $storeDetail['id_skor'] = $key;
-                $resultDetail = SkoringPenilaianDetail::store($storeDetail);
+                $resultDetail = SkoringPenilaianDetail::store($storeDetail,false);
             }
 
             Pipeline::updateStepAnalisaKredit([
