@@ -503,8 +503,14 @@ class ProsesKredit {
             $total_manajemen = $manajemen['skor_prospek_usaha'] + $manajemen['skor_lama_usaha'] + $manajemen['skor_jangka_waktu'];
             $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
             $total = round($total_financial + $total_karakter + $total_manajemen + $total_lingkungan_bisnis,2);
+
+            $total_financial_arr = [$financial['skor_rpc'], $financial['skor_idir'], $financial['skor_profitability']];
+            $total_karakter_arr = [$karakter['skor_integritas_usaha'], $karakter['skor_riwayat_hub_bank']];
+            $total_manajemen_arr = [$manajemen['skor_prospek_usaha'], $manajemen['skor_lama_usaha'], $manajemen['skor_jangka_waktu']];
+            $total_lingkungan_bisnis_arr = [$lingkungan_bisnis['skor_ketergantungan_pelanggan'], $lingkungan_bisnis['skor_jenis_produk'], $lingkungan_bisnis['skor_ketergantungan_supplier'], $lingkungan_bisnis['skor_wilayah_pemasaran']];
+            $penilaianDetail = array(1 => $total_financial_arr, 2 => $total_karakter_arr, 3 => $total_manajemen_arr, 4 => $total_lingkungan_bisnis_arr);
+
             $penilaian = [];
-            $penilaianDetail = array(1 => $total_financial, 2 => $total_karakter, 3 => $total_manajemen, 4 => $total_lingkungan_bisnis);
             $penilaian['id_pipeline'] = $id;
             $penilaian['skor'] = $total;
 
@@ -517,10 +523,16 @@ class ProsesKredit {
             foreach($penilaianDetail as $key=>$val) {
                 $storeDetail = [];
                 $storeDetail['id'] = null;
-                $storeDetail['penilaian'] = $val;
+                $storeDetail['val_penilaian'] = $val;
                 $storeDetail['id_skoring_penilaian'] = $result->id;
                 $storeDetail['id_skor'] = $key;
-                $resultDetail = SkoringPenilaianDetail::store($storeDetail,false);
+                $index = 1;
+                foreach ($storeDetail['val_penilaian'] as $val){
+                    $storeDetail['id_skor_detail'] = $index;
+                    $storeDetail['penilaian'] = $val;
+                    $resultDetail = SkoringPenilaianDetail::store($storeDetail);
+                    $index++;
+                }
             }
 
             Pipeline::updateStepAnalisaKredit([
