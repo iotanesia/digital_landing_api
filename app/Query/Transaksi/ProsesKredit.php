@@ -116,13 +116,19 @@ class ProsesKredit {
         $result->nama_kabupaten_pasangan = $modul->refKabupatenPasangan->nama ?? null;
         $result->nama_kecamatan_pasangan = $modul->refKecamatanPasangan->nama ?? null;
         $result->nama_kelurahan_pasangan = $modul->refKelurahanPasangan->nama ?? null;
+        $result->nama_jenis_kelamin_pasangan = $modul->refJenisKelaminPasangan->nama ?? null;
+        $result->nama_agama_pasangan = $modul->refAgamaPasangan->nama ?? null;
+
         $result->nik_kontak_darurat = $modul->refPKreditDataPersonal->nik_kontak_darurat ?? null;
         $result->nama_kontak_darurat = $modul->refPKreditDataPersonal->nama_kontak_darurat ?? null;
         $result->no_hp_kontak_darurat = $modul->refPKreditDataPersonal->no_hp_kontak_darurat ?? null;
         $result->tempat_lahir_kontak_darurat = $modul->refPKreditDataPersonal->tempat_lahir_kontak_darurat ?? null;
         $result->tangal_lahir_kontak_darurat = $modul->refPKreditDataPersonal->tangal_lahir_kontak_darurat ?? null;
         $result->alamat_kontak_darurat = $modul->refPKreditDataPersonal->alamat_kontak_darurat ?? null;
+
         unset(
+            $modul->refJenisKelaminPasangan,
+            $modul->refAgamaPasangan,
             $modul->refProduk,
             $modul->refStatusPerkawinan,
             $modul->refCabang,
