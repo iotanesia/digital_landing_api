@@ -2,6 +2,7 @@
 
 namespace App\Query\Transaksi;
 
+use App\Constants\Constants;
 use App\Models\Transaksi\SkoringApproval as Model;
 use Illuminate\Support\Facades\DB;
 class SkoringApproval
@@ -27,6 +28,7 @@ class SkoringApproval
 
     public static function getDataCurrent($request) {
         $data = Model::where('id_user', $request->current_user->id)
+        ->where( 'step_analisa_kredit', Constants::STEP_APPROVAL_PROSES_SKORING)
         ->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
