@@ -70,7 +70,7 @@ class Skoring {
             ])->first();
             $cabangRM = $getInfoRM->id_cabang ?? null;
             $getBM = User::getInfoBM($cabangRM);
-            if(!$getBM) throw new \Exception("Role BM pada cabang ".$getInfoRM->refCabang->nama_cabang.' belum diataur', 400);
+            if(!$getBM) throw new \Exception("Role BM pada cabang ".$getInfoRM->refCabang->nama_cabang.' belum diatur', 400);
 
             SkoringApproval::store([
                 'id_pipeline' => $request->id_pipeline,
@@ -81,6 +81,27 @@ class Skoring {
             TransaksiPipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => Constants::STEP_APPROVAL_PROSES_SKORING
+            ],false);
+
+            if($is_trasaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_trasaction) DB::beginTransaction();
+            throw $th;
+        }
+    }
+
+    public static function updateApprovalBm($request,$is_trasaction = true)
+    {
+        if($is_trasaction) DB::beginTransaction();
+        try {
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+            
+            TransaksiPipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => $request->status ? Constants::STEP_KELENGKAPAN_ADMINISTRASI : constants::STEP_ANALISA_SUBMIT,
+                'is_revisi_scoring' => $request->status ? null : 1
             ],false);
 
             if($is_trasaction) DB::commit();

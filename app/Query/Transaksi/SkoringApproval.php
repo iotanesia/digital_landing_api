@@ -26,10 +26,7 @@ class SkoringApproval
     }
 
     public static function getDataCurrent($request) {
-        $data = Model::where(function ($query) use ($request){
-            if($request->nama) $query->where('nama','ilike',"%$request->nama%");
-        })
-        ->where('id_user', $request->current_user->id)
+        $data = Model::where('id_user', $request->current_user->id)
         ->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
@@ -49,5 +46,4 @@ class SkoringApproval
             ]
         ];
     }
-
 }

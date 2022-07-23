@@ -267,6 +267,7 @@ class Pipeline {
             // $data->step_analisa_kredit = $data->step_analisa_kredit >= Constants::STEP_ANALISA_KELENGKAPAN ? Constants::STEP_ANALISA_KELENGKAPAN : $request['step_analisa_kredit'];
             $data->step_analisa_kredit = $data->step_analisa_kredit <= $request['step_analisa_kredit'] ? $request['step_analisa_kredit'] : $data->step_analisa_kredit ;
             $data->updated_by = request()->current_user->id;
+            $data->is_revisi_scoring = isset($request['is_revisi_scoring']) ? $request['is_revisi_scoring'] : null;
             $data->save();
             if($is_transaction) DB::commit();
         } catch (\Throwable $th) {
@@ -359,9 +360,9 @@ class Pipeline {
         $data = Model::find($id);
 
         $result = new stdClass;
-        $result->nama = $data->refUser->nama;
-        $result->nirk = $data->refUser->nirk;
-        $result->tgl_buka = $data->refUser->tgl_buka;
+        $result->nama = $data->refUser->nama ?? null;
+        $result->nirk = $data->refUser->nirk ?? null;
+        $result->tgl_buka = $data->refUser->tgl_buka ?? null;
 
         return ['items' => $result];
 
