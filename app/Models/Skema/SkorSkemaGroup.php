@@ -11,4 +11,9 @@ class SkorSkemaGroup extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'skoring_skema_grup';
     protected $connection = 'skema';
+
+    public function manySkemaNilai()
+    {
+        return $this->belongsTo(SkorSkemaNilai::class,'id_skoring_skema_grup','id');
+    }
 }
