@@ -78,7 +78,7 @@ class ProsesKredit {
                         Constants::STEP_DATA_USAHA,
                     ])) array_push($item['validate'],Constants::STEP_DATA_AGUNAN);
                 }
-
+                // dd($skema['step']);
                 // checked info
                 $item['is_checked'] = in_array($data->step_analisa_kredit,$item['validate']);
                 unset(
@@ -471,11 +471,11 @@ class ProsesKredit {
             $store =  VerifValidasiData::byIdPipeline($request->id_pipeline);
             if(!$store) throw new \Exception("Data tidak ditemukan", 400);
             $result = PKreditDataUsaha::store($request,false);
-            if($is_transaction) DB::commit();
             Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => Constants::STEP_DATA_USAHA
             ],false);
+            if($is_transaction) DB::commit();
             return [
                 'items' => $result
             ];

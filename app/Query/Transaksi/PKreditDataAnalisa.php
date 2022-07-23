@@ -57,7 +57,7 @@ class PKreditDataAnalisa
 
             $total_limit = $pipeline->refPlafondDebitur->total_limit ?? 0;
             $limit_aktif = $pipeline->refPlafondDebitur->limit_aktif ?? 0;
-            $result->total_limit = $total_limit - $limit_aktif;
+            $result->limit_aktif = $total_limit - $limit_aktif;
             unset(
                 $data->refPipeline
             );
