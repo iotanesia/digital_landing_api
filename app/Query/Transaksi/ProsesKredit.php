@@ -25,6 +25,10 @@ class ProsesKredit {
     public static function getDataCurrent($request) {
         try {
             $data = Model::where(function ($query) use ($request){
+                if($request->kueri) $query->where(function ($query) use ($request){
+                    $query->where('nomor_aplikasi','ilike',"%$request->kueri%");
+                    $query->orWhere('nik','ilike',"$request->kueri%");
+                });
                 $query->where('tracking',Constants::ANALISA_KREDIT);
                 $query->where('step_analisa_kredit','>=',Constants::STEP_ANALISA_SUBMIT);
                 $query->where('id_user',$request->current_user->id);
