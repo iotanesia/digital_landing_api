@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaksi;
 
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,11 @@ class SkoringApproval extends Model
     public function refPipeline()
     {
         return $this->belongsTo(Pipeline::class,'id_pipeline','id');
+    }
+
+    public function refUser()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
     }
 
     public static function boot()
