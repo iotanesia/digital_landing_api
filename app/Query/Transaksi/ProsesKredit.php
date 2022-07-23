@@ -308,6 +308,11 @@ class ProsesKredit {
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $result = PKreditDatAgunanTanahBangunan::store($request,false);
+            Pipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => Constants::STEP_DATA_AGUNAN
+            ],false);
+
             if($is_transaction) DB::commit();
             return [
                 'items' => $result
