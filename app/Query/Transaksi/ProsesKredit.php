@@ -493,13 +493,12 @@ class ProsesKredit {
 
         if($is_transaction) DB::beginTransaction();
         try {
-            $usaha = PKreditDataUsaha::byIdPipeline($id);
-            $keuangan = PKreditDataKeuangan::byIdPipeline($id);
+            $id_skor = [1,2,3,4];
 
-            $financial = ProsesKredit::setFinancial($id,1);
-            $karakter = ProsesKredit::setKarakter($id,2);
-            $manajemen = ProsesKredit::setManajemen($id,3);
-            $lingkungan_bisnis = ProsesKredit::setLingkunganBisnis($id,4);
+            $financial = ProsesKredit::setFinancial($id,$id_skor[0]);
+            $karakter = ProsesKredit::setKarakter($id,$id_skor[1]);
+            $manajemen = ProsesKredit::setManajemen($id,$id_skor[2]);
+            $lingkungan_bisnis = ProsesKredit::setLingkunganBisnis($id,$id_skor[3]);
 
             $total_financial = $financial['skor_rpc'] + $financial['skor_idir'] + $financial['skor_profitability'];
             $total_karakter = $karakter['skor_integritas_usaha'] + $karakter['skor_riwayat_hub_bank'];
@@ -507,26 +506,8 @@ class ProsesKredit {
             $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
             $total = round($total_financial + $total_karakter + $total_manajemen + $total_lingkungan_bisnis,2);
 
-            $attr = [];
-            $attr['skor_integritas_usaha'] = $karakter['skor_integritas_usaha'];
-            $attr['skor_riwayat_hub_bank'] = $karakter['skor_riwayat_hub_bank'];
-            $attr['skor_rpc'] = $financial['skor_rpc'];
-            $attr['skor_idir'] = $financial['skor_idir'];
-            $attr['skor_profitability'] = $financial['skor_profitability'];
-            $attr['skor_prospek_usaha'] = $manajemen['skor_prospek_usaha'];
-            $attr['skor_lama_usaha'] = $manajemen['skor_lama_usaha'];
-            $attr['skor_jangka_waktu'] = $manajemen['skor_jangka_waktu'];
-            $attr['skor_ketergantungan_pelanggan'] = $lingkungan_bisnis['skor_ketergantungan_pelanggan'];
-            $attr['skor_jenis_produk'] = $lingkungan_bisnis['skor_jenis_produk'];
-            $attr['skor_ketergantungan_supplier'] = $lingkungan_bisnis['skor_ketergantungan_supplier'];
-            $attr['skor_wilayah_pemasaran'] = $lingkungan_bisnis['skor_wilayah_pemasaran'];
-
             $penilaian = [];
-            $penilaianDetail = [$total_financial,$total_karakter,$total_manajemen,$total_lingkungan_bisnis];
-            $penilaianDetail['total_financial'] = $total_financial;
-            $penilaianDetail['total_karakter'] = $total_karakter;
-            $penilaianDetail['total_manajemen'] = $total_manajemen;
-            $penilaianDetail['total_lingkungan_bisnis'] = $total_lingkungan_bisnis;
+            $penilaianDetail = array(1 => $total_financial, 2 => $total_karakter, 3 => $total_manajemen, 4 => $total_lingkungan_bisnis);
 
             $penilaian['id_pipeline'] = $id;
             $penilaian['skor'] = $total;
@@ -537,11 +518,19 @@ class ProsesKredit {
 
             $result = SkoringPenilaian::store($penilaian,false);
 
+            foreach($penilaianDetail as $key=>$val) {
+                $storeDetail = [];
+                $storeDetail['penilaian'] = $val;
+                $storeDetail['id_skoring_penilaian'] = $result->id;
+                $storeDetail['id_skor'] = $key;
+                $resultDetail = SkoringPenilaianDetail::store($storeDetail,false);
+            }
+
             Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $id,
                 'step_analisa_kredit' => Constants::STEP_DATA_SEDANG_PROSES_SKORING
             ],false);
-            return ['items' => $penilaian];
+            return ['items' => $result];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;

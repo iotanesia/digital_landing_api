@@ -18,6 +18,7 @@ class SkoringPenilaian
             $store->save();
 
             if($is_transaction) DB::commit();
+            return $store;
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollBack();
             throw $th;
