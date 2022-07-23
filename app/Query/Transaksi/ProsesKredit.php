@@ -629,7 +629,7 @@ class ProsesKredit {
                 $itemsArr[] = $key->bobot;
             }
             if($usaha->lama_usaha <= 3) $kondisi1 = '<= 3';
-            elseif ($usaha->lama_usaha > 3 && $usaha->lama_usaha >= 7) $kondisi1 = '> 3 and >= 7';
+            elseif ($usaha->lama_usaha > 3 && $usaha->lama_usaha <= 7) $kondisi1 = '> 3 and <= 7';
             elseif ($usaha->lama_usaha > 7) $kondisi1 = '> 7';
             else $kondisi1 = null;
 
