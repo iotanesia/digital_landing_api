@@ -12,6 +12,10 @@ use App\Query\Skema\AgunanNilai;
 use App\Query\Skema\AgunanSkemaProduk;
 use App\Query\Transaksi\VerifValidasiData;
 use Illuminate\Support\Facades\DB;
+use App\Query\Master\SkorDetailNilai;
+use App\Query\Master\SkorDetail;
+use App\Query\Master\Skor;
+use App\Query\Transaksi\PKreditDataKeuangan;
 
 
 class ProsesKredit {
@@ -487,11 +491,45 @@ class ProsesKredit {
 
         if($is_transaction) DB::beginTransaction();
         try {
+            $usaha = PKreditDataUsaha::byIdPipeline($id);
+            $keuangan = PKreditDataKeuangan::byIdPipeline($id);
+
+            $financial = ProsesKredit::setFinancial($id,1);
+            $karakter = ProsesKredit::setKarakter($id,2);
+            $manajemen = ProsesKredit::setManajemen($id,3);
+            $lingkungan_bisnis = ProsesKredit::setLingkunganBisnis($id,4);
+
+            $total_financial = $financial['skor_rpc'] + $financial['skor_idir'] + $financial['skor_profitability'];
+            $total_karakter = $karakter['skor_integritas_usaha'] + $karakter['skor_riwayat_hub_bank'];
+            $total_manajemen = $manajemen['skor_prospek_usaha'] + $manajemen['skor_lama_usaha'] + $manajemen['skor_jangka_waktu'];
+            $total_lingkungan_bisnis = $lingkungan_bisnis['skor_ketergantungan_pelanggan'] + $lingkungan_bisnis['skor_jenis_produk'] + $lingkungan_bisnis['skor_ketergantungan_supplier'] + $lingkungan_bisnis['skor_wilayah_pemasaran'];
+
+            $attr = [];
+            $attr['skor_integritas_usaha'] = $karakter['skor_integritas_usaha'];
+            $attr['skor_riwayat_hub_bank'] = $karakter['skor_riwayat_hub_bank'];
+            $attr['skor_rpc'] = $financial['skor_rpc'];
+            $attr['skor_idir'] = $financial['skor_idir'];
+            $attr['skor_profitability'] = $financial['skor_profitability'];
+            $attr['skor_prospek_usaha'] = $manajemen['skor_prospek_usaha'];
+            $attr['skor_lama_usaha'] = $manajemen['skor_lama_usaha'];
+            $attr['skor_jangka_waktu'] = $manajemen['skor_jangka_waktu'];
+            $attr['skor_ketergantungan_pelanggan'] = $lingkungan_bisnis['skor_ketergantungan_pelanggan'];
+            $attr['skor_jenis_produk'] = $lingkungan_bisnis['skor_jenis_produk'];
+            $attr['skor_ketergantungan_supplier'] = $lingkungan_bisnis['skor_ketergantungan_supplier'];
+            $attr['skor_wilayah_pemasaran'] = $lingkungan_bisnis['skor_wilayah_pemasaran'];
+
+            $attr['total_financial'] = $total_financial;
+            $attr['total_karakter'] = $total_karakter;
+            $attr['total_manajemen'] = $total_manajemen;
+            $attr['total_lingkungan_bisnis'] = $total_lingkungan_bisnis;
+
+
 
             Pipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $id,
                 'step_analisa_kredit' => Constants::STEP_DATA_SEDANG_PROSES_SKORING
             ],false);
+            return ['items' => $attr];
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;
@@ -512,6 +550,131 @@ class ProsesKredit {
             return [
                 'ltv' =>  $ltv,
                 'taksasi' =>  $taksasi
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function setKarakter($id_pipeline,$id_skor)
+    {
+        try {
+            $usaha = PKreditDataUsaha::byIdPipeline($id_pipeline);
+            if(!$usaha) throw new \Exception("Data Pipeline tidak ditemukan", 400);
+
+            $skor = Skor::byId($id_skor);
+            $skor_detail = SkorDetail::byIdSkor($id_skor);
+            $itemsArr = [];
+            foreach($skor_detail as $key) {
+                $itemsArr[] = $key->bobot;
+            }
+            $nilai1 = ((SkorDetailNilai::pembanding('id_integritas_usaha',$usaha->id_integritas_usaha)/3) * $itemsArr[0]) * $skor->bobot;
+            $nilai2 = ((SkorDetailNilai::pembanding('id_riwayat_hubungan_bank',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[1]) * $skor->bobot;
+            return [
+                'skor_integritas_usaha' =>  round($nilai1,2),
+                'skor_riwayat_hub_bank' =>  round($nilai2,2)
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function setFinancial($id_pipeline,$id_skor)
+    {
+        try {
+            $keuangan = PKreditDataKeuangan::byIdPipeline($id_pipeline);
+            if(!$keuangan) throw new \Exception("Data Pipeline tidak ditemukan", 400);
+
+            $skor = Skor::byId($id_skor);
+            $skor_detail = SkorDetail::byIdSkor($id_skor);
+            $itemsArr = [];
+            foreach($skor_detail as $key) {
+                $itemsArr[] = $key->bobot;
+            }
+            if($keuangan->rpc < 2) $kondisi1 = '< 2';
+            elseif ($keuangan->rpc >= 2 && $keuangan->rpc <= 2.90) $kondisi1 = '>= 2 and <= 2.90';
+            elseif ($keuangan->rpc > 2.90) $kondisi1 = '> 2.90';
+            else $kondisi1 = null;
+
+            if($keuangan->idir >= 75 && $keuangan->idir <= 80) $kondisi2 = '>= 75 and <= 80';
+            elseif ($keuangan->idir >= 70 && $keuangan->idir < 75) $kondisi2 = '>= 70 and < 75';
+            elseif ($keuangan->idir < 70) $kondisi2 = '< 70';
+            else $kondisi2 = null;
+
+            if($keuangan->profitability < 15) $kondisi3 = '< 15';
+            elseif ($keuangan->profitability > 25) $kondisi3 = '> 25';
+            elseif ($keuangan->profitability >= 15 && $keuangan->profitability <= 25) $kondisi3 = '>= 15 and <= 25';
+            else $kondisi3 = null;
+
+            $nilai1 = ((SkorDetailNilai::pembanding('rpc',$kondisi1)/3) * $itemsArr[0]) * $skor->bobot;
+            $nilai2 = ((SkorDetailNilai::pembanding('idir',$kondisi2)/3) * $itemsArr[1]) * $skor->bobot;
+            $nilai3 = ((SkorDetailNilai::pembanding('profitability',$kondisi3)/3) * $itemsArr[2]) * $skor->bobot;
+            return [
+                'skor_rpc' =>  round($nilai1,2),
+                'skor_idir' =>  round($nilai2,2),
+                'skor_profitability' =>  round($nilai3,2)
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function setManajemen($id_pipeline,$id_skor)
+    {
+        try {
+            $usaha = PKreditDataUsaha::byIdPipeline($id_pipeline);
+            if(!$usaha) throw new \Exception("Data Pipeline tidak ditemukan", 400);
+
+            $skor = Skor::byId($id_skor);
+            $skor_detail = SkorDetail::byIdSkor($id_skor);
+            $itemsArr = [];
+            foreach($skor_detail as $key) {
+                $itemsArr[] = $key->bobot;
+            }
+            if($usaha->lama_usaha <= 3) $kondisi1 = '<= 3';
+            elseif ($usaha->lama_usaha > 3 && $usaha->lama_usaha >= 7) $kondisi1 = '> 3 and >= 7';
+            elseif ($usaha->lama_usaha > 7) $kondisi1 = '> 7';
+            else $kondisi1 = null;
+
+            if($usaha->jangka_waktu > 3) $kondisi2 = '> 3';
+            elseif ($usaha->jangka_waktu >= 1 && $usaha->jangka_waktu <= 3) $kondisi2 = '>= 1 and <= 3';
+            elseif ($usaha->jangka_waktu < 1) $kondisi2 = '< 1';
+            else $kondisi2 = null;
+
+            $nilai1 = ((SkorDetailNilai::pembanding('id_prospek_usaha',$usaha->id_prospek_usaha)/3) * $itemsArr[0]) * $skor->bobot;
+            $nilai2 = ((SkorDetailNilai::pembanding('lama_usaha',$kondisi1)/3) * $itemsArr[1]) * $skor->bobot;
+            $nilai3 = ((SkorDetailNilai::pembanding('jangka_waktu',$kondisi2)/3) * $itemsArr[2]) * $skor->bobot;
+            return [
+                'skor_prospek_usaha' =>  round($nilai1,2),
+                'skor_lama_usaha' =>  round($nilai2,2),
+                'skor_jangka_waktu' =>  round($nilai3,2)
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function setLingkunganBisnis($id_pipeline,$id_skor)
+    {
+        try {
+            $usaha = PKreditDataUsaha::byIdPipeline($id_pipeline);
+            if(!$usaha) throw new \Exception("Data Pipeline tidak ditemukan", 400);
+
+            $skor = Skor::byId($id_skor);
+            $skor_detail = SkorDetail::byIdSkor($id_skor);
+            $itemsArr = [];
+            foreach($skor_detail as $key) {
+                $itemsArr[] = $key->bobot;
+            }
+            $nilai1 = ((SkorDetailNilai::pembanding('id_ketergantungan_pelanggan',$usaha->id_integritas_usaha)/3) * $itemsArr[0]) * $skor->bobot;
+            $nilai2 = ((SkorDetailNilai::pembanding('id_jenis_produk',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[1]) * $skor->bobot;
+            $nilai3 = ((SkorDetailNilai::pembanding('id_ketergantungan_supplier',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[2]) * $skor->bobot;
+            $nilai4 = ((SkorDetailNilai::pembanding('id_wilayah_pemasaran',$usaha->id_riwayat_hubungan_bank)/3) * $itemsArr[3]) * $skor->bobot;
+            return [
+                'skor_ketergantungan_pelanggan' =>  round($nilai1,2),
+                'skor_jenis_produk' =>  round($nilai2,2),
+                'skor_ketergantungan_supplier' =>  round($nilai3,2),
+                'skor_wilayah_pemasaran' =>  round($nilai4,2)
             ];
         } catch (\Throwable $th) {
             throw $th;
