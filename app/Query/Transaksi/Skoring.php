@@ -123,4 +123,25 @@ class Skoring {
             throw $th;
         }
     }
+
+    public static function storeReject($request,$is_trasaction = true)
+    {
+        if($is_trasaction) DB::beginTransaction();
+        try {
+            $require_fileds = [];
+            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
+            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
+
+            // TransaksiPipeline::updateStepAnalisaKredit([
+            //     'id_pipeline' => $request->id_pipeline,
+            //     'step_analisa_kredit' => $request->status ? Constants::STEP_KELENGKAPAN_ADMINISTRASI : constants::STEP_ANALISA_SUBMIT,
+            //     'is_revisi_scoring' => $request->status ? null : 1
+            // ],false);
+
+            if($is_trasaction) DB::commit();
+        } catch (\Throwable $th) {
+            if($is_trasaction) DB::beginTransaction();
+            throw $th;
+        }
+    }
 }

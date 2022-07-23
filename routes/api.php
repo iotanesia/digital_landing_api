@@ -238,6 +238,7 @@ Route::prefix('v1')
         Route::prefix('skoring')->group(function () {
             /* get list */ Route::get('/',[SkoringController::class,'index']);
             /* proses assign */ Route::post('/asign',[SkoringController::class,'storeAsign']);
+            /* reject */ Route::post('/reject',[SkoringController::class,'storeReject']);
             /* get asign */ Route::get('/info-approver/{id}',[SkoringController::class,'approver']);
 
             Route::prefix('approval-verifikasi')->group(function () {

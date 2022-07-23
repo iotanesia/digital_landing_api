@@ -116,9 +116,15 @@ class SkoringController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function storeReject(Request $request)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                Skoring::storeReject($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
