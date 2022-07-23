@@ -3,6 +3,7 @@
 namespace App\Query\Auth;
 use App\Models\Auth\User as Model;
 use App\ApiHelper as Helper;
+use App\Constants\Constants;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -59,7 +60,7 @@ class User {
 
             $user->menu = $menuArr;
         }
-        
+
         unset(
             $user->refUserRole,
             $user->manyUserRole,
@@ -310,5 +311,13 @@ class User {
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public static function getInfoBM($id_cabang)
+    {
+        return Model::whereHas('refUserRole',function ($query) use ($id_cabang){
+            $query->where('id_role',Constants::USR_ID_BM);
+            $query->where('id_cabang',$id_cabang);
+        })->first();
     }
 }

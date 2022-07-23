@@ -30,11 +30,11 @@ class SkoringController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function storeApproval(Request $request)
+    public function storeAssign(Request $request)
     {
         try {
             return Helper::resultResponse(
-                Skoring::storeApproval($request)
+                Skoring::storeAssign($request)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -47,11 +47,27 @@ class SkoringController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function approval(Request $request,$id)
+    public function assign(Request $request,$id)
     {
         try {
             return Helper::resultResponse(
-                Skoring::approval($id)
+                Skoring::assign($id)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function approvalVerifikasi(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                "code here"
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);
@@ -59,14 +75,38 @@ class SkoringController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeApprovalVerifikasi(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                "code here"
+
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function inform($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                "code here"
+
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
