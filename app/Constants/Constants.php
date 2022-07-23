@@ -67,6 +67,8 @@ class Constants
                 self::STEP_DATA_ANALISA_KREDIT,
                 self::STEP_DATA_VERIFIKASI_AGUNAN,
                 self::STEP_DATA_SEDANG_PROSES_SKORING,
+                self::STEP_APPROVAL_PROSES_SKORING,
+                self::STEP_KELENGKAPAN_ADMINISTRASI,
             ]
         ],
         [
@@ -78,6 +80,8 @@ class Constants
                 self::STEP_DATA_ANALISA_KREDIT,
                 self::STEP_DATA_VERIFIKASI_AGUNAN,
                 self::STEP_DATA_SEDANG_PROSES_SKORING,
+                self::STEP_APPROVAL_PROSES_SKORING,
+                self::STEP_KELENGKAPAN_ADMINISTRASI,
             ]
         ],
         [
@@ -88,6 +92,8 @@ class Constants
                 self::STEP_DATA_ANALISA_KREDIT,
                 self::STEP_DATA_VERIFIKASI_AGUNAN,
                 self::STEP_DATA_SEDANG_PROSES_SKORING,
+                self::STEP_APPROVAL_PROSES_SKORING,
+                self::STEP_KELENGKAPAN_ADMINISTRASI,
             ]
         ],
         [
@@ -107,6 +113,8 @@ class Constants
                 self::STEP_DATA_ANALISA_KREDIT,
                 self::STEP_DATA_VERIFIKASI_AGUNAN,
                 self::STEP_DATA_SEDANG_PROSES_SKORING,
+                self::STEP_APPROVAL_PROSES_SKORING,
+                self::STEP_KELENGKAPAN_ADMINISTRASI,
             ]
 
         ],
@@ -116,6 +124,8 @@ class Constants
             'validate' => [
                 self::STEP_DATA_VERIFIKASI_AGUNAN,
                 self::STEP_DATA_SEDANG_PROSES_SKORING,
+                self::STEP_APPROVAL_PROSES_SKORING,
+                self::STEP_KELENGKAPAN_ADMINISTRASI,
             ]
         ]
     ];
