@@ -11,8 +11,7 @@ class MHubungan extends Model
     protected $table = 'hubungan';
     protected $connection = 'master';
     public $fillable = [
-        'nama_hubungan',
-        'kode_hubungan',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

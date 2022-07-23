@@ -19,7 +19,6 @@ class MTipeProduk {
             if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
             $data = Model::where(function ($query) use ($request){
                 if($request->nama) $query->where('nama','ilike',"%$request->nama%");
-                if($request->id_sub_produk) $query->where('id_sub_produk',$request->id_sub_produk);
             })->paginate($request->limit);
                 return [
                     'items' => $data->items(),

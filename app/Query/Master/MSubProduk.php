@@ -60,10 +60,10 @@ class MSubProduk {
         try {
 
             $require_fileds = [];
-            if(!$request->nama_sub_produk) $require_fileds[] = 'nama_sub_produk';
-            if(!$request->kode_sub_produk) $require_fileds[] = 'kode_sub_produk';
-            if(!$request->kode_produk) $require_fileds[] = 'kode_produk';
-            if(!$request->suku_bunga) $require_fileds[] = 'suku_bunga';
+            if(!$request->nama) $require_fileds[] = 'nama';
+            if(!$request->id_produk) $require_fileds[] = 'id_produk';
+            if(!$request->min_suku_bunga) $require_fileds[] = 'min_suku_bunga';
+            if(!$request->max_suku_bunga) $require_fileds[] = 'max_suku_bunga';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
             $store = Model::create($request->all());

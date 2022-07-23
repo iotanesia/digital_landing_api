@@ -12,8 +12,7 @@ class MTingkatPendidikan extends Model
     protected $primaryKey = 'id';
     protected $connection = 'master';
     public $fillable = [
-        'nama_tingkat_pendidikan',
-        'kode_tingkat_pendidikan',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

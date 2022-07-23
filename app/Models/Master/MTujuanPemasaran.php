@@ -11,7 +11,7 @@ class MTujuanPemasaran extends Model
     protected $table = 'tujuan_pemasaran';
     protected $connection = 'master';
     public $fillable = [
-        'nama_tujuan_pemasaran',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',

@@ -14,6 +14,8 @@ class MSubSubProduk extends Model
     public $fillable = [
         'id_sub_produk',
         'nama',
+        'min_plafond',
+        'max_plafond',
         'created_at',
         'created_by',
         'updated_at',

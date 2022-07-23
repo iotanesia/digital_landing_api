@@ -12,8 +12,7 @@ class MJenisPekerjaan extends Model
     protected $connection = 'master';
 
     public $fillable = [
-        'id',
         'nama',
-        'kode',
+        'kode'
     ];
 }
