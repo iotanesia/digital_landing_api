@@ -78,7 +78,13 @@ class ProsesKredit {
                         Constants::STEP_DATA_USAHA,
                     ])) array_push($item['validate'],Constants::STEP_DATA_AGUNAN);
                 }
-                // dd($skema['step']);
+                if(!$skema['step'] && $skema['menu']) {
+                    if(in_array($item['code'],[
+                        Constants::STEP_DATA_PERSONAL,
+                        Constants::STEP_DATA_KEUANGAN,
+                        Constants::STEP_DATA_USAHA,
+                    ])) array_push($item['validate'],Constants::STEP_DATA_AGUNAN);
+                }
                 // checked info
                 $item['is_checked'] = in_array($data->step_analisa_kredit,$item['validate']);
                 unset(
