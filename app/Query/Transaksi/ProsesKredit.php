@@ -443,6 +443,10 @@ class ProsesKredit {
             return [
                 'items' => $result
             ];
+            Pipeline::updateStepAnalisaKredit([
+                'id_pipeline' => $request->id_pipeline,
+                'step_analisa_kredit' => Constants::STEP_DATA_USAHA
+            ],false);
         } catch (\Throwable $th) {
             if($is_transaction) DB::rollback();
             throw $th;
