@@ -40,4 +40,9 @@ class PKreditDataKeuangan extends Model
        'created_by',
        'updated_by'
     ];
+
+    public function refPipeline()
+    {
+        return $this->belongsTo(Pipeline::class,'id_pipeline','id');
+    }
 }

@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\ProsesKreditController;
 use App\Http\Controllers\Api\VerifikasiController;
 use App\Http\Controllers\Api\PencairanController;
 use App\Http\Controllers\Api\AkadController;
-use App\Http\Controllers\Api\ScoringController;
+use App\Http\Controllers\Api\SkoringController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\AgunanController;

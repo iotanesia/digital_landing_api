@@ -8,7 +8,13 @@ class PKreditDataKeuangan {
 
     public static function byIdPipeline($id_pipeline)
     {
-        return Model::where('id_pipeline',$id_pipeline)->first();
+        $data = Model::where('id_pipeline',$id_pipeline)->first();
+        if(!$data) throw new \Exception("Data tidak ditemukan", 400);
+        $data->limit_aktif = $data->refPipeline->refPlafondDebitur->limit_aktif ?? 0;
+        unset(
+            $data->refPipeline
+        );
+        return $data;
     }
 
     public static function store($request,$is_transaction = true)

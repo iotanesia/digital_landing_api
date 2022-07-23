@@ -61,5 +61,10 @@ class Pipeline extends Model
         return $this->belongsTo(VerifValidasiData::class,'id','id_pipeline');
     }
 
+    public function refPlafondDebitur()
+    {
+        return $this->belongsTo(PlafondDebitur::class,'nomor_aplikasi','nomor_aplikasi');
+    }
+
 
 }
