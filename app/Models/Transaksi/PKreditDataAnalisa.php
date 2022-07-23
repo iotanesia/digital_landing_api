@@ -56,4 +56,9 @@ class PKreditDataAnalisa extends Model
         return $this->belongsTo(MSubSubProduk::class,'id_sub_sub_produk','id');
     }
 
+    public function refPipeline()
+    {
+        return $this->belongsTo(Pipeline::class,'id_pipeline','id');
+    }
+
 }

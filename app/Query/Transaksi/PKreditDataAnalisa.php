@@ -54,6 +54,10 @@ class PKreditDataAnalisa
             $result->nama_sub_sub_produk = $data->refSubSubProduk->nama ?? null;
             $result->nama_sub_produk = $data->refSubSubProduk->refSubProduk->nama ?? null;
             $result->nama_produk = $data->refSubSubProduk->refSubProduk->refProduk->nama ?? null;
+            $result->limit_aktif = $pipeline->refPlafondDebitur->limit_aktif ?? 0;
+            unset(
+                $data->refPipeline
+            );
             return $result;
         } catch (\Throwable $th) {
             throw $th;
