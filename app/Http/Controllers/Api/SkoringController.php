@@ -80,7 +80,7 @@ class SkoringController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeApprovalVerifikasi(Request $request,$id)
+    public function storeApprovalVerifikasi(Request $request)
     {
         try {
             return Helper::resultResponse(
@@ -99,7 +99,14 @@ class SkoringController extends Controller
      */
     public function inform($id)
     {
-        //
+        try {
+            return Helper::resultResponse(
+                "code here"
+
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
     }
 
     /**
