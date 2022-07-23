@@ -31,6 +31,12 @@ class SkoringApproval
         })->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){
+                $item->nama = $item->refPipeline->refVerifValidasiData->nama ?? null;
+                $item->nama_cabang = $item->refPipeline->refVerifValidasiData->refCabang->nama_cabang ?? null;
+                $item->nama_sub_produk = $item->refPipeline->refVerifValidasiData->refSubProduk->nama ?? null;
+                $item->skor = $item->refPipeline->refSkoringPenilaian->skor ?? null;
+                $item->jenis_skor = $item->refPipeline->refSkoringPenilaian->jenis ?? null;
+                unset($item->refPipeline);
                 return $item;
             }),
             'attributes' => [

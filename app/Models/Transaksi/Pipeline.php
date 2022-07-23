@@ -65,6 +65,9 @@ class Pipeline extends Model
     {
         return $this->belongsTo(PlafondDebitur::class,'nomor_aplikasi','nomor_aplikasi');
     }
-
-
+    
+    public function refSkoringPenilaian()
+    {
+        return $this->belongsTo(SkoringPenilaian::class,'id','id_pipeline');
+    }
 }
