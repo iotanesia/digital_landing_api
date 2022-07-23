@@ -28,6 +28,7 @@ class Pipeline extends Model
         'nik',
         'tanggal',
         'tracking',
+        'is_revisi_scoring',
         'created_at',
         'created_by',
         'updated_at',

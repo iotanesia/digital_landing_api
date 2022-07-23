@@ -86,7 +86,7 @@ class SkoringController extends Controller
     {
         try {
             return Helper::resultResponse(
-                "code here"
+                Skoring::updateApprovalBm($request)
 
             );
         } catch (\Throwable $th) {
