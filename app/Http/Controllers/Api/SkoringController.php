@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ApiHelper as Helper;
+use App\Query\Transaksi\Pipeline;
 use App\Query\Transaksi\Skoring;
 use App\Query\Transaksi\SkoringApproval;
 
@@ -102,8 +103,7 @@ class SkoringController extends Controller
     {
         try {
             return Helper::resultResponse(
-                "code here"
-
+                Pipeline::getDataRm($id)
             );
         } catch (\Throwable $th) {
             return Helper::setErrorResponse($th);

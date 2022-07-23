@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Query\Transaksi\AktifitasPemasaran;
 use App\Query\Transaksi\Leads;
 use App\Query\Transaksi\Eform;
+use stdClass;
 
 class Pipeline {
 
@@ -352,5 +353,17 @@ class Pipeline {
         return [
             'items' => $result
         ];
+    }
+
+    public static function getDataRm($id) {
+        $data = Model::find($id);
+
+        $result = new stdClass;
+        $result->nama = $data->refUser->nama;
+        $result->nirk = $data->refUser->nirk;
+        $result->tgl_buka = $data->refUser->tgl_buka;
+
+        return ['items' => $result];
+
     }
 }
