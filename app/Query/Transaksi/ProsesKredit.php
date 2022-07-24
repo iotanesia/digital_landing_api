@@ -605,9 +605,9 @@ class ProsesKredit {
             $penilaian['id_pipeline'] = $id;
             $penilaian['skor'] = $total;
 
-            if($total > 85) $penilaian['jenis'] = 'approved';
-            elseif($total <= 85 && $total > 60) $penilaian['jenis'] = 'menunggu approval';
-            else $penilaian['jenis'] = 'reject';
+            if($total > 85) $penilaian['jenis'] = Constants::APPROVED;
+            elseif($total <= 85 && $total > 60) $penilaian['jenis'] = Constants::MENUNGGU_APPROVAL;
+            else $penilaian['jenis'] = Constants::REJECT;
 
             $result = SkoringPenilaian::store($penilaian,false);
 

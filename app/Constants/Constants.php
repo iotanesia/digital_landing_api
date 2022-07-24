@@ -56,6 +56,10 @@ class Constants
 
     const USR_ID_BM = 4;
 
+    const APPROVED = 'approved';
+    const REJECT = 'reject';
+    const MENUNGGU_APPROVAL = 'menunggu approval rm';
+
     const MENU_PROSES_KREDIT = [
         [
             'code' => 5,
