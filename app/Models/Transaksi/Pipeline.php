@@ -35,6 +35,8 @@ class Pipeline extends Model
         'updated_by',
         'deleted_at',
         'deleted_by',
+        'is_rejected_by',
+        'is_rejected_date',
     ];
 
     public function refUser()
