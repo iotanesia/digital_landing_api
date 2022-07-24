@@ -28,7 +28,9 @@ class SkoringApproval
 
     public static function getDataCurrent($request) {
         $data = Model::where('id_user', $request->current_user->id)
-        ->where( 'step_analisa_kredit', Constants::STEP_APPROVAL_PROSES_SKORING)
+        ->whereHas('refPipeline',function ($query){
+            $query->where('step_analisa_kredit', Constants::STEP_APPROVAL_PROSES_SKORING);
+        })
         ->paginate($request->limit);
         return [
             'items' => $data->getCollection()->transform(function ($item){

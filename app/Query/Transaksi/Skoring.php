@@ -114,7 +114,7 @@ class Skoring {
             TransaksiPipeline::updateStepAnalisaKredit([
                 'id_pipeline' => $request->id_pipeline,
                 'step_analisa_kredit' => $request->status ? Constants::STEP_KELENGKAPAN_ADMINISTRASI : constants::STEP_ANALISA_SUBMIT,
-                'is_revisi_scoring' => $request->status ? null : 1
+                'is_revisi_scoring' => $request->status ? null : Constants::IS_ACTIVE
             ],false);
 
             if($is_trasaction) DB::commit();
