@@ -11,7 +11,7 @@ class MAgama extends Model
     protected $table = 'agama';
     protected $connection = 'master';
     public $fillable = [
-        'agama',
+        'nama',
         'created_at',
         'created_by',
         'updated_at',
