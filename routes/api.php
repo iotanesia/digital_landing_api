@@ -436,6 +436,7 @@ Route::prefix('v1')
             // route cabang
             Route::prefix('cabang')->group(function () {
                 Route::get('/',[CabangController::class,'index']);
+                Route::get('/all',[CabangController::class,'allCabang']);
                 Route::get('/lokasi',[CabangController::class,'getLocation']);
                 Route::post('/',[CabangController::class,'store']);
                 Route::get('/{id}',[CabangController::class,'show']);

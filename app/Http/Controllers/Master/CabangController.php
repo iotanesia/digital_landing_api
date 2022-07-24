@@ -124,4 +124,15 @@ class CabangController extends Controller
             return Helper::setErrorResponse($th);
         }
     }
+
+    public function allCabang(Request $request)
+    {
+        try {
+            return Helper::resultResponse(
+                MCabang::getAllCabang($request)
+            );
+        } catch (\Throwable $th) {
+            return Helper::setErrorResponse($th);
+        }
+    }
 }
