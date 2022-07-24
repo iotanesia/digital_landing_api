@@ -15,7 +15,20 @@ class MKabupaten {
 
     public static function byId($id)
     {
-        return ['items' => Model::where('id_kabupaten', $id)->first()];
+        return ['items' => Model::where('id_kabupaten', $id)->get()->transform(function ($item){
+            return [
+                'id' => $item->id,
+                'id_propinsi' => $item->id_propinsi ?? null,
+                'id_kabupaten' => $item->id_kabupaten ?? null,
+                'nama_kabupaten' => $item->nama ?? null,
+                'nama_propinsi' => $item->refPropinsi->nama ?? null,
+                'created_at' => $item->created_at ?? null,
+                'created_by' => $item->created_by ?? null,
+                'updated_at' => $item->updated_at ?? null,
+                'updated_by' => $item->updated_by ?? null,
+                'deleted_at' => $item->deleted_at ?? null
+            ];
+        })];
     }
 
     public static function getAll($request)
@@ -29,7 +42,20 @@ class MKabupaten {
             ->orderBy('id_kabupaten','asc')
             ->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_propinsi' => $item->id_propinsi ?? null,
+                            'id_kabupaten' => $item->id_kabupaten ?? null,
+                            'nama_kabupaten' => $item->nama ?? null,
+                            'nama_propinsi' => $item->refPropinsi->nama ?? null,
+                            'created_at' => $item->created_at ?? null,
+                            'created_by' => $item->created_by ?? null,
+                            'updated_at' => $item->updated_at ?? null,
+                            'updated_by' => $item->updated_by ?? null,
+                            'deleted_at' => $item->deleted_at ?? null
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

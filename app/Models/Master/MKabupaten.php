@@ -46,4 +46,9 @@ class MKabupaten extends Model
             throw $th;
         }
     }
+
+    public function refPropinsi()
+    {
+        return $this->belongsTo(MPropinsi::class,'id_propinsi','id_propinsi');
+    }
 }
