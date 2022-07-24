@@ -111,13 +111,24 @@ class Skoring {
             if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
             if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            TransaksiPipeline::updateStepAnalisaKredit([
+            $params = [
                 'id_pipeline' => $request->id_pipeline,
-                'step_analisa_kredit' => $request->status ? Constants::STEP_KELENGKAPAN_ADMINISTRASI : constants::STEP_ANALISA_SUBMIT,
-                'is_revisi_scoring' => $request->status ? null : Constants::IS_ACTIVE,
-                'is_rejected_by' => $request->status ? null : $request->current_user->id,
-                'is_rejected_date' => $request->status ? null : Carbon::now(),
-            ],false);
+            ];
+            if($request->status == Constants::VERIF_STS_BM_APPROVED) {
+                $params['step_analisa_kredit'] = Constants::STEP_KELENGKAPAN_ADMINISTRASI;
+            }
+
+            if($request->status == Constants::VERIF_STS_BM_REJECTED) {
+                $params['is_rejected_by'] = $request->current_user->id;
+                $params['is_rejected_date'] = Carbon::now();
+            }
+
+            if($request->status == Constants::VERIF_STS_BM_BACKTOBM) {
+                $params['is_revisi_scoring'] = Constants::IS_ACTIVE;
+                $params['step_analisa_kredit'] = Constants::STEP_ANALISA_SUBMIT;
+            }
+
+            TransaksiPipeline::updateStepAnalisaKredit($params,false);
 
             if($is_trasaction) DB::commit();
         } catch (\Throwable $th) {
@@ -126,24 +137,5 @@ class Skoring {
         }
     }
 
-    public static function storeReject($request,$is_trasaction = true)
-    {
-        if($is_trasaction) DB::beginTransaction();
-        try {
-            $require_fileds = [];
-            if(!$request->id_pipeline) $require_fileds[] = 'id_pipeline';
-            if(count($require_fileds) > 0) throw new \Exception('This parameter must be filled '.implode(',',$require_fileds),400);
 
-            // TransaksiPipeline::updateStepAnalisaKredit([
-            //     'id_pipeline' => $request->id_pipeline,
-            //     'step_analisa_kredit' => $request->status ? Constants::STEP_KELENGKAPAN_ADMINISTRASI : constants::STEP_ANALISA_SUBMIT,
-            //     'is_revisi_scoring' => $request->status ? null : 1
-            // ],false);
-
-            if($is_trasaction) DB::commit();
-        } catch (\Throwable $th) {
-            if($is_trasaction) DB::beginTransaction();
-            throw $th;
-        }
-    }
 }

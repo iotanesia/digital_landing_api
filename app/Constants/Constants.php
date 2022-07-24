@@ -54,6 +54,10 @@ class Constants
     const MTD_DIGI_DATA = 5;
     const MTD_SLIK_NAE = 6;
 
+    const VERIF_STS_BM_APPROVED = 1;
+    const VERIF_STS_BM_REJECTED = 2;
+    const VERIF_STS_BM_BACKTOBM = 3;
+
     const USR_ID_BM = 4;
 
     const APPROVED = 'approved';
