@@ -133,4 +133,25 @@ class MCabang {
     {
         return Model::where('id_cabang', $id)->first()->cabang_bbrv;
     }
+
+    public static function getAllCabang($request)
+    {
+        try {
+            if($request->dropdown == Constants::IS_ACTIVE) $request->limit = Model::count();
+            $data = Model::where(function ($query) use ($request){
+                if($request->nama_cabang) $query->where('nama_cabang','ilike',"%$request->nama_cabang%");
+            })->paginate($request->limit);
+            return [
+                'items' => $data->items(),
+                'attributes' => [
+                    'total' => $data->total(),
+                    'current_page' => $data->currentPage(),
+                    'from' => $data->currentPage(),
+                    'per_page' => (int) $data->perPage(),
+                ]
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
