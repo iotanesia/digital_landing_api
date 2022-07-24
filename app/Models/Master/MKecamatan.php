@@ -23,6 +23,11 @@ class MKecamatan extends Model
         'deleted_by',
     ];
 
+    public function refKabupaten()
+    {
+        return $this->belongsTo(MKabupaten::class,'id_kabupaten','id_kabupaten');
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -29,7 +29,23 @@ class MKelurahan {
             ->orderBy('id_kelurahan','asc')
             ->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_propinsi' => $item->refKecamatan->refKabupaten->id_propinsi ?? null,
+                            'id_kabupaten' => $item->refKecamatan->id_kabupaten ?? null,
+                            'id_kecamatan' => $item->id_kecamatan ?? null,
+                            'nama' => $item->nama ?? null,
+                            'nama_kecamatan' => $item->refKecamatan->nama ?? null,
+                            'nama_kabupaten' => $item->refKecamatan->refKabupaten->nama ?? null,
+                            'nama_propinsi' => $item->refKecamatan->refKabupaten->refPropinsi->nama ?? null,
+                            'created_at' => $item->created_at ?? null,
+                            'created_by' => $item->created_by ?? null,
+                            'updated_at' => $item->updated_at ?? null,
+                            'updated_by' => $item->updated_by ?? null,
+                            'deleted_at' => $item->deleted_at ?? null
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

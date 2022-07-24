@@ -29,7 +29,22 @@ class MKecamatan {
             ->orderBy('id_kecamatan','asc')
             ->paginate($request->limit);
                 return [
-                    'items' => $data->items(),
+                    'items' => $data->getCollection()->transform(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'id_propinsi' => $item->refKabupaten->id_propinsi ?? null,
+                            'id_kabupaten' => $item->id_kabupaten ?? null,
+                            'id_kecamatan' => $item->id_kecamatan ?? null,
+                            'nama' => $item->nama ?? null,
+                            'nama_kabupaten' => $item->refKabupaten->nama ?? null,
+                            'nama_propinsi' => $item->refKabupaten->refPropinsi->nama ?? null,
+                            'created_at' => $item->created_at ?? null,
+                            'created_by' => $item->created_by ?? null,
+                            'updated_at' => $item->updated_at ?? null,
+                            'updated_by' => $item->updated_by ?? null,
+                            'deleted_at' => $item->deleted_at ?? null
+                        ];
+                    }),
                     'attributes' => [
                         'total' => $data->total(),
                         'current_page' => $data->currentPage(),

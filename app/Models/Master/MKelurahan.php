@@ -24,6 +24,11 @@ class MKelurahan extends Model
         'deleted_by',
     ];
 
+    public function refKecamatan()
+    {
+        return $this->belongsTo(MKecamatan::class,'id_kecamatan','id_kecamatan');
+    }
+
     public static function boot()
     {
         parent::boot();
