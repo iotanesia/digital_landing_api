@@ -160,6 +160,7 @@ class ApprovalPrescreening {
                 }
 
                 $data_plafond = $item->refParent->refPlafondDebitur ?? null;
+                $kolektabilitas = $item->refParent->refKolektibilitas ?? null;
                 return [
                     'id' => $item->id,
                     'metode' => $item->refRules->refMetode->metode ?? null,
@@ -167,7 +168,7 @@ class ApprovalPrescreening {
                     'status' =>  $status,
                     'response' => isset(json_decode($item->response,true)['keterangan']) ? json_decode($item->response,true)['keterangan'] : (isset(json_decode($item->response,true)['message']) ? json_decode($item->response,true)['message'] : null),
                     'keterangan' => 'Prescreening '.$item->refRules->refMetode->metode.' '.$keterangan,
-                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $item->refParent->refKolektibilitas : null,
+                    'detail' =>in_array($item->refRules->refMetode->id,[Constants::MTD_SLIK_NAE]) ? $kolektabilitas : null,
                     'plafond_debitur' => in_array($item->refRules->refMetode->id,[Constants::MTD_SIKP_Plafond]) ? $data_plafond : null
                 ];
             }),
